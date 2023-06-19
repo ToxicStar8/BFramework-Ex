@@ -36,23 +36,4 @@ namespace Framework
             public List<string> ABRelyOnNameList;
         }
     }
-
-    /// <summary>
-    /// AB包MD5信息类
-    /// </summary>
-    public class ABMd5Info
-    {
-        /// <summary>
-        /// 名字
-        /// </summary>
-        public string ABName;
-        /// <summary>
-        /// 大小
-        /// </summary>
-        public int ABSize;
-        /// <summary>
-        /// Md5
-        /// </summary>
-        public string ABMd5;
-    }
 }

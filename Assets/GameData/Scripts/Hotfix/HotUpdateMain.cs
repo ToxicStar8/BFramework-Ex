@@ -20,12 +20,13 @@ namespace GameData
         void Start()
         {
             GameEntry.Instance.Log(E_Log.Framework, "热更代码", "进入成功");
+            //初始化游戏总控制器
+            var gameGod = new GameObject("GameGod");
+            gameGod.AddComponent<GameGod>();
+            //Log
+            gameGod.AddComponent<Log>();
             //初始化表格
             GameGod.Instance.TableManager.Init(TableTypes.TableCtrlTypeArr);
-            //初始化数据操作类
-            //GameEntry.Instance.ModuleManager.Init(ModuleTypes.ModuleTypeArr);
-            //初始化存档
-            new GameObject("[Data]").AddComponent<DataManager>();
             //背景音乐
             GameGod.Instance.AudioManager.PlayBackground("RetroComedy.ogg");
             //游戏管理器

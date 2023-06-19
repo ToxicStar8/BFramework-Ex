@@ -21,7 +21,7 @@ namespace GameData
         /// </summary>
         public static void FnStartNewGame(Action callback)
         {
-            DataManager.Instance.GetNewData();
+            GameGod.Instance.DataManager.GetNewData();
             callback?.Invoke();
         }
 

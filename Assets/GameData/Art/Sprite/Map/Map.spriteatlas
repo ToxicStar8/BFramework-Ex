@@ -16,7 +16,7 @@ SpriteAtlas:
       compressionQuality: 0
       maxTextureSize: 0
       textureCompression: 0
-      filterMode: 0
+      filterMode: 1
       generateMipMaps: 0
       readable: 0
       crunchedCompression: 0
@@ -50,44 +50,8 @@ SpriteAtlas:
     isAtlasV2: 0
     cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
-  m_PackedSprites:
-  - {fileID: 21300000, guid: 1486f61242d2a3d47a3044b5f9d0f3d7, type: 3}
-  - {fileID: 21300000, guid: 038dc3c26e1888b47a20b4a5ef77a7ad, type: 3}
-  - {fileID: 21300000, guid: cb5169c2757022c42a981724d44ac9a0, type: 3}
-  - {fileID: 21300000, guid: 53e015132d3c8184fade85eba139d68b, type: 3}
-  - {fileID: 21300000, guid: ff99fe63a1379b04a810770cb1ac0d78, type: 3}
-  - {fileID: 21300000, guid: 2facb4248eba94d42ba15bc1bd116a94, type: 3}
-  - {fileID: 21300000, guid: f99daa24ed3351d47a76dc87d0f056d1, type: 3}
-  - {fileID: 21300000, guid: a8188f654c84ddd44a88131c88c5f792, type: 3}
-  - {fileID: 21300000, guid: 50b9eec544fa9684a9c3f2c28d447060, type: 3}
-  - {fileID: 21300000, guid: 66368ea68a773ce4e9a9d1fcc61ba430, type: 3}
-  - {fileID: 21300000, guid: f6cff50755d601e4089e12af8061d055, type: 3}
-  - {fileID: 21300000, guid: 52922fd974197cc4f868cc36e7225c20, type: 3}
-  - {fileID: 21300000, guid: f509006a880846542bb77b0bb2ee7dc6, type: 3}
-  - {fileID: 21300000, guid: 4d273c9b78a0d0041924b94393c2f23d, type: 3}
-  - {fileID: 21300000, guid: 6b8383fb776438e409d100453bfe1025, type: 3}
-  - {fileID: 21300000, guid: 7487262d53df27e4bb38633b050a87a7, type: 3}
-  - {fileID: 21300000, guid: 94fb49deaa627784d9376dda0c1995b5, type: 3}
-  - {fileID: 21300000, guid: 613d324f0ed9b814690f65e335bb7c1c, type: 3}
-  m_PackedSpriteNamesToIndex:
-  - Map_Water
-  - Map_GrassRightUpSupply
-  - Map_GrassLeftUpSupply
-  - Map_Arable
-  - Map_GrassLeftUp
-  - Map_GrassRightUp
-  - Map_BigTree
-  - Map_GrassRight
-  - Map_Grass
-  - Map_GrassSingle
-  - Map_GrassLeftDownSupply
-  - Map_GrassRightDown
-  - Map_GrassLeft
-  - Map_GrassLeftDown
-  - Map_Select
-  - Map_GrassDown
-  - 'Map_GrassRightDownSupply '
-  - Map_GrassUp
+  m_PackedSprites: []
+  m_PackedSpriteNamesToIndex: []
   m_RenderDataMap: {}
   m_Tag: Map
   m_IsVariant: 0

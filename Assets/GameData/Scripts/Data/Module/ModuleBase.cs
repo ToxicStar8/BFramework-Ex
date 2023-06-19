@@ -17,6 +17,6 @@ namespace GameData
         public static TableSuitCardCtrl TbSuitCardCtrl => GameGod.Instance.TableManager.GetTableCtrl<TableSuitCardCtrl>();
 
         //数据快捷访问
-        public static PlayData PlayData => DataManager.Instance.PlayData;
+        public static PlayData PlayData => GameGod.Instance.DataManager.PlayData;
     }
 }

@@ -5,14 +5,7 @@
  *********************************************/
 using LitJson;
 using MainPackage;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Networking;
-using UnityEngine.UI;
 
 namespace Framework
 {
@@ -25,40 +18,21 @@ namespace Framework
 
         public override void OnStart()
         {
-            if (GameEntry.Instance.IsEditorMode)
+            if (!GameEntry.Instance.IsEditorMode || GameEntry.Instance.IsRunABPackage)
             {
-                if (GameEntry.Instance.IsRunABPackage)
+                //非编辑器模式或者加载AB包模式下直接加载AB包索引信息
+                var abPackage = AssetBundle.LoadFromFile(GameEntry.Instance.DowloadManager.SavePath + ConstDefine.ABInfoName);
+                if (abPackage == null)
                 {
-                    EditorLoadABPackage();
+                    GameEntry.Instance.Log(E_Log.Error, "没有找到AB包！");
+                    return;
                 }
-                else
-                {
-                    GameEntry.Instance.WinLoading.IsInitEnd = true;
-                }
+                var textAsset = abPackage.LoadAsset<TextAsset>(ConstDefine.ABInfoName + ".json");
+                //转化为ABInfo
+                ABInfo = JsonMapper.ToObject<ABInfo>(textAsset.text);
+                abPackage.Unload(true);
+                GameEntry.Instance.Log(E_Log.Framework, "索引加载完毕");
             }
-            else
-            {
-
-            }
-        }
-
-        /// <summary>
-        /// 编辑器模式加载AB包
-        /// </summary>
-        private void EditorLoadABPackage()
-        {
-            //编辑器模式下直接加载AB包索引信息
-            var abPackage = AssetBundle.LoadFromFile(GameEntry.Instance.DowloadManager.SavePath + ConstDefine.ABInfoName);
-            if(abPackage == null)
-            {
-                GameEntry.Instance.Log(E_Log.Error, "没有找到AB包！");
-                return;
-            }
-            var textAsset = abPackage.LoadAsset<TextAsset>(ConstDefine.ABInfoName + ".json");
-            //转化为ABInfo
-            ABInfo = JsonMapper.ToObject<ABInfo>(textAsset.text);
-            abPackage.Unload(true);
-            GameEntry.Instance.Log(E_Log.Framework, "索引加载完毕");
         }
 
         public override void OnUpdate() { }

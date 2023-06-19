@@ -22,7 +22,7 @@ namespace GameData
 
         public override void OnShow(params object[] args)
         {
-            Btn_Continue.SetActive(!DataManager.Instance.IsNullData);
+            Btn_Continue.SetActive(!GameGod.Instance.DataManager.IsNullData);
         }
 
         private void FnContinueGame()

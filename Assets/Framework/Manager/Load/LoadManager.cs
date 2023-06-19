@@ -46,38 +46,29 @@ namespace Framework
             if (GameEntry.Instance.IsEditorMode)
             {
                 _allObjDirectoryDic = new Dictionary<string, string>();
-                ////先生成一下真实打AB包的列表
-                //_abConfig.SetABNameAndPath();
-                //直接从根目录遍历全部文件
-                //var rootABList = _abConfig.RootABList;
-                //按预设好的路径添加资源
-                //foreach (var item in rootABList)
-                //{
-                    //var directoryInfo = new DirectoryInfo(Application.dataPath + item.Substring(6));
-                    var directoryInfo = new DirectoryInfo(Application.dataPath + "/GameData/");
-                    var directoryArr = directoryInfo.GetFiles("*.*", SearchOption.AllDirectories);
-                    var removeLength = Application.dataPath.Length - 6;
-                    for (int i = 0, length = directoryArr.Length; i < length; i++)
+                var directoryInfo = new DirectoryInfo(Application.dataPath + "/GameData/");
+                var directoryArr = directoryInfo.GetFiles("*.*", SearchOption.AllDirectories);
+                var removeLength = Application.dataPath.Length - 6;
+                for (int i = 0, length = directoryArr.Length; i < length; i++)
+                {
+                    var fileInfo = directoryArr[i];
+                    if (fileInfo.Extension != ".meta" && fileInfo.Extension != ".cs")
                     {
-                        var fileInfo = directoryArr[i];
-                        if (fileInfo.Extension != ".meta" && fileInfo.Extension != ".cs")
+                        var path = fileInfo.FullName.Substring(removeLength);
+                        if (_allObjDirectoryDic.ContainsKey(fileInfo.Name))
                         {
-                            var path = fileInfo.FullName.Substring(removeLength);
-                            if (_allObjDirectoryDic.ContainsKey(fileInfo.Name))
-                            {
-                                GameEntry.Instance.Log(E_Log.Error, fileInfo.Name, "名字重复");
-                                continue;
-                            }
-                            _allObjDirectoryDic.Add(fileInfo.Name, path);
+                            GameEntry.Instance.Log(E_Log.Error, fileInfo.Name, "名字重复");
+                            continue;
                         }
+                        _allObjDirectoryDic.Add(fileInfo.Name, path);
                     }
-                //}
+                }
             }
 #endif
         }
 
         /// <summary>
-        /// 同步加载资源
+        /// 同步加载资源 带后缀
         /// </summary>
         public T LoadSync<T>(string objName) where T : Object
         {
@@ -136,7 +127,7 @@ namespace Framework
                     var abPackage = LoadAssetBundle(abRelyOnInfo.ABName);
                     if(objName.EndsWith(".unity"))
                     {
-                        //加载场景 todo
+                        //场景需要单独加载 todo
 
                     }
                     else
@@ -156,25 +147,7 @@ namespace Framework
         public Sprite GetSprite(string atlasName,string spriteName)
         {
             Sprite sp = null;
-            //编辑器模式并且非AB包 创建Sprite
-//            if (GameEntry.Instance.IsEditorMode && !GameEntry.Instance.IsRunABPackage)
-//            {
-//#if UNITY_EDITOR
-//                var texture = LoadSync<Texture2D>(spriteName);
-//                if (texture != null)
-//                {
-//                    sp = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-//                }
-//#endif
-//            }
-//            //AB包可直接转化为Sprite
-//            else
-//            {
-//                sp = LoadSync<Sprite>(spriteName);
-//            }
-//            return sp;
-
-            SpriteAtlas atlas = LoadSync<SpriteAtlas>(atlasName + "");
+            SpriteAtlas atlas = LoadSync<SpriteAtlas>(atlasName);
             if (atlas != null)
             {
                 sp = atlas.GetSprite(spriteName);

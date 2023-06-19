@@ -16,7 +16,7 @@ SpriteAtlas:
       compressionQuality: 0
       maxTextureSize: 0
       textureCompression: 0
-      filterMode: 0
+      filterMode: 1
       generateMipMaps: 0
       readable: 0
       crunchedCompression: 0
@@ -50,62 +50,8 @@ SpriteAtlas:
     isAtlasV2: 0
     cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
-  m_PackedSprites:
-  - {fileID: -614295219, guid: 1f618640c1c39ac4a98a1f2481ab18ae, type: 3}
-  - {fileID: 1427259014, guid: 1f618640c1c39ac4a98a1f2481ab18ae, type: 3}
-  - {fileID: 1786649223, guid: 1f618640c1c39ac4a98a1f2481ab18ae, type: 3}
-  - {fileID: 1512557058, guid: 1f618640c1c39ac4a98a1f2481ab18ae, type: 3}
-  - {fileID: 1703280702, guid: 1f618640c1c39ac4a98a1f2481ab18ae, type: 3}
-  - {fileID: -738014385, guid: 1f618640c1c39ac4a98a1f2481ab18ae, type: 3}
-  - {fileID: 1428110488, guid: 1f618640c1c39ac4a98a1f2481ab18ae, type: 3}
-  - {fileID: -207472785, guid: 1f618640c1c39ac4a98a1f2481ab18ae, type: 3}
-  - {fileID: 927319863, guid: 1f618640c1c39ac4a98a1f2481ab18ae, type: 3}
-  - {fileID: -677116367, guid: e74515d475275c045870106e39c52e8b, type: 3}
-  - {fileID: 1773960716, guid: e74515d475275c045870106e39c52e8b, type: 3}
-  - {fileID: 1793269894, guid: e74515d475275c045870106e39c52e8b, type: 3}
-  - {fileID: -1269920965, guid: e74515d475275c045870106e39c52e8b, type: 3}
-  - {fileID: -199745256, guid: e74515d475275c045870106e39c52e8b, type: 3}
-  - {fileID: 369895918, guid: e74515d475275c045870106e39c52e8b, type: 3}
-  - {fileID: -1870377946, guid: e74515d475275c045870106e39c52e8b, type: 3}
-  - {fileID: 198196496, guid: e74515d475275c045870106e39c52e8b, type: 3}
-  - {fileID: 2082060297, guid: e74515d475275c045870106e39c52e8b, type: 3}
-  - {fileID: -466115052, guid: 5b3bcf15020b91c46bd37e464dbb44f6, type: 3}
-  - {fileID: -2110259650, guid: 5b3bcf15020b91c46bd37e464dbb44f6, type: 3}
-  - {fileID: 2006934748, guid: 5b3bcf15020b91c46bd37e464dbb44f6, type: 3}
-  - {fileID: 2089479483, guid: 5b3bcf15020b91c46bd37e464dbb44f6, type: 3}
-  - {fileID: 939879671, guid: 5b3bcf15020b91c46bd37e464dbb44f6, type: 3}
-  - {fileID: 927240305, guid: 5b3bcf15020b91c46bd37e464dbb44f6, type: 3}
-  - {fileID: -502525734, guid: 5b3bcf15020b91c46bd37e464dbb44f6, type: 3}
-  - {fileID: -692487164, guid: 5b3bcf15020b91c46bd37e464dbb44f6, type: 3}
-  - {fileID: -465761668, guid: 5b3bcf15020b91c46bd37e464dbb44f6, type: 3}
-  m_PackedSpriteNamesToIndex:
-  - Monster_01_Idle_04
-  - Monster_01_Idle_03
-  - Monster_01_Idle_02
-  - Monster_01_Idle_01
-  - Monster_01_Walk_01
-  - Monster_01_Walk_02
-  - Monster_01_Walk_03
-  - Monster_01_Default
-  - Monster_01_Walk_04
-  - sprite (2)_8
-  - sprite (2)_2
-  - sprite (2)_3
-  - sprite (2)_0
-  - sprite (2)_1
-  - sprite (2)_6
-  - sprite (2)_7
-  - sprite (2)_4
-  - sprite (2)_5
-  - sprite (1)_7
-  - sprite (1)_6
-  - sprite (1)_5
-  - sprite (1)_4
-  - sprite (1)_3
-  - sprite (1)_2
-  - sprite (1)_1
-  - sprite (1)_0
-  - sprite (1)_8
+  m_PackedSprites: []
+  m_PackedSpriteNamesToIndex: []
   m_RenderDataMap: {}
   m_Tag: Monster
   m_IsVariant: 0

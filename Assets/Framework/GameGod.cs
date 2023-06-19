@@ -28,19 +28,13 @@ namespace Framework
         public TableManager TableManager { private set; get; }
         public AudioManager AudioManager { private set; get; }
         public TimerManager TimeManager { private set; get; }
-        //public ModuleManager ModuleManager { private set; get; }       
+        public DataManager DataManager { private set; get; }
         public FsmManager FsmManager { private set; get; }
 
         private void Awake()
         {
             Instance = this;
             DontDestroyOnLoad(Instance);
-        }
-
-        private void Start()
-        {
-            //限定60fps
-            Application.targetFrameRate = 60;
 
             PoolManager = new PoolManager();
             HttpManager = new HttpManager();
@@ -52,7 +46,13 @@ namespace Framework
             TableManager = new TableManager();
             AudioManager = new AudioManager();
             TimeManager = new TimerManager();
+            DataManager = new DataManager();
             FsmManager = new FsmManager();
+        }
+
+        private void Start()
+        {
+
         }
 
         private void Update()
@@ -67,7 +67,7 @@ namespace Framework
             TableManager.OnUpdate();
             AudioManager.OnUpdate();
             TimeManager.OnUpdate();
-            //ModuleManager.OnUpdate();
+            DataManager.OnUpdate();
             FsmManager.OnUpdate();
         }
 
@@ -91,6 +91,7 @@ namespace Framework
             SocketManager.OnDispose();
             AudioManager.OnDispose();
             TimeManager.OnDispose();
+            DataManager.OnDispose();
         }
     }
 }

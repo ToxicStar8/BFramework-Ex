@@ -1,7 +1,7 @@
 /*********************************************
  * 自动生成代码，禁止手动修改文件
  * 脚本名：AssetName.cs
- * 创建时间：2023/04/25 10:54:31
+ * 创建时间：2023/06/19 14:13:11
  *********************************************/
 
 namespace GameData
@@ -42,6 +42,7 @@ namespace GameData
         public static string Png_Hearts_88X124 => "Hearts_88x124.png";
         public static string Png_Spades_88X124 => "Spades_88x124.png";
         public static string Png_Uistyle => "UIStyle.png";
+        public static string Prefab_Map => "Map.prefab";
         public static string Asset_Arable => "Arable.asset";
         public static string Asset_Islandrule => "IslandRule.asset";
         public static string Asset_Water => "Water.asset";

@@ -3,6 +3,7 @@
  * 热更入口
  * 创建时间：2023/01/08 20:40:23
  *********************************************/
+using Framework;
 using HybridCLR;
 using MainPackage;
 using System.Collections;
@@ -20,20 +21,28 @@ namespace GameData
         {
             GameEntry.Instance.Log(E_Log.Framework, "热更代码", "进入成功");
             //初始化表格
-            //GameEntry.Instance.TableManager.Init(TableTypes.TableCtrlTypeArr);
+            GameGod.Instance.TableManager.Init(TableTypes.TableCtrlTypeArr);
+            //初始化数据操作类
+            //GameEntry.Instance.ModuleManager.Init(ModuleTypes.ModuleTypeArr);
             //初始化存档
-            //new GameObject("[Data]").AddComponent<DataManager>();
+            new GameObject("[Data]").AddComponent<DataManager>();
             //背景音乐
-            //GameEntry.Instance.AudioManager.PlayBackground("RetroComedy.ogg");
+            GameGod.Instance.AudioManager.PlayBackground("RetroComedy.ogg");
             //游戏管理器
-            //GameManager.CreateGameManager();
+            GameManager.CreateGameManager();
             //正式启动
-            //GameEntry.Instance.UIManager.OpenUI<UIMainMenu>(E_UILevel.Common);
-        }
-
-        private void Update()
-        {
-            GameEntry.Instance.Log(E_Log.Framework, "热更");
+            GameGod.Instance.UIManager.OpenUI<UIMainMenu>(E_UILevel.Common);
         }
     }
+
+    /// <summary>
+    /// 反射加载热更（已弃用）
+    /// </summary>
+    //public class HotUpdateMainByMethod
+    //{
+    //    public static void Start()
+    //    {
+    //          
+    //    }
+    //}
 }

@@ -1,0 +1,4 @@
+int^string^string^string^int^int^int
+id^name^asset^desc^hp^speed^factor_scale
+^怪物名^怪物资源^怪物说明^血量基础值^速度基础值^被影响的系数比（百分比）
+1^章鱼人^Monster_01.prefab^^1^4^100,0

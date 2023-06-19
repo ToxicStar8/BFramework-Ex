@@ -142,6 +142,7 @@ namespace MainPackage
         private void OnApplicationQuit()
         {
             //先执行
+
         }
 
         private void OnDestroy()

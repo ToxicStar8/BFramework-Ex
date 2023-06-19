@@ -7,12 +7,6 @@
       "dependencies": {},
       "hash": "00cedc166f7ca58cfb9a9ad645bd4a0ffc9b8fc9"
     },
-    "com.sharelib.logviewer": {
-      "version": "file:Unity-Logs-Viewer",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,

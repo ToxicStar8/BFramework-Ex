@@ -63,8 +63,6 @@ namespace Framework
             SaveABMD5ToXML();
             //9.清除AB包标签
             ClearABName();
-            //10.打包完毕清空Dll文件夹
-            //ClearHotfixDirDll();
             //打开文件夹
             OpenFileTools.OpenFile(ABOutPath);
             //回收资源

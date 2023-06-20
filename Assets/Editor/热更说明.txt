@@ -1,19 +1,23 @@
-//生成热更依赖文件
+//生成主包体依赖文件
 1.HybridCLR/Generate/all
 
-//热更脚本
-2.HybridCLR/CompileDll/ActiveBuildTarget
+//打包顺便生成AotDll
+2.File/Build Setting/Build
 
 //打图集
 3.BFramework/Build SpriteAtlas
 
+//打资源名称
+4.BFramework/Build AssetName
+
+//打热更Dll
+5.HybridCLR/CompileDll/ActiveBuildTarget
+
 //打AB包
-4.BFramework/Build AssetBundles
+6.BFramework/Build AssetBundles
 
 //
-5.把AssetBundle文件夹下的文件上传至服务器
+7.把AssetBundle文件夹下的文件上传至服务器
 
-//打包
-6.File/Build Setting/Build
-
-7.发布包
+//
+8.发布包

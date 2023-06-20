@@ -62,7 +62,7 @@ namespace GameData
             {
                 owner.transform.SetLocalScaleX(vector.x < 0 ? -1 : 1);
             }
-            Debug.Log(owner.Rg.velocity.magnitude);
+            //Debug.Log(owner.Rg.velocity.magnitude);
         }
         public override void OnLeave()
         {

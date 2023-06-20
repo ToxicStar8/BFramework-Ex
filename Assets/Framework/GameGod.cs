@@ -3,6 +3,7 @@
  * 游戏入口
  * 创建时间：2022/12/25 20:40:23
  *********************************************/
+using MainPackage;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,6 +18,16 @@ namespace Framework
     /// </summary>
     public class GameGod : MonoBehaviour
     {
+        /// <summary>
+        /// Update回调
+        /// </summary>
+        public Action UpdateCallback;
+
+        /// <summary>
+        /// 退出回调回调
+        /// </summary>
+        public Action DisposeCallback;
+
         public static GameGod Instance { private set; get; }
         public PoolManager PoolManager { private set; get; }
         public HttpManager HttpManager { private set; get; }
@@ -33,15 +44,18 @@ namespace Framework
 
         private void Awake()
         {
+            //限定60fps
+            Application.targetFrameRate = 60;
+
             Instance = this;
             DontDestroyOnLoad(Instance);
 
+            ABManager = new ABManager();
+            LoadManager = new LoadManager();
             PoolManager = new PoolManager();
             HttpManager = new HttpManager();
             SocketManager = new SocketManager();
-            ABManager = new ABManager();
             UIManager = new UIManager();
-            LoadManager = new LoadManager();
             EventManager = new EventManager();
             TableManager = new TableManager();
             AudioManager = new AudioManager();
@@ -69,12 +83,13 @@ namespace Framework
             TimeManager.OnUpdate();
             DataManager.OnUpdate();
             FsmManager.OnUpdate();
+            UpdateCallback?.Invoke();
         }
 
         private void OnApplicationQuit()
         {
             //先执行
-
+            DisposeCallback?.Invoke();
         }
 
         private void OnDestroy()

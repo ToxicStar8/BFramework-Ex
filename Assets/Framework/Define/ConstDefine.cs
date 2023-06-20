@@ -22,8 +22,10 @@ namespace Framework
         public const string HotfixDllName = "Assembly-CSharp.dll";          //热更的DLL名（同GameEntry的HotfixDllName）
         public const string VolumBackground = "VolumBackground";            //背景音乐音量
         public const string VolumSound = "VolumSound";                      //音效音量
+        public const string HotfixPath = "Assets/Hotfix/";                  //DLL文件位置
         public const string ABConfigPath = "Assets/Editor/ABConfig/ABConfig.asset";   //ABConfig配置文件位置
         public const string JsoninformationDirPath = "Assets/Editor/ABConfig/JsonInformation/";   //依赖信息Json文件夹的路径
         public const string JsoninformationPath = JsoninformationDirPath + ABInfoName + ".json";   //依赖信息Json的路径
+        public const string Archival = "Archival";                          //游戏存档
     }
 }

@@ -923,6 +923,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1745214866}
   - component: {fileID: 1745214867}
+  - component: {fileID: 1745214868}
   m_Layer: 0
   m_Name: GameEntry
   m_TagString: Untagged
@@ -961,10 +962,22 @@ MonoBehaviour:
   UICamera: {fileID: 644216477}
   ObjPool: {fileID: 1978671858}
   GameStart: {fileID: 1124249894}
-  IsEditorMode: 1
+  IsEditorMode: 0
   IsRunABPackage: 0
   WinLoading: {fileID: 176193653}
   TimeScale: 1
+--- !u!114 &1745214868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1745214864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06728ed9fcfbf7f4c93d549a1e51c71a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1792969499
 GameObject:
   m_ObjectHideFlags: 0

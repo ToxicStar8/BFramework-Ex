@@ -14,18 +14,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RootABList:
   - Assets/Editor/ABConfig/JsonInformation
+  - Assets/Hotfix
   - Assets/GameData/Art/Audio
   - Assets/GameData/Art/Font
   - Assets/GameData/Art/Sprite
   - Assets/GameData/Art/Texture
   - Assets/GameData/Art/Tilemap
   - Assets/GameData/Table
-  - Assets/GameData/Prefabs/Hotfix
   - Assets/GameData/Prefabs/UI
   - Assets/GameData/Prefabs/Game
   TrueABList:
   - path: Assets/Editor/ABConfig/JsonInformation
     abName: jsoninformation
+  - path: Assets/Hotfix
+    abName: hotfix
   - path: Assets/GameData/Art/Font
     abName: font
   - path: Assets/GameData/Art/Sprite/Map
@@ -42,8 +44,6 @@ MonoBehaviour:
     abName: tilemap
   - path: Assets/GameData/Table
     abName: table
-  - path: Assets/GameData/Prefabs/Hotfix
-    abName: hotfix
   - path: Assets/GameData/Prefabs/UI/Btns
     abName: uibtns
   - path: Assets/GameData/Prefabs/UI/Common

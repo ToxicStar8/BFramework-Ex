@@ -51,9 +51,9 @@ namespace GameData
             Instance.MainCamera = Instance.transform.Find("MainCamera").GetComponent<Camera>();
             Instance.VirtualCamera = Instance.transform.Find("PlayerFollowVirtualCamera").GetComponent<CinemachineVirtualCamera>();
             //添加Update监听
-            GameEntry.Instance.UpdateCallback += Instance.OnUpdate;
+            GameGod.Instance.UpdateCallback += Instance.OnUpdate;
             //添加关闭监听
-            GameEntry.Instance.DisposeCallback += Instance.OnDispose;
+            GameGod.Instance.DisposeCallback += Instance.OnDispose;
         }
 
         /// <summary>

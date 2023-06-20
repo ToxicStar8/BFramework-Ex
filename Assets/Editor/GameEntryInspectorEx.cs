@@ -3,21 +3,16 @@
  * GameEntry检查器扩展
  * 创建时间：2023/04/25 11:52:36
  *********************************************/
-using System;
-using System.Globalization;
-using System.IO;
-using System.Reflection;
+using MainPackage;
 using UnityEditor;
-using UnityEditor.U2D;
 using UnityEngine;
-using UnityEngine.U2D;
 
 namespace Framework
 {
     /// <summary>
-    /// GameGod检查器扩展
+    /// GameEntry检查器扩展
     /// </summary>
-    [CustomEditor(typeof(GameGod))]
+    [CustomEditor(typeof(GameEntry))]
     public class GameEntryInspectorEx : Editor
     {
         public override void OnInspectorGUI()

@@ -15,8 +15,6 @@ namespace GameData
     /// </summary>
     public static class ConstDefine
     {
-        public const string Archival = "Archival";                          //游戏存档
-
         public const string DrawCardTimeKey = "DrawCardTimeKey";            //抽卡定时器Key
         public const string CreateMonsterTimeKey = "CreateMonsterTimeKey";  //刷怪定时器Key
     }

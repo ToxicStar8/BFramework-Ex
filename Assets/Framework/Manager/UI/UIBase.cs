@@ -47,7 +47,7 @@ namespace Framework
             //关闭前移除全部Update回调
             if (_update != null)
             {
-                GameEntry.Instance.UpdateCallback -= _update;
+                GameGod.Instance.UpdateCallback -= _update;
                 _update = null;
             }
 
@@ -107,7 +107,7 @@ namespace Framework
             }
 
             _update = updateCallback;
-            GameEntry.Instance.UpdateCallback += _update;
+            GameGod.Instance.UpdateCallback += _update;
         }
         #endregion
 

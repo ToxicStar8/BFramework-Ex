@@ -28,10 +28,9 @@ namespace Framework
                     return;
                 }
                 var textAsset = abPackage.LoadAsset<TextAsset>(ConstDefine.ABInfoName + ".json");
-                //转化为ABInfo
+                //转化为ABInfo（AB包的索引
                 ABInfo = JsonMapper.ToObject<ABInfo>(textAsset.text);
                 abPackage.Unload(true);
-                GameEntry.Instance.Log(E_Log.Framework, "索引加载完毕");
             }
         }
 

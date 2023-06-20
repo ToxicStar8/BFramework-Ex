@@ -88,7 +88,6 @@ namespace MainPackage
         private IEnumerator DownloadABPackage()
         {
             DowloadManager.StartDowload();
-            Log(E_Log.Framework, "AB包存放路径为", DowloadManager.SavePath);
 
             yield return new WaitUntil(() => DowloadManager.IsDowloadEnd);
 
@@ -96,6 +95,7 @@ namespace MainPackage
             Assembly ass = null;
             if (!IsEditorMode || IsRunABPackage)
             {
+                Log(E_Log.Framework, "AB包存放路径为", DowloadManager.SavePath);
                 //下载完资源后 加载热更Dll和AotDll的AB包
                 var abPackage = AssetBundle.LoadFromFile(DowloadManager.SavePath + "hotfix");
                 //加载DLL

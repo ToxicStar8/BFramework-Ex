@@ -1,6 +1,6 @@
 ﻿/*********************************************
  * BFramework
- * GameEntry检查器扩展
+ * GameGod检查器扩展
  * 创建时间：2023/04/25 11:52:36
  *********************************************/
 using MainPackage;
@@ -10,10 +10,10 @@ using UnityEngine;
 namespace Framework
 {
     /// <summary>
-    /// GameEntry检查器扩展
+    /// GameGod检查器扩展
     /// </summary>
-    [CustomEditor(typeof(GameEntry))]
-    public class GameEntryInspectorEx : Editor
+    [CustomEditor(typeof(GameGod))]
+    public class GameGodInspectorEx : Editor
     {
         public override void OnInspectorGUI()
         {

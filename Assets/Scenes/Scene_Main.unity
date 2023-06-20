@@ -962,7 +962,7 @@ MonoBehaviour:
   UICamera: {fileID: 644216477}
   ObjPool: {fileID: 1978671858}
   GameStart: {fileID: 1124249894}
-  IsEditorMode: 0
+  IsEditorMode: 1
   IsRunABPackage: 0
   WinLoading: {fileID: 176193653}
   TimeScale: 1

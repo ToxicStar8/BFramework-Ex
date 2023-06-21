@@ -82,6 +82,13 @@ namespace MainPackage
             StartCoroutine(DownloadABPackage());
         }
 
+#if UNITY_EDITOR
+        private void Update()
+        {
+            Time.timeScale = TimeScale;
+        }
+#endif
+
         /// <summary>
         /// 开始下载AB包
         /// </summary>

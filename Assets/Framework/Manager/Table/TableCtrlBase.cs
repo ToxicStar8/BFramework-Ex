@@ -41,7 +41,7 @@ namespace Framework
         {
             if (index > DataList.Count - 1)
             {
-                GameEntry.Instance.Log(E_Log.Error, "超出数据上限 索引", index.ToString());
+                GameGod.Instance.Log(E_Log.Error, "超出数据上限 索引", index.ToString());
                 return null;
             }
             return DataList[index];
@@ -60,7 +60,7 @@ namespace Framework
                     return table;
                 }
             }
-            GameEntry.Instance.Log(E_Log.Error, "没有找到表数据 id", id.ToString());
+            GameGod.Instance.Log(E_Log.Error, "没有找到表数据 id", id.ToString());
             return null;
         }
 

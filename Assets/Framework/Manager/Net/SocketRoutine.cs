@@ -96,7 +96,7 @@ namespace Framework
         /// </summary>
         public void SendMsg(string msg)
         {
-            GameEntry.Instance.Log(E_Log.Proto, "WebSocket 发送消息", msg);
+            GameGod.Instance.Log(E_Log.Proto, "WebSocket 发送消息", msg);
             Socket.SendAsync(msg);
         }
 
@@ -129,18 +129,18 @@ namespace Framework
             switch (evt.type)
             {
                 case 1:         // 错误
-                    GameEntry.Instance.Log(E_Log.Error, "WebSocket 错误", evt.msg);
+                    GameGod.Instance.Log(E_Log.Error, "WebSocket 错误", evt.msg);
                     break;
                 case 2:         // 消息
-                    GameEntry.Instance.Log(E_Log.Proto, "WebSocket 接收消息", evt.msg);
+                    GameGod.Instance.Log(E_Log.Proto, "WebSocket 接收消息", evt.msg);
                     //分发消息
                     DispatchMsg(evt.msg);
                     break;
                 case 3:         // WS 关闭
-                    GameEntry.Instance.Log(E_Log.Proto,"WebSocket 主动关闭");
+                    GameGod.Instance.Log(E_Log.Proto,"WebSocket 主动关闭");
                     break;
                 case 4:         // WS 打开
-                    GameEntry.Instance.Log(E_Log.Proto,"WebSocket 已连接");
+                    GameGod.Instance.Log(E_Log.Proto,"WebSocket 已连接");
                     OpenCallback?.Invoke();
                     break;
                 default:

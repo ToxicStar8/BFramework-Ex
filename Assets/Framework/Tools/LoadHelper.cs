@@ -61,7 +61,7 @@ namespace Framework
             var sp = GameGod.Instance.LoadManager.GetSprite(atlasName,spriteName);
             if (sp == null)
             {
-                GameEntry.Instance.Log(E_Log.Error, "图片资源为空", spriteName);
+                GameGod.Instance.Log(E_Log.Error, "图片资源为空", spriteName);
                 return null;
             }
             //追加到记录列表里
@@ -85,7 +85,7 @@ namespace Framework
             var obj = GameGod.Instance.LoadManager.LoadSync<T>(objName);
             if (obj == null)
             {
-                GameEntry.Instance.Log(E_Log.Error, "加载资源为空", objName);
+                GameGod.Instance.Log(E_Log.Error, "加载资源为空", objName);
                 return null;
             }
             //记录名字即可
@@ -129,7 +129,7 @@ namespace Framework
             {
                 string objName = _objNameList[i];
                 GameGod.Instance.LoadManager.UnloadAsset(objName);
-                GameEntry.Instance.Log(E_Log.Framework, "Unload Object", objName);
+                GameGod.Instance.Log(E_Log.Framework, "Unload Object", objName);
             }
             _objNameList.Clear();
         }
@@ -149,7 +149,7 @@ namespace Framework
             {
                 string spriteName = _atlasNameList[i];
                 GameGod.Instance.LoadManager.UnloadAsset(spriteName);
-                GameEntry.Instance.Log(E_Log.Framework, "Unload Atlas", spriteName);
+                GameGod.Instance.Log(E_Log.Framework, "Unload Atlas", spriteName);
             }
             _atlasNameList.Clear();
         }

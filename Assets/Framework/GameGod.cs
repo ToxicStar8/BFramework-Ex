@@ -108,5 +108,17 @@ namespace Framework
             TimeManager.OnDispose();
             DataManager.OnDispose();
         }
+
+        /// <summary>
+        /// 获得UI根节点下的层级节点
+        /// </summary>
+        /// <param name="uiLevel"></param>
+        /// <returns></returns>
+        public RectTransform GetUILevelTrans(E_UILevel uiLevel) => GameEntry.Instance.GetUILevelTrans(uiLevel);
+
+        /// <summary>
+        /// Log
+        /// </summary>
+        public void Log(E_Log logType, string title = null, string content = null) => GameEntry.Instance.Log(logType, title, content);
     }
 }

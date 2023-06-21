@@ -51,7 +51,7 @@ namespace Framework
 
             uiBase = new T();
             var obj = GameGod.Instance.LoadManager.LoadSync<GameObject>(uiName + ".prefab");
-            var uiTrans = GameEntry.Instance.GetUILevelTrans(uiLevel);
+            var uiTrans = GameGod.Instance.GetUILevelTrans(uiLevel);
             uiBase.uiName = uiName;
             uiBase.gameObject = UnityEngine.Object.Instantiate(obj, uiTrans);
             uiBase.LoadHelper = LoadHelper.Create();

@@ -93,7 +93,7 @@ namespace Framework
         /// </summary>
         public RectTransform GetUILevelTrans(E_UILevel uiLevel)
         {
-            return GameEntry.Instance.GetUILevelTrans(uiLevel);
+            return GameGod.Instance.GetUILevelTrans(uiLevel);
         }
 
         #region Update
@@ -102,7 +102,7 @@ namespace Framework
         {
             if (_update != null)
             {
-                GameEntry.Instance.Log(E_Log.Error, gameObject.name,"Update重复注册！");
+                GameGod.Instance.Log(E_Log.Error, gameObject.name,"Update重复注册！");
                 return;
             }
 

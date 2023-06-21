@@ -196,7 +196,7 @@ namespace Framework
         #region Log
         public virtual void Log(E_Log logType,string title = null,string content = null)
         {
-            GameEntry.Instance.Log(logType, title, content);
+            GameGod.Instance.Log(logType, title, content);
         }
         #endregion
     }

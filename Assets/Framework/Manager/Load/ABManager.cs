@@ -24,7 +24,7 @@ namespace Framework
                 var abPackage = AssetBundle.LoadFromFile(GameEntry.Instance.DowloadManager.SavePath + ConstDefine.ABInfoName);
                 if (abPackage == null)
                 {
-                    GameEntry.Instance.Log(E_Log.Error, "没有找到AB包！");
+                    GameGod.Instance.Log(E_Log.Error, "没有找到AB包！");
                     return;
                 }
                 var textAsset = abPackage.LoadAsset<TextAsset>(ConstDefine.ABInfoName + ".json");

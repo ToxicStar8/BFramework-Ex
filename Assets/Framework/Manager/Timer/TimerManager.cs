@@ -105,7 +105,7 @@ namespace Framework
         {
             if (timerInfo.AllCount == -1)
             {
-                GameEntry.Instance.Log(E_Log.Error, "执行次数永远不能为-1！");
+                GameGod.Instance.Log(E_Log.Error, "执行次数永远不能为-1！");
                 return;
             }
 
@@ -120,7 +120,7 @@ namespace Framework
         {
             if (TimerInfoDic.ContainsKey(timeName) && WaitReycleList.Find(x => x.TimeName == timeName) == null)
             {
-                GameEntry.Instance.Log(E_Log.Error, "定时器重复监听", timeName);
+                GameGod.Instance.Log(E_Log.Error, "定时器重复监听", timeName);
                 //TimerInfoDic.Remove(timeName);
                 return;
             }
@@ -151,7 +151,7 @@ namespace Framework
             {
                 return timerInfo;
             }
-            GameEntry.Instance.Log(E_Log.Error, "没有找到该计时器", timeName);
+            GameGod.Instance.Log(E_Log.Error, "没有找到该计时器", timeName);
             return null;
         }
 

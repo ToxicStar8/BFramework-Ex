@@ -30,7 +30,7 @@ namespace Framework
         {
             if (_eventDic.ContainsKey(eventNo))
             {
-                GameEntry.Instance.Log(E_Log.Error, "事件重复监听",eventNo.ToString());
+                GameGod.Instance.Log(E_Log.Error, "事件重复监听",eventNo.ToString());
                 _eventDic.Remove(eventNo);
             }
             _eventDic.Add(eventNo, callBack);
@@ -54,7 +54,7 @@ namespace Framework
         {
             if (!_eventDic.TryGetValue(eventNo, out var callBack))
             {
-                GameEntry.Instance.Log(E_Log.Error, "事件不存在！");
+                GameGod.Instance.Log(E_Log.Error, "事件不存在！");
             }
             callBack?.Invoke(args);
         }

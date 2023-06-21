@@ -76,7 +76,7 @@ namespace Framework
                         }
                         catch
                         {
-                            GameEntry.Instance.Log(E_Log.Error, "游戏存档损坏，请检查");
+                            GameGod.Instance.Log(E_Log.Error, "游戏存档损坏，请检查");
                         }
                     }
                 }

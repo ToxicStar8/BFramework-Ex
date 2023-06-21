@@ -69,7 +69,7 @@ namespace Framework
         {
             if (IsBusy)
             {
-                GameEntry.Instance.Log(E_Log.Error, "网络锁");
+                GameGod.Instance.Log(E_Log.Error, "网络锁");
                 return;
             }
 
@@ -88,7 +88,7 @@ namespace Framework
         {
             if (IsBusy)
             {
-                GameEntry.Instance.Log(E_Log.Error, "网络锁");
+                GameGod.Instance.Log(E_Log.Error, "网络锁");
                 return;
             }
 
@@ -103,9 +103,9 @@ namespace Framework
 
         private void GetUrl()
         {
-            GameEntry.Instance.Log(E_Log.Proto, string.Format("Get===><color=#00ffff>{0}</color>\n\r重试===><color=#00ffff>{1}</color>", _url, _currRetry));
+            GameGod.Instance.Log(E_Log.Proto, string.Format("Get===><color=#00ffff>{0}</color>\n\r重试===><color=#00ffff>{1}</color>", _url, _currRetry));
             UnityWebRequest www = UnityWebRequest.Get(_url);
-            GameEntry.Instance.StartCoroutine(SendRequest(www));
+            GameGod.Instance.StartCoroutine(SendRequest(www));
         }
 
         private void PostUrl()
@@ -135,8 +135,8 @@ namespace Framework
             www.downloadHandler = new DownloadHandlerBuffer();
             www.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(_json));
             www.SetRequestHeader("Content-Type", "application/json");
-            GameEntry.Instance.Log(E_Log.Proto, string.Format("Post===><color=#00ffff>{0}</color>\n\r重试===><color=#00ffff>{1}</color>", _url + _json, _currRetry));
-            GameEntry.Instance.StartCoroutine(SendRequest(www));
+            GameGod.Instance.Log(E_Log.Proto, string.Format("Post===><color=#00ffff>{0}</color>\n\r重试===><color=#00ffff>{1}</color>", _url + _json, _currRetry));
+            GameGod.Instance.StartCoroutine(SendRequest(www));
         }
 
         private IEnumerator SendRequest(UnityWebRequest www)
@@ -174,7 +174,7 @@ namespace Framework
                 //打印错误
                 if (!string.IsNullOrWhiteSpace(_jsonData))
                 {
-                    GameEntry.Instance.Log(E_Log.Error, _jsonData);
+                    GameGod.Instance.Log(E_Log.Error, _jsonData);
                 }
             }
             else
@@ -184,7 +184,7 @@ namespace Framework
                 //打印数据
                 if (!string.IsNullOrWhiteSpace(_jsonData))
                 {
-                    GameEntry.Instance.Log(E_Log.Proto, string.Format("<color=#FFF11A>{{\"code\":{0},\"data\":{1}}}</color>", www.responseCode, _jsonData));
+                    GameGod.Instance.Log(E_Log.Proto, string.Format("<color=#FFF11A>{{\"code\":{0},\"data\":{1}}}</color>", www.responseCode, _jsonData));
                 }
             }
             //执行回调

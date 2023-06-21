@@ -16,9 +16,9 @@ namespace GameData
     {
         void Start()
         {
-            GameEntry.Instance.Log(E_Log.Framework, "热更代码", "启动成功");
             //初始化游戏总控制器
             GameEntry.Instance.gameObject.AddComponent<GameGod>();
+            GameGod.Instance.Log(E_Log.Framework, "热更代码", "启动成功");
             //初始化表格
             GameGod.Instance.TableManager.Init(TableTypes.TableCtrlTypeArr);
             //背景音乐

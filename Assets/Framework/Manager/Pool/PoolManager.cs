@@ -49,7 +49,7 @@ namespace Framework
             var name = objName.Replace(".prefab", "");
             if (!GameObjectPoolDic.TryGetValue(name, out var pool))
             {
-                GameEntry.Instance.Log(E_Log.Framework, "不存在" + name + "池","创建");
+                GameGod.Instance.Log(E_Log.Framework, "不存在" + name + "池","创建");
                 //初始化使用完整预制体名字
                 pool = new GameObjectPool(objName);
                 GameObjectPoolDic[name] = pool;
@@ -98,7 +98,7 @@ namespace Framework
             string className = typeof(T).Name;
             if (!ClassObjectPoolDic.TryGetValue(className, out var pool))
             {
-                GameEntry.Instance.Log(E_Log.Framework, "不存在" + className + "池","创建");
+                GameGod.Instance.Log(E_Log.Framework, "不存在" + className + "池","创建");
                 pool = new ClassObjectPool<T>();
                 ClassObjectPoolDic[className] = pool;
             }

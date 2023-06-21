@@ -189,7 +189,7 @@ namespace Framework
         {
             if (_unitBase == null)
             {
-                GameEntry.Instance.Log(E_Log.Framework, "Panel" + UnitName, "创建");
+                GameGod.Instance.Log(E_Log.Framework, "Panel" + UnitName, "创建");
                 _unitBase = new T();
                 _unitBase.gameObject = gameObject;
                 _unitBase.LoadHelper = LoadHelper;

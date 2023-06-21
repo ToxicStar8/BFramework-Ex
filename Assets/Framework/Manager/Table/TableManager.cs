@@ -44,14 +44,14 @@ namespace Framework
             Type type = typeof(T);
             if(!_allTableDic.TryGetValue(type,out var tableCtrl))
             {
-                GameEntry.Instance.Log(E_Log.Error, type.Name ,"未进行初始化！");
+                GameGod.Instance.Log(E_Log.Error, type.Name ,"未进行初始化！");
                 return null;
             }
 
             //用的时候再更新数据
             if (tableCtrl.GetCreateStatus() == 0)
             {
-                GameEntry.Instance.Log(E_Log.Framework, "初始化表格",type.Name);
+                GameGod.Instance.Log(E_Log.Framework, "初始化表格",type.Name);
                 tableCtrl.OnInitData();
             }
             return _allTableDic[type] as T;

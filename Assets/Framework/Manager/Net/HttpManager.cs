@@ -45,7 +45,7 @@ namespace Framework
         public void ClearHeader()
         {
             HttpHeaderDic.Clear();
-            GameEntry.Instance.Log(E_Log.Framework, "清空浏览器标头");
+            GameGod.Instance.Log(E_Log.Framework, "清空浏览器标头");
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Framework
         public void AddHeader(string key,string value)
         {
             HttpHeaderDic.Add(key, value);
-            GameEntry.Instance.Log(E_Log.Framework, "添加浏览器标头" + key, value);
+            GameGod.Instance.Log(E_Log.Framework, "添加浏览器标头" + key, value);
         }
 
         public void Get(string url, Action<string> callBack = null)

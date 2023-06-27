@@ -165,61 +165,8 @@ namespace Framework
         private void DispatchMsg(SocketEvent evt)
         {
             //根据实际项目情况修改
-            //var msg = ProtobufHelper.DeSerialize<string>(evt.bytes);
-            //Debug.Log(msg);
+            var msg = evt.msg;
 
-            //拆收到消息的第一层
-            var wssPackage = Douyin.PushFrame.Parser.ParseFrom(evt.bytes);
-            //拆转化pb后的第二层 需要GZip解压
-            var unGzip = GZipDecompress(wssPackage.Payload.ToByteArray());
-            var payloadPackage = Douyin.Response.Parser.ParseFrom(unGzip);
-            Debug.Log("payloadPackage=" + payloadPackage);
-            //拆Gzip解压的第三层
-
-            foreach (var msg in payloadPackage.MessagesList)
-            {
-                switch (msg.Method)
-                {
-                    case "WebcastChatMessage":
-                        var chatMessage = Douyin.ChatMessage.Parser.ParseFrom(msg.Payload);
-                        Debug.LogError("chatMessage=" + chatMessage);
-                        break;
-
-                    default:
-                        break;
-                }
-                Debug.Log("msg.Method=" + msg.Method);
-            }
-
-
-            static byte[] GZipDecompress(byte[] bytes)
-            {
-                using (MemoryStream ms = new MemoryStream(bytes))
-                {
-                    using (GZipStream zs = new GZipStream(ms, CompressionMode.Decompress))
-                    {
-                        byte[] buffer = new byte[512];
-                        MemoryStream buf = new MemoryStream();
-                        for (int offset; (offset = zs.Read(buffer, 0, 512)) > 0;)
-                            buf.Write(buffer, 0, offset);
-                        return buf.ToArray();
-                    }
-                }
-            }
-
-            static string DecompressGzip(byte[] bytes)
-            {
-                using (MemoryStream ms = new MemoryStream(bytes))
-                {
-                    string str = "";
-                    GZipStream gzip = new GZipStream(ms, CompressionMode.Decompress);//解压缩
-                    using (StreamReader reader = new StreamReader(gzip, Encoding.GetEncoding("utf-8")))
-                    {
-                        str = reader.ReadToEnd();
-                    }
-                    return str;
-                }
-            }
         }
     }
 

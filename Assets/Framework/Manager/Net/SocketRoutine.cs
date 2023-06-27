@@ -12,6 +12,8 @@ using UnityEngine.Networking;
 using LitJson;
 using UnityWebSocket;
 using MainPackage;
+using System.IO;
+using System.IO.Compression;
 
 namespace Framework
 {
@@ -53,7 +55,7 @@ namespace Framework
             {
                 lock (_eventQueue)
                 {
-                    _eventQueue.Enqueue(new SocketEvent(2, sender, e.Data));
+                    _eventQueue.Enqueue(new SocketEvent(2, sender, e.Data, e.RawData));
                 }
             };
             Socket.OnOpen += (sender, e) =>
@@ -85,10 +87,10 @@ namespace Framework
         /// <summary>
         /// 连接
         /// </summary>
-        public void Connect(Action callback = null)
+        public void Connect(Action callback = null, Dictionary<string, string> headerDic = null)
         {
             OpenCallback = callback;
-            Socket.ConnectAsync();
+            Socket.ConnectAsync(headerDic);
         }
 
         /// <summary>
@@ -98,6 +100,14 @@ namespace Framework
         {
             GameGod.Instance.Log(E_Log.Proto, "WebSocket 发送消息", msg);
             Socket.SendAsync(msg);
+        }
+
+        /// <summary>
+        /// 获取SocketClient
+        /// </summary>
+        public System.Net.WebSockets.ClientWebSocket GetSocket()
+        {
+            return Socket.GetSocket();
         }
 
         /// <summary>
@@ -134,13 +144,13 @@ namespace Framework
                 case 2:         // 消息
                     GameGod.Instance.Log(E_Log.Proto, "WebSocket 接收消息", evt.msg);
                     //分发消息
-                    DispatchMsg(evt.msg);
+                    DispatchMsg(evt);
                     break;
                 case 3:         // WS 关闭
-                    GameGod.Instance.Log(E_Log.Proto,"WebSocket 主动关闭");
+                    GameGod.Instance.Log(E_Log.Proto, "WebSocket 主动关闭");
                     break;
                 case 4:         // WS 打开
-                    GameGod.Instance.Log(E_Log.Proto,"WebSocket 已连接");
+                    GameGod.Instance.Log(E_Log.Proto, "WebSocket 已连接");
                     OpenCallback?.Invoke();
                     break;
                 default:
@@ -152,32 +162,86 @@ namespace Framework
         /// 派送消息
         /// </summary>
         /// <param name="msg"></param>
-        private void DispatchMsg(string msg)
+        private void DispatchMsg(SocketEvent evt)
         {
             //根据实际项目情况修改
-            //var jsondata = JsonMapper.ToObject(msg);
-            //int code = jsondata["code"].ToInt();
-            //int cmd = jsondata["cmd"].ToInt(0);
-        }
+            //var msg = ProtobufHelper.DeSerialize<string>(evt.bytes);
+            //Debug.Log(msg);
 
-        /// <summary>
-        /// Socket事件类
-        /// </summary>
-        public class SocketEvent
-        {
-            public int type;    //握手次数 1掉线 2消息 3主动关闭 4连接
-            public object ws;
-            public string msg;
-            //错误码和原因
-            public ushort code;
-            public string reason;
+            //拆收到消息的第一层
+            var wssPackage = Douyin.PushFrame.Parser.ParseFrom(evt.bytes);
+            //拆转化pb后的第二层 需要GZip解压
+            var unGzip = GZipDecompress(wssPackage.Payload.ToByteArray());
+            var payloadPackage = Douyin.Response.Parser.ParseFrom(unGzip);
+            Debug.Log("payloadPackage=" + payloadPackage);
+            //拆Gzip解压的第三层
 
-            public SocketEvent(int type, object ws, string msg = null)
+            foreach (var msg in payloadPackage.MessagesList)
             {
-                this.type = type;
-                this.ws = ws;
-                this.msg = msg;
+                switch (msg.Method)
+                {
+                    case "WebcastChatMessage":
+                        var chatMessage = Douyin.ChatMessage.Parser.ParseFrom(msg.Payload);
+                        Debug.LogError("chatMessage=" + chatMessage);
+                        break;
+
+                    default:
+                        break;
+                }
+                Debug.Log("msg.Method=" + msg.Method);
             }
+
+
+            static byte[] GZipDecompress(byte[] bytes)
+            {
+                using (MemoryStream ms = new MemoryStream(bytes))
+                {
+                    using (GZipStream zs = new GZipStream(ms, CompressionMode.Decompress))
+                    {
+                        byte[] buffer = new byte[512];
+                        MemoryStream buf = new MemoryStream();
+                        for (int offset; (offset = zs.Read(buffer, 0, 512)) > 0;)
+                            buf.Write(buffer, 0, offset);
+                        return buf.ToArray();
+                    }
+                }
+            }
+
+            static string DecompressGzip(byte[] bytes)
+            {
+                using (MemoryStream ms = new MemoryStream(bytes))
+                {
+                    string str = "";
+                    GZipStream gzip = new GZipStream(ms, CompressionMode.Decompress);//解压缩
+                    using (StreamReader reader = new StreamReader(gzip, Encoding.GetEncoding("utf-8")))
+                    {
+                        str = reader.ReadToEnd();
+                    }
+                    return str;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Socket事件类
+    /// </summary>
+    public class SocketEvent
+    {
+        public int type;    //握手次数 1掉线 2消息 3主动关闭 4连接
+        public object ws;
+        public string msg;
+        //错误码和原因
+        public ushort code;
+        public string reason;
+        public byte[] bytes;
+
+        public SocketEvent(int type, object ws, string msg = null, byte[] bytes = null)
+        {
+            this.type = type;
+            this.ws = ws;
+            this.msg = msg;
+            this.bytes = bytes;
         }
     }
 }

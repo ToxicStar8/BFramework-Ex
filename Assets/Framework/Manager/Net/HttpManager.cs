@@ -57,20 +57,22 @@ namespace Framework
             GameGod.Instance.Log(E_Log.Framework, "添加浏览器标头" + key, value);
         }
 
-        public void Get(string url, Action<string> callBack = null)
+        public HttpRoutine Get(string url, Action<string> callBack = null)
         {
             var pool = GameGod.Instance.PoolManager.CreateClassObjectPool<HttpRoutine>();
             var routine = pool.CreateClassObj();
             routine.ThisPool = pool;
             routine.Get(url, callBack);
+            return routine;
         }
 
-        public void Post(string url, string json = null, Action<string> callBack = null)
+        public HttpRoutine Post(string url, string json = null, Action<string> callBack = null)
         {
             var pool = GameGod.Instance.PoolManager.CreateClassObjectPool<HttpRoutine>();
             var routine = pool.CreateClassObj();
             routine.ThisPool = pool;
             routine.Post(url, json, callBack);
+            return routine;
         }
 
         public override void OnUpdate() { }

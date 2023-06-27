@@ -202,17 +202,26 @@ namespace Framework
         {
             GameGod.Instance.HttpManager.AddHeader(key, value);
         }
-        public virtual void HttpGet(string url, Action<string> callBack = null)
+        public virtual HttpRoutine HttpGet(string url, Action<string> callBack = null)
         {
-            GameGod.Instance.HttpManager.Get(url, callBack);
+            return GameGod.Instance.HttpManager.Get(url, callBack);
         }
-        public virtual void HttpPost(string url, string json = null, Action<string> callBack = null)
+        public virtual HttpRoutine HttpPost(string url, string json = null, Action<string> callBack = null)
         {
-            GameGod.Instance.HttpManager.Post(url, json, callBack);
+            return GameGod.Instance.HttpManager.Post(url, json, callBack);
         }
-        public virtual void SocketConnect(Action callBack = null)
+
+        public virtual void SocketClearHeader()
         {
-            GameGod.Instance.SocketManager.Connect(callBack);
+            GameGod.Instance.SocketManager.ClearHeader();
+        }
+        public virtual void SocketAddHeader(string key, string value)
+        {
+            GameGod.Instance.SocketManager.AddHeader(key, value);
+        }
+        public virtual void SocketConnect(string wsUrl, Action callBack = null)
+        {
+            GameGod.Instance.SocketManager.Connect(wsUrl,callBack);
         }
         public virtual void SocketSendMsg(string msg, Action<string> callBack = null)
         {

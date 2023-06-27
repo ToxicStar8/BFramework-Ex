@@ -49,17 +49,25 @@ namespace Framework
         /// </summary>
         private int _currRetry = 0;
 
+        /// <summary>
+        /// URL
+        /// </summary>
         private string _url;
+
+        /// <summary>
+        /// Post发送的数据
+        /// </summary>
         private string _json;
 
         /// <summary>
-        /// 发送的数据
+        /// 
         /// </summary>
-        private Dictionary<string, object> _sendDic;
+        private UnityWebRequest _webRequest;
+        public UnityWebRequest GetWWW() => _webRequest;
 
         public HttpRoutine()
         {
-            _sendDic = new Dictionary<string, object>();
+
         }
 
         /// <summary>
@@ -77,6 +85,7 @@ namespace Framework
 
             _url = url;
             _callBack = callBack;
+            _webRequest?.Dispose();
 
             GetUrl();
         }
@@ -97,6 +106,7 @@ namespace Framework
             _url = url;
             _json = json;
             _callBack = callBack;
+            _webRequest?.Dispose();
 
             PostUrl();
         }
@@ -104,8 +114,8 @@ namespace Framework
         private void GetUrl()
         {
             GameGod.Instance.Log(E_Log.Proto, string.Format("Get===><color=#00ffff>{0}</color>\n\r重试===><color=#00ffff>{1}</color>", _url, _currRetry));
-            UnityWebRequest www = UnityWebRequest.Get(_url);
-            GameGod.Instance.StartCoroutine(SendRequest(www));
+            _webRequest = UnityWebRequest.Get(_url);
+            GameGod.Instance.StartCoroutine(SendRequest());
         }
 
         private void PostUrl()
@@ -131,23 +141,23 @@ namespace Framework
             }
 
             //这里如果使用UnityWebRequest.Post再new UploadHandlerRaw，会造成内存泄漏
-            UnityWebRequest www = new UnityWebRequest(_url, "POST");
-            www.downloadHandler = new DownloadHandlerBuffer();
-            www.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(_json));
-            www.SetRequestHeader("Content-Type", "application/json");
+            _webRequest = new UnityWebRequest(_url, "POST");
+            _webRequest.downloadHandler = new DownloadHandlerBuffer();
+            _webRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(_json));
+            _webRequest.SetRequestHeader("Content-Type", "application/json");
             GameGod.Instance.Log(E_Log.Proto, string.Format("Post===><color=#00ffff>{0}</color>\n\r重试===><color=#00ffff>{1}</color>", _url + _json, _currRetry));
-            GameGod.Instance.StartCoroutine(SendRequest(www));
+            GameGod.Instance.StartCoroutine(SendRequest());
         }
 
-        private IEnumerator SendRequest(UnityWebRequest www)
+        private IEnumerator SendRequest()
         {
             foreach (var item in HttpMgr.HttpHeaderDic)
             {
-                www.SetRequestHeader(item.Key, item.Value);
+                _webRequest.SetRequestHeader(item.Key, item.Value);
             }
-            www.timeout = 5;
-            yield return www.SendWebRequest();
-            if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError)
+            _webRequest.timeout = 5;
+            yield return _webRequest.SendWebRequest();
+            if (_webRequest.result == UnityWebRequest.Result.ConnectionError || _webRequest.result == UnityWebRequest.Result.ProtocolError)
             {
                 //报错了 进行重试
                 if (_currRetry > 0) yield return HttpMgr.WaitSeconds;
@@ -156,7 +166,7 @@ namespace Framework
                 //如果还有重试次数 重试
                 if (_currRetry <= HttpMgr.Retry)
                 {
-                    switch (www.method)
+                    switch (_webRequest.method)
                     {
                         case UnityWebRequest.kHttpVerbGET:
                             GetUrl();
@@ -170,7 +180,7 @@ namespace Framework
 
                 //结束
                 IsBusy = false;
-                _jsonData = www.error;
+                _jsonData = _webRequest.error;
                 //打印错误
                 if (!string.IsNullOrWhiteSpace(_jsonData))
                 {
@@ -180,11 +190,11 @@ namespace Framework
             else
             {
                 IsBusy = false;
-                _jsonData = www.downloadHandler.text;
+                _jsonData = _webRequest.downloadHandler.text;
                 //打印数据
                 if (!string.IsNullOrWhiteSpace(_jsonData))
                 {
-                    GameGod.Instance.Log(E_Log.Proto, string.Format("<color=#FFF11A>{{\"code\":{0},\"data\":{1}}}</color>", www.responseCode, _jsonData));
+                    GameGod.Instance.Log(E_Log.Proto, string.Format("<color=#FFF11A>{{\"code\":{0},\"data\":{1}}}</color>", _webRequest.responseCode, _jsonData));
                 }
             }
             //执行回调
@@ -193,9 +203,7 @@ namespace Framework
             _callBack = null;
             _currRetry = 0;
             _url = null;
-            _sendDic.Clear();
             _jsonData = null;
-            www.Dispose();
             //回池
             ThisPool.Recycle(this);
         }

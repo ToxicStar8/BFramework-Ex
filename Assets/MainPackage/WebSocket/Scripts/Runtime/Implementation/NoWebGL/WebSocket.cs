@@ -45,6 +45,7 @@ namespace UnityWebSocket
         public event EventHandler<MessageEventArgs> OnMessage;
 
         private ClientWebSocket socket;
+        public ClientWebSocket GetSocket() => socket;
         private bool isOpening => socket != null && socket.State == System.Net.WebSockets.WebSocketState.Open;
 
         #region APIs 
@@ -65,7 +66,7 @@ namespace UnityWebSocket
             this.SubProtocols = subProtocols;
         }
 
-        public void ConnectAsync()
+        public void ConnectAsync(Dictionary<string,string> headerDic = null)
         {
 #if !UNITY_WEB_SOCKET_ENABLE_ASYNC
             WebSocketManager.Instance.Add(this);
@@ -83,6 +84,14 @@ namespace UnityWebSocket
                     if (string.IsNullOrEmpty(protocol)) continue;
                     Log($"Add Sub Protocol {protocol}");
                     socket.Options.AddSubProtocol(protocol);
+                }
+            }
+            if (headerDic != null)
+            {
+                //Ìí¼Óä¯ÀÀÆ÷±êÍ·
+                foreach (var item in headerDic)
+                {
+                    socket.Options.SetRequestHeader(item.Key, item.Value);
                 }
             }
             Task.Run(ConnectTask);

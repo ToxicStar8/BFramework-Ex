@@ -14,6 +14,8 @@ namespace UnityWebSocket
         public event EventHandler<CloseEventArgs> OnClose;
         public event EventHandler<ErrorEventArgs> OnError;
         public event EventHandler<MessageEventArgs> OnMessage;
+        
+        public System.Net.WebSockets.ClientWebSocket GetSocket() => null;
 
         internal int instanceId = 0;
 
@@ -61,7 +63,7 @@ namespace UnityWebSocket
             WebSocketManager.WebSocketFree(instanceId);
         }
 
-        public void ConnectAsync()
+        public void ConnectAsync(Dictionary<string,string> headerDic = null)
         {
             Log($"Connect with instanceId: {instanceId}");
             WebSocketManager.Add(this);

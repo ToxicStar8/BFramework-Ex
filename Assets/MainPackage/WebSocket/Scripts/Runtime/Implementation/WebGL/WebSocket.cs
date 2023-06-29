@@ -63,7 +63,7 @@ namespace UnityWebSocket
             WebSocketManager.WebSocketFree(instanceId);
         }
 
-        public void ConnectAsync(Dictionary<string,string> headerDic = null)
+        public void ConnectAsync(System.Collections.Generic.Dictionary<string, string> headerDic = null)
         {
             Log($"Connect with instanceId: {instanceId}");
             WebSocketManager.Add(this);

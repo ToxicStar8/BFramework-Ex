@@ -119,6 +119,6 @@ namespace Framework
         /// <summary>
         /// Log
         /// </summary>
-        public void Log(E_Log logType, string title = null, string content = null) => GameEntry.Instance.Log(logType, title, content);
+        public void Log(E_Log logType, string title = null, string content = null,string color = null) => GameEntry.Instance.Log(logType, title, content,color);
     }
 }

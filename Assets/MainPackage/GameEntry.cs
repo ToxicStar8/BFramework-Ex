@@ -158,7 +158,7 @@ namespace MainPackage
         /// <summary>
         /// Log
         /// </summary>
-        public void Log(E_Log logType, string title = null, string content = null)
+        public void Log(E_Log logType, string title = null, string content = null, string color = null)
         {
             string tempStr = string.Empty;
             if (title == null || content == null)
@@ -183,6 +183,9 @@ namespace MainPackage
                     break;
                 case E_Log.Error:
                     Debug.Log(string.Format(tempStr, "red", title, content));
+                    break;
+                case E_Log.Custom:
+                    Debug.Log(string.Format(tempStr, color, title, content));
                     break;
             }
         }
@@ -209,5 +212,6 @@ namespace MainPackage
         Framework,  //框架Log
         Proto,      //联网Log
         Error,      //错误Log
+        Custom,     //自定义颜色Log
     }
 }

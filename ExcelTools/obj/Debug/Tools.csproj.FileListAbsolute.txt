@@ -1,0 +1,7 @@
+D:\CultivationRoguelike2D\Table\Tools\bin\Debug\Tools.exe.config
+D:\CultivationRoguelike2D\Table\Tools\bin\Debug\Tools.exe
+D:\CultivationRoguelike2D\Table\Tools\bin\Debug\Tools.pdb
+D:\CultivationRoguelike2D\Table\Tools\obj\Debug\Tools.csproj.AssemblyReference.cache
+D:\CultivationRoguelike2D\Table\Tools\obj\Debug\Tools.csproj.CoreCompileInputs.cache
+D:\CultivationRoguelike2D\Table\Tools\obj\Debug\Tools.exe
+D:\CultivationRoguelike2D\Table\Tools\obj\Debug\Tools.pdb

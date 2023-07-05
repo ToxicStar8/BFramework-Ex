@@ -89,7 +89,7 @@ namespace Framework
 
         public override void OnDispose() 
         {
-            _mainSocket.CloseSocket();
+            _mainSocket?.CloseSocket();
             _mainSocket = null;
         }
     }

@@ -29,15 +29,4 @@ namespace GameData
             GameGod.Instance.UIManager.OpenUI<UIMainMenu>(E_UILevel.Common);
         }
     }
-
-    /// <summary>
-    /// 反射加载热更（已弃用）
-    /// </summary>
-    //public class HotUpdateMainByMethod
-    //{
-    //    public static void Start()
-    //    {
-    //          
-    //    }
-    //}
 }

@@ -24,37 +24,5 @@ namespace GameData
             GameGod.Instance.DataManager.GetNewData();
             callback?.Invoke();
         }
-
-        /// <summary>
-        /// 选择角色
-        /// </summary>
-        /// <param name="obj"></param>
-        public static void FnSelectRole(E_RoleType roleId, Action callback)
-        {
-            PlayData.RoleData.SetRoleId((int)roleId);
-            callback?.Invoke();
-        }
-
-        /// <summary>
-        /// 抽卡
-        /// </summary>
-        /// <param name="obj"></param>
-        public static void FnDrawCard(Action callback)
-        {
-            callback?.Invoke();
-            //抽完卡之后增加Idx
-            PlayData.CurSelectIdx++;
-        }
-
-        /// <summary>
-        /// 重置牌序
-        /// </summary>
-        /// <param name="obj"></param>
-        public static void FnReSortCardList(Action callback)
-        {
-            PlayData.CurSelectIdx = 0;
-            PlayData.CardHeldList.SortByDisordered();
-            callback?.Invoke();
-        }
     }
 }

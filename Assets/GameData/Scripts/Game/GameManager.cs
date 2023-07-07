@@ -17,12 +17,10 @@ namespace GameData
     /// <summary>
     /// 游戏管理器
     /// </summary>
-    public partial class GameManager : GameBase
+    public partial class GameManager : InstanceBase<GameManager>
     {
         public GameObject gameObject { private set; get; }
         public Transform transform { private set; get; }
-        //单例
-        public static GameManager Instance { private set; get; }
         //加载器
         public LoadHelper LoadHelper { private set; get; }
         //玩家控制器
@@ -41,7 +39,6 @@ namespace GameData
         /// </summary>
         public static void CreateGameManager()
         {
-            Instance = new GameManager();
             //初始化加载器
             Instance.LoadHelper = LoadHelper.Create();
             //初始化游戏对象和Trans
@@ -61,42 +58,14 @@ namespace GameData
         /// </summary>
         public void InitGame()
         {
-            var tbRole = PlayerModule.PlayData.RoleData.GetTbRole();
             //初始化玩家
-            PlayerCtrl = PlayerCtrl.CreateEntity<PlayerCtrl>(LoadHelper, tbRole.Asset);
+            PlayerCtrl = PlayerCtrl.CreateEntity<PlayerCtrl>(LoadHelper, "Player.prefab");
             //摄像机跟随
             VirtualCamera.Follow = PlayerCtrl.transform;
             //游戏开始时间
             _startTime = Time.time;
-            //地图初始化
-            InitMap();
-            //抽卡定时器
-            var timeCountdown = GameGod.Instance.PoolManager.CreateClassObj<TimerInfo>();
-            timeCountdown.Init(-1, 1, false, OnDrawCard);
-            AddTimer(ConstDefine.DrawCardTimeKey, timeCountdown);
-            //刷怪初始化
-            InitMonsterInfo();
             //初始化完毕
             _initComplete = true;
-        }
-
-        /// <summary>
-        /// 定时抽卡方法
-        /// </summary>
-        private void OnDrawCard()
-        {
-            PlayerModule.FnDrawCard(() =>
-            {
-                var playData = PlayerModule.PlayData;
-                //如果抽空牌库
-                if (playData.CurSelectIdx >= playData.CardHeldList.Count)
-                {
-                    Log(E_Log.Log, "重置牌序");
-                    PlayerModule.FnReSortCardList(null);
-                }
-                //UI同步显示
-                SendEven((ushort)UIEvent.OnUIMainShowCard, playData.CurSelectIdx.ToString());
-            });
         }
 
         private void OnUpdate()
@@ -109,8 +78,6 @@ namespace GameData
 
         public void OnDispose()
         {
-            RemoveTimer(ConstDefine.DrawCardTimeKey);
-            //RemoveCountdown(ConstDefine.CreateMonsterTimeKey);
             //回收加载器
             LoadHelper.Recycle(LoadHelper);
         }

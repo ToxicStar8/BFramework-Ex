@@ -13,17 +13,15 @@ namespace GameData
 {
     public partial class Main_CardUnit : UnitBase
     {
-        public CardData Data { private set; get; }
 
         public override void OnInit()
         {
             
         }
 
-        public void FnShow(CardData data)
+        public void FnShow()
         {
-            Data = data;
-            Img_Card.sprite = data.GetTbSuitCard().GetSpCard(LoadHelper);
+
         }
     }
 }

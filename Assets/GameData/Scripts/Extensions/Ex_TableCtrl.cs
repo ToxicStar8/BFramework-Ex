@@ -9,11 +9,5 @@ using UnityEngine;
 
 namespace GameData
 {
-    /// <summary>
-    /// 全局表
-    /// </summary>
-    public partial class TableGlobalCtrl
-    {
-        public TableGlobal Data => GetDataById(1);
-    }
+
 }

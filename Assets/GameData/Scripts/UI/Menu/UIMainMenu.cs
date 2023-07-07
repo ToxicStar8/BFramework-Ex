@@ -7,6 +7,7 @@ using Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace GameData
@@ -18,6 +19,13 @@ namespace GameData
             Btn_Start.AddListener(OnClick_Btn_Start);
             Btn_Continue.AddListener(OnClick_Btn_Continue);
             Btn_Exit.AddListener(OnClick_Btn_Exit);
+
+            RegisterUpdate(Update);
+        }
+
+        private void Update()
+        {
+
         }
 
         public override void OnShow(params object[] args)
@@ -28,7 +36,6 @@ namespace GameData
         private void FnContinueGame()
         {
             GameManager.Instance.InitGame();
-            OpenUI<UIMain>();
             CloseSelf();
         }
 
@@ -36,10 +43,7 @@ namespace GameData
         {
             PlayerModule.FnStartNewGame(new Action(() =>
             {
-                PlayerModule.FnSelectRole(E_RoleType.Green, new Action(() =>
-                {
-                    FnContinueGame();
-                }));
+                FnContinueGame();
             }));
         }
 

@@ -1,7 +1,0 @@
-int^string^string^int^int
-id^name^asset^speed^hp
-^角色名^角色预制体^速度基础值^血量基础值
-1^原皮小龙^Player.prefab^10^3
-2^大地小龙^^8^5
-3^冰霜小龙^^12^2
-4^红烧小龙^^9^4

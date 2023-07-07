@@ -1,7 +1,7 @@
 /*********************************************
  * 自动生成代码，禁止手动修改文件
  * 脚本名：TableTypes.cs
- * 修改时间：2023/04/26 04:06:42
+ * 修改时间：2023/07/07 04:18:32
  *********************************************/
 using System;
 
@@ -14,12 +14,7 @@ namespace GameData
     {
         public static Type[] TableCtrlTypeArr = new Type[]
         {
-            typeof(TableDifficultyCtrl),
-			typeof(TableLevelCtrl),
-			typeof(TableMonsterCtrl),
-			typeof(TableRoleCtrl),
-			typeof(TableSuitCardCtrl),
-			typeof(TableGlobalCtrl),
+            typeof(TableRegionCtrl),
 			
         };
     }

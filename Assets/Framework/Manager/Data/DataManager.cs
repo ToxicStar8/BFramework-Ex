@@ -14,7 +14,7 @@ namespace Framework
     /// <summary>
     /// 数据管理器
     /// </summary>
-    public partial class DataManager : ManagerBase
+    public class DataManager : ManagerBase
     {
         /// <summary>
         /// 最后存档的时间（Time.time）
@@ -24,9 +24,9 @@ namespace Framework
         /// <summary>
         /// 数据列表
         /// </summary>
-        public DataList Data { private set; get; }
+        public AllData AllData { private set; get; }
 
-        public bool IsNullData => Data == null;
+        public bool IsNullData => AllData == null;
 
         /// <summary>
         /// 存档的路径
@@ -72,7 +72,7 @@ namespace Framework
                     {
                         try
                         {
-                            Data = JsonMapper.ToObject<DataList>(jsonData);
+                            AllData = JsonMapper.ToObject<AllData>(jsonData);
                         }
                         catch
                         {
@@ -87,15 +87,15 @@ namespace Framework
         /// <summary>
         /// 新建存档
         /// </summary>
-        public DataList GetNewData()
+        public AllData GetNewData()
         {
             //新存档需要将旧数据绑定的定时器之类的先取消
-            Data?.OnDispose();
+            AllData?.OnDispose();
             //创建新存档
             LastSaveTime = Time.time;
-            Data = new DataList();
+            AllData = new AllData();
             SaveDataToFile();
-            return Data;
+            return AllData;
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace Framework
         public void SaveData()
         {
             //游玩时长
-            Data.GamingTime += Time.time - LastSaveTime;
+            AllData.GamingTime += Time.time - LastSaveTime;
             //更新记录开始的时间
             LastSaveTime = Time.time;
             SaveDataToFile();
@@ -119,7 +119,7 @@ namespace Framework
             //WebGL不允许使用IO类函数
             PlayerPrefs.SetString(ConstDefine.Archival, JsonMapper.ToJson(Data));
 #else
-            File.WriteAllText(_archivalPath, JsonMapper.ToJson(Data));
+            File.WriteAllText(_archivalPath, JsonMapper.ToJson(AllData));
 #endif
         }
 
@@ -130,7 +130,7 @@ namespace Framework
         public override void OnDispose()
         {
             SaveData();
-            Data?.OnDispose();
+            AllData?.OnDispose();
         }
     }
 }

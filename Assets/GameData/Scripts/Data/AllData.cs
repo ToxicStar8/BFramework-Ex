@@ -14,7 +14,7 @@ namespace GameData
     /// <summary>
     /// 数据列表
     /// </summary>
-    public class DataList
+    public class AllData
     {
         /// <summary>
         /// 游玩总时间

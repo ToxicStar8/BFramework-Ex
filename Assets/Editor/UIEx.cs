@@ -68,9 +68,14 @@ namespace Framework
             var go = txt.gameObject;
             DestroyImmediate(txt);
             txt = go.AddComponent<TextEx>();
-            var path = Application.dataPath;
-            path = path.Remove(0, path.Length - 6) + "/GameData/Art/Font/AlimamaShuHeiTi-Bold.ttf";
-            txt.font = UnityEditor.AssetDatabase.LoadAssetAtPath<Font>(path);
+            var fontDirPath = Application.dataPath + "/GameData/Art/Font/";
+            var fileArr = new DirectoryInfo(fontDirPath).GetFiles("*", SearchOption.AllDirectories);
+            if (fileArr.Length != 0)
+            {
+                var fontPath = fileArr[0].FullName;
+                fontPath = "Assets" + fontPath.Split("Assets")[1];
+                txt.font = UnityEditor.AssetDatabase.LoadAssetAtPath<Font>(fontPath);
+            }
             txt.supportRichText = false;
             txt.raycastTarget = false;
             txt.text = "TextEx...";

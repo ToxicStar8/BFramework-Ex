@@ -24,13 +24,13 @@ namespace GameData
         //加载器
         public LoadHelper LoadHelper { private set; get; }
         //玩家控制器
-        public PlayerCtrl PlayerCtrl { private set; get; }
+        //public PlayerCtrl PlayerCtrl { private set; get; }
         //主摄像机
-        public Camera MainCamera { private set; get; }
+        //public Camera MainCamera { private set; get; }
         //虚拟摄像机
-        public CinemachineVirtualCamera VirtualCamera { private set; get; }
+        //public CinemachineVirtualCamera VirtualCamera { private set; get; }
         //是否初始化完毕
-        private bool _initComplete = false;
+        //private bool _initComplete = false;
         //开始时间
         public float _startTime { private set; get; }
 
@@ -45,8 +45,8 @@ namespace GameData
             Instance.transform = GameEntry.Instance.GameStart;
             Instance.gameObject = Instance.transform.gameObject;
             //初始化主摄像机
-            Instance.MainCamera = Instance.transform.Find("MainCamera").GetComponent<Camera>();
-            Instance.VirtualCamera = Instance.transform.Find("PlayerFollowVirtualCamera").GetComponent<CinemachineVirtualCamera>();
+            //Instance.MainCamera = Instance.transform.Find("MainCamera").GetComponent<Camera>();
+            //Instance.VirtualCamera = Instance.transform.Find("PlayerFollowVirtualCamera").GetComponent<CinemachineVirtualCamera>();
             //添加Update监听
             GameGod.Instance.UpdateCallback += Instance.OnUpdate;
             //添加关闭监听
@@ -59,21 +59,18 @@ namespace GameData
         public void InitGame()
         {
             //初始化玩家
-            PlayerCtrl = PlayerCtrl.CreateEntity<PlayerCtrl>(LoadHelper, "Player.prefab");
+            //PlayerCtrl = PlayerCtrl.CreateEntity<PlayerCtrl>(LoadHelper, "Player.prefab");
             //摄像机跟随
-            VirtualCamera.Follow = PlayerCtrl.transform;
+            //VirtualCamera.Follow = PlayerCtrl.transform;
             //游戏开始时间
             _startTime = Time.time;
             //初始化完毕
-            _initComplete = true;
+            //_initComplete = true;
         }
 
         private void OnUpdate()
         {
-            if (_initComplete)
-            {
-                PlayerCtrl.OnUpdate();
-            }
+            //PlayerCtrl?.OnUpdate();
         }
 
         public void OnDispose()

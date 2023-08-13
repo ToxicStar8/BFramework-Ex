@@ -227,6 +227,10 @@ namespace Framework
         {
             GameGod.Instance.SocketManager.SendMsg(msg, callBack);
         }
+        public virtual void SocketSendMsg(byte[] msg, Action<string> callBack = null)
+        {
+            GameGod.Instance.SocketManager.SendMsg(msg, callBack);
+        }
         public virtual void SocketClose()
         {
             GameGod.Instance.SocketManager.CloseSocket();

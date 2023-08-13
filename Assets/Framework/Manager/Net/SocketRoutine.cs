@@ -103,6 +103,15 @@ namespace Framework
         }
 
         /// <summary>
+        /// 发送数据
+        /// </summary>
+        public void SendMsg(byte[] msg)
+        {
+            GameGod.Instance.Log(E_Log.Proto, "WebSocket 发送消息", msg.ToString());
+            Socket.SendAsync(msg);
+        }
+
+        /// <summary>
         /// 获取SocketClient
         /// </summary>
         public System.Net.WebSockets.ClientWebSocket GetSocket()
@@ -166,7 +175,8 @@ namespace Framework
         {
             //根据实际项目情况修改
             var msg = evt.msg;
-
+            var jsonData = JsonMapper.ToObject(msg);
+            Debug.Log(jsonData.ToString());
         }
     }
 

@@ -20,4 +20,4 @@ namespace GameData
         //数据快捷访问
         public static PlayData PlayData => GameGod.Instance.DataManager.AllData.PlayData;
     }
-}
+}   

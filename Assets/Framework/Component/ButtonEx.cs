@@ -3,7 +3,9 @@
  * 按钮扩展类
  * 创建时间：2023/01/08 20:40:23
  *********************************************/
+using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Framework
@@ -13,6 +15,20 @@ namespace Framework
     /// </summary>
     public class ButtonEx : Button
     {
+        //按钮按下拿起回调
+        public Action<PointerEventData> OnPointerDownCallback;
+        public Action<PointerEventData> OnPointerUpCallback;
 
+        public override void OnPointerDown(PointerEventData eventData)
+        {
+            base.OnPointerDown(eventData);
+            OnPointerDownCallback?.Invoke(eventData);
+        }
+
+        public override void OnPointerUp(PointerEventData eventData)
+        {
+            base.OnPointerUp(eventData);
+            OnPointerUpCallback?.Invoke(eventData);
+        }
     }
 }

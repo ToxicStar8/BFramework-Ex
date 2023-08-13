@@ -66,6 +66,11 @@ namespace Framework
             _mainSocket.SendMsg(msg);
         }
 
+        public void SendMsg(byte[] msg, Action<string> callBack = null)
+        {
+            _mainSocket.SendMsg(msg);
+        }
+
         /// <summary>
         /// 获取SocketClient
         /// </summary>

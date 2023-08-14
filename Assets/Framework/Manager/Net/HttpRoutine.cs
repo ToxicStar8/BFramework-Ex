@@ -196,9 +196,9 @@ namespace Framework
                 {
                     GameGod.Instance.Log(E_Log.Proto, string.Format("<color=#FFF11A>{{\"code\":{0},\"data\":{1}}}</color>", _webRequest.responseCode, _jsonData));
                 }
+                //执行回调
+                _callBack?.Invoke(_jsonData);
             }
-            //执行回调
-            _callBack?.Invoke(_jsonData);
             //清理状态
             _callBack = null;
             _currRetry = 0;

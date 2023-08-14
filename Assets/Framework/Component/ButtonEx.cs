@@ -15,6 +15,22 @@ namespace Framework
     /// </summary>
     public class ButtonEx : Button
     {
+        private RectTransform selfRect;
+        /// <summary>
+        /// Btn游戏节点
+        /// </summary>
+        public RectTransform rectTransform
+        {
+            get
+            {
+                if (selfRect == null)
+                {
+                    selfRect = GetComponent<RectTransform>();
+                }
+                return selfRect;
+            }
+        }
+
         //按钮按下拿起回调
         public Action<PointerEventData> OnPointerDownCallback;
         public Action<PointerEventData> OnPointerUpCallback;

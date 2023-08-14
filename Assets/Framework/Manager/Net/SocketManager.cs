@@ -61,12 +61,12 @@ namespace Framework
         /// <summary>
         /// 发送消息
         /// </summary>
-        public void SendMsg(string msg, Action<string> callBack = null)
+        public void SendMsg(string msg)
         {
             _mainSocket.SendMsg(msg);
         }
 
-        public void SendMsg(byte[] msg, Action<string> callBack = null)
+        public void SendMsg(byte[] msg)
         {
             _mainSocket.SendMsg(msg);
         }

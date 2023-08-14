@@ -223,13 +223,13 @@ namespace Framework
         {
             GameGod.Instance.SocketManager.Connect(wsUrl,callBack);
         }
-        public virtual void SocketSendMsg(string msg, Action<string> callBack = null)
+        public virtual void SocketSendMsg(string msg)
         {
-            GameGod.Instance.SocketManager.SendMsg(msg, callBack);
+            GameGod.Instance.SocketManager.SendMsg(msg);
         }
-        public virtual void SocketSendMsg(byte[] msg, Action<string> callBack = null)
+        public virtual void SocketSendMsg(byte[] msg)
         {
-            GameGod.Instance.SocketManager.SendMsg(msg, callBack);
+            GameGod.Instance.SocketManager.SendMsg(msg);
         }
         public virtual void SocketClose()
         {

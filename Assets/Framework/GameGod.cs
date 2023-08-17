@@ -28,6 +28,11 @@ namespace Framework
         /// </summary>
         public Action DisposeCallback;
 
+        /// <summary>
+        /// 全局用的加载器，基本不释放
+        /// </summary>
+        public LoadHelper LoadHelper { private set; get; }
+
         public static GameGod Instance { private set; get; }
         public PoolManager PoolManager { private set; get; }
         public HttpManager HttpManager { private set; get; }
@@ -62,6 +67,8 @@ namespace Framework
             TimeManager = new TimerManager();
             DataManager = new DataManager();
             FsmManager = new FsmManager();
+
+            LoadHelper = LoadHelper.Create();
         }
 
         private void Start()

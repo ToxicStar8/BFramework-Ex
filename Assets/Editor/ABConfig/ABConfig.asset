@@ -19,10 +19,10 @@ MonoBehaviour:
   - Assets/GameData/Art/Font
   - Assets/GameData/Art/Sprite
   - Assets/GameData/Art/Texture
-  - Assets/GameData/Art/Tilemap
   - Assets/GameData/Table
   - Assets/GameData/Prefabs/UI
   - Assets/GameData/Prefabs/Game
+  - Assets/GameData/Scene
   TrueABList:
   - path: Assets/Editor/ABConfig/JsonInformation
     abName: jsoninformation
@@ -30,18 +30,8 @@ MonoBehaviour:
     abName: hotfix
   - path: Assets/GameData/Art/Font
     abName: font
-  - path: Assets/GameData/Art/Sprite/Map
-    abName: spritemap
-  - path: Assets/GameData/Art/Sprite/Monster
-    abName: spritemonster
   - path: Assets/GameData/Art/Sprite/Role
     abName: spriterole
-  - path: Assets/GameData/Art/Sprite/UI
-    abName: spriteui
-  - path: Assets/GameData/Art/Tilemap/Map
-    abName: tilemapmap
-  - path: Assets/GameData/Art/Tilemap
-    abName: tilemap
   - path: Assets/GameData/Table
     abName: table
   - path: Assets/GameData/Prefabs/UI/Btns
@@ -50,9 +40,7 @@ MonoBehaviour:
     abName: uicommon
   - path: Assets/GameData/Prefabs/UI/Main
     abName: uimain
-  - path: Assets/GameData/Prefabs/UI/Menu
-    abName: uimenu
   - path: Assets/GameData/Prefabs/Game/Entity
     abName: gameentity
-  - path: Assets/GameData/Prefabs/Game/Map
-    abName: gamemap
+  - path: Assets/GameData/Scene/Scene_Game.unity
+    abName: scene_game

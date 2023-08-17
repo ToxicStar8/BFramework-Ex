@@ -129,7 +129,10 @@ namespace Framework
         /// </summary>
         public override void OnDispose()
         {
-            SaveData();
+            if (AllData != null)
+            {
+                SaveData();
+            }
             AllData?.OnDispose();
         }
     }

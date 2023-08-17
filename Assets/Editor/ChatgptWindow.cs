@@ -4,18 +4,11 @@
  * 创建时间：2022/12/28 15:52:23
  *********************************************/
 using LitJson;
-using MainPackage;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
-using System.Runtime.Remoting.Messaging;
-using System.Security.Policy;
 using System.Text;
 using UnityEditor;
-using UnityEditor.TestTools.TestRunner.Api;
-using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -54,26 +47,26 @@ namespace Framework
         private string _openaiSaveKeyPath = "";
         public void OnGUI()
         {
-            GUILayout.BeginHorizontal();
-            GUILayout.Label("你的问题：", GUILayout.Width(80f));
-            _question = GUILayout.TextField(_question, GUILayout.Width(440f));
+            EditorGUILayout.BeginHorizontal("Box");
+            EditorGUILayout.LabelField("你的问题：", GUILayout.Width(80f));
+            _question = EditorGUILayout.TextField(_question, GUILayout.Width(440f));
             if (GUILayout.Button("确定"))
             {
                 Debug.Log("确定");
                 HttpPost();
             }
-            GUILayout.EndHorizontal();
-            GUILayout.Space(10f);
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.Space(10f);
 
-            GUILayout.BeginHorizontal();
-            GUILayout.Label("回复：", GUILayout.Width(80f));
-            _answer = GUILayout.TextField(_answer, GUILayout.Height(300f));
-            GUILayout.EndHorizontal();
-            GUILayout.Space(10f);
+            EditorGUILayout.BeginHorizontal("Box");
+            EditorGUILayout.LabelField("回复：", GUILayout.Width(80f));
+            _answer = EditorGUILayout.TextField(_answer, GUILayout.Height(300f));
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.Space(10f);
 
-            GUILayout.BeginHorizontal();
-            GUILayout.Label("OpenAI Key：", GUILayout.Width(80f));
-            _openaiKey = GUILayout.TextField(_openaiKey, GUILayout.Width(400f));
+            EditorGUILayout.BeginHorizontal("Box");
+            EditorGUILayout.LabelField("OpenAI Key：", GUILayout.Width(80f));
+            _openaiKey = EditorGUILayout.TextField(_openaiKey, GUILayout.Width(400f));
             if (GUILayout.Button("保存"))
             {
                 if (File.Exists(_openaiSaveKeyPath))
@@ -86,8 +79,8 @@ namespace Framework
             {
                 OpenFileTools.OpenFile(Application.persistentDataPath);
             }
-            GUILayout.EndHorizontal();
-            GUILayout.Space(10f);
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.Space(10f);
         }
 
         private UnityWebRequest _webRequest;

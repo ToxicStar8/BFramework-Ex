@@ -127,8 +127,8 @@ namespace Framework
                     var abPackage = LoadAssetBundle(abRelyOnInfo.ABName);
                     if(objName.EndsWith(".unity"))
                     {
-                        //场景需要单独加载 todo
-
+                        //场景为单独一个AB包加载完毕后，直接使用无需再加载资产
+                        obj = abPackage;
                     }
                     else
                     {

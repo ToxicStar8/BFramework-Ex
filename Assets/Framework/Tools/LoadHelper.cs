@@ -8,6 +8,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
 namespace Framework
@@ -73,16 +74,25 @@ namespace Framework
         }
 
         /// <summary>
-        /// 加载资源
+        /// 加载资源 带后缀
         /// </summary>
         public T LoadSync<T>(string objName) where T : Object
+        {
+            var obj = LoadSync(objName) as T;
+            return obj;
+        }
+
+        /// <summary>
+        /// 加载资源 带后缀
+        /// </summary>
+        public Object LoadSync(string objName)
         {
             if (_objNameList == null)
             {
                 _objNameList = new List<string>();
             }
             //真正加载资源的地方
-            var obj = GameGod.Instance.LoadManager.LoadSync<T>(objName);
+            var obj = GameGod.Instance.LoadManager.LoadSync(objName);
             if (obj == null)
             {
                 GameGod.Instance.Log(E_Log.Error, "加载资源为空", objName);
@@ -94,6 +104,17 @@ namespace Framework
                 _objNameList.Add(objName);
             }
             return obj;
+        }
+
+        /// <summary>
+        /// 同步加载场景
+        /// </summary>
+        /// <param name="sceneName">加载场景一定要用全大小写名，全小写的名字只能用于预先放在BuildSetting里使用</param>
+        public void LoadSceneSync(string sceneName)
+        {
+            //var sceneName = "Scene_Game";
+            LoadSync(sceneName + ".unity");
+            SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
         }
 
         /// <summary>

@@ -141,6 +141,21 @@ namespace Framework
             return obj;
         }
 
+#if UNITY_EDITOR
+        /// <summary>
+        /// 编辑器模式下获取对象的路径（用于场景加载
+        /// </summary>
+        public string GetObjAssetPath(string objName)
+        {
+            if (!_allObjDirectoryDic.TryGetValue(objName, out var path))
+            {
+                GameGod.Instance.Log(E_Log.Error, "找不到资源", objName);
+                return null;
+            }
+            return path;
+        }
+#endif
+
         /// <summary>
         /// 加载图片
         /// </summary>

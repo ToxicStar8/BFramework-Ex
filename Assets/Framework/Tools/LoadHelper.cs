@@ -114,7 +114,18 @@ namespace Framework
         {
             //var sceneName = "Scene_Game";
             LoadSync(sceneName + ".unity");
-            SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+            if (!GameEntry.Instance.IsEditorMode || GameEntry.Instance.IsRunABPackage)
+            {
+                SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+            }
+#if UNITY_EDITOR
+            else
+            {
+                string path = GameGod.Instance.LoadManager.GetObjAssetPath(sceneName + ".unity");
+                var parameters = new LoadSceneParameters( LoadSceneMode.Single);
+                UnityEditor.SceneManagement.EditorSceneManager.LoadSceneInPlayMode(path, parameters);
+            }
+#endif
         }
 
         /// <summary>

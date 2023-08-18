@@ -26,9 +26,9 @@ namespace GameData
         //玩家控制器
         //public PlayerCtrl PlayerCtrl { private set; get; }
         //主摄像机
-        //public Camera MainCamera { private set; get; }
+        public Camera MainCamera { private set; get; }
         //虚拟摄像机
-        //public CinemachineVirtualCamera VirtualCamera { private set; get; }
+        public CinemachineVirtualCamera VirtualCamera { private set; get; }
         //是否初始化完毕
         //private bool _initComplete = false;
         //开始时间
@@ -41,12 +41,8 @@ namespace GameData
         {
             //初始化加载器
             Instance.LoadHelper = LoadHelper.Create();
-            //初始化游戏对象和Trans
-            Instance.transform = GameEntry.Instance.GameStart;
-            Instance.gameObject = Instance.transform.gameObject;
-            //初始化主摄像机
-            //Instance.MainCamera = Instance.transform.Find("MainCamera").GetComponent<Camera>();
-            //Instance.VirtualCamera = Instance.transform.Find("PlayerFollowVirtualCamera").GetComponent<CinemachineVirtualCamera>();
+            //切换游戏场景
+            Instance.LoadHelper.LoadSceneSync("Scene_Game");
             //添加Update监听
             GameGod.Instance.UpdateCallback += Instance.OnUpdate;
             //添加关闭监听
@@ -58,6 +54,12 @@ namespace GameData
         /// </summary>
         public void InitGame()
         {
+            //初始化游戏对象和Trans
+            gameObject = GameObject.Find("GameStart");
+            transform = gameObject.transform;
+            //初始化主摄像机
+            MainCamera = transform.Find("MainCamera").GetComponent<Camera>();
+            VirtualCamera = transform.Find("PlayerFollowVirtualCamera").GetComponent<CinemachineVirtualCamera>();
             //初始化玩家
             //PlayerCtrl = PlayerCtrl.CreateEntity<PlayerCtrl>(LoadHelper, "Player.prefab");
             //摄像机跟随

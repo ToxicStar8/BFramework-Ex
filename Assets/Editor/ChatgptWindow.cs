@@ -25,7 +25,7 @@ namespace Framework
         private static void OpenWindow()
         {
             var win = CreateWindow<ChatgptWindow>("Chatgpt即时问答工具");
-            win.position = new Rect(100, 100, 600, 400);
+            win.position = new Rect(100, 100, 600, 450);
             win.OnInit();
             _chatgptWindow?.Close();
             _chatgptWindow = win;
@@ -34,6 +34,7 @@ namespace Framework
         public void OnInit()
         {
             _openaiSaveKeyPath = Application.persistentDataPath + "/openaikey.txt";
+            _version = "gpt-3.5-turbo-0613";
 
             if (File.Exists(_openaiSaveKeyPath))
             {
@@ -45,8 +46,23 @@ namespace Framework
         private string _answer = "";
         private string _openaiKey = "";
         private string _openaiSaveKeyPath = "";
+        private string _version = "";
         public void OnGUI()
         {
+            EditorGUILayout.BeginHorizontal("Box");
+            EditorGUILayout.LabelField("当前版本：", GUILayout.Width(80f));
+            EditorGUILayout.LabelField(_version, GUILayout.Width(80f));
+            if (GUILayout.Button("切换gpt-3.5"))
+            {
+                _version = "gpt-3.5-turbo-0613";
+            }
+            if (GUILayout.Button("切换gpt-4"))
+            {
+                _version = "gpt-4-0613";
+            }
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.Space(10f);
+
             EditorGUILayout.BeginHorizontal("Box");
             EditorGUILayout.LabelField("你的问题：", GUILayout.Width(80f));
             _question = EditorGUILayout.TextField(_question, GUILayout.Width(440f));
@@ -89,7 +105,7 @@ namespace Framework
         {
             _webRequest = new UnityWebRequest(_openaiUrl, "POST");
             _webRequest.downloadHandler = new DownloadHandlerBuffer();
-            var json = "{\"model\":\"gpt-4\",\"messages\": [{\"role\": \"user\", \"content\": \"" + _question + "\"}]}";
+            var json = "{\"model\":\""+ _version + "\",\"messages\": [{\"role\": \"user\", \"content\": \"" + _question + "\"}]}";
             _webRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(json));
             _webRequest.SetRequestHeader("Content-Type", "application/json");
             _webRequest.SetRequestHeader("Authorization", "Bearer " + _openaiKey);

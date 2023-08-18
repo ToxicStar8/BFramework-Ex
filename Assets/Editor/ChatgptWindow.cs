@@ -1,7 +1,7 @@
 /*********************************************
  * BFramework
- * 快捷打开工具
- * 创建时间：2022/12/28 15:52:23
+ * Chatgpt即时问答工具
+ * 创建时间：2023/08/16 17:00:23
  *********************************************/
 using LitJson;
 using System.Collections;
@@ -68,7 +68,6 @@ namespace Framework
             _question = EditorGUILayout.TextField(_question, GUILayout.Width(440f));
             if (GUILayout.Button("确定"))
             {
-                Debug.Log("确定");
                 HttpPost();
             }
             EditorGUILayout.EndHorizontal();
@@ -76,7 +75,7 @@ namespace Framework
 
             EditorGUILayout.BeginHorizontal("Box");
             EditorGUILayout.LabelField("回复：", GUILayout.Width(80f));
-            _answer = EditorGUILayout.TextField(_answer, GUILayout.Height(300f));
+            _answer = EditorGUILayout.TextField(_answer, GUILayout.MinHeight(300f), GUILayout.MaxHeight(1000f));
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.Space(10f);
 

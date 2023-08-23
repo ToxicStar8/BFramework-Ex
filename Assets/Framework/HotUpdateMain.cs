@@ -24,7 +24,7 @@ namespace GameData
             //背景音乐
             GameGod.Instance.AudioManager.PlayBackground("RetroComedy.ogg");
             //游戏管理器
-            GameManager.CreateGameManager();
+            //GameManager.CreateGameManager();
             //正式启动
             GameGod.Instance.UIManager.OpenUI<UIMainMenu>(E_UILevel.Common);
         }

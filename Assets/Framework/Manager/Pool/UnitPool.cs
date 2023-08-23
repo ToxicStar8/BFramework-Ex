@@ -99,6 +99,9 @@ namespace Framework
                 unitBase.gameObject.SetParent(parent);
             }
             PoolList.Add(unitBase);
+            unitBase.rectTransform.localPosition = gameObject.transform.localPosition;
+            unitBase.rectTransform.localRotation = gameObject.transform.localRotation;
+            unitBase.rectTransform.localScale = gameObject.transform.localScale;
             unitBase.gameObject.SetActive(true);
             return unitBase;
         }

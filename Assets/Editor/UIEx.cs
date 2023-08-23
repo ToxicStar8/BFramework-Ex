@@ -5,6 +5,7 @@
  *********************************************/
 using System.IO;
 using UnityEditor;
+using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +16,7 @@ namespace Framework
     /// </summary>
     public class UIEx : Editor
     {
+        #region Create UI Component
         [MenuItem("GameObject/UI/ButtonEx", false, 0)]
         public static void CreateButtonEx()
         {
@@ -59,7 +61,9 @@ namespace Framework
             var go = txt.gameObject;
             go.transform.SetParent(trans);
         }
+        #endregion
 
+        #region Replace Text
         /// <summary>
         /// Text替换成TextEx
         /// </summary>
@@ -103,6 +107,27 @@ namespace Framework
             }
             img.raycastTarget = btn != null;
         }
+        #endregion
+
+        #region Replace Image
+        [MenuItem("CONTEXT/Image/替换为ImageEx")]
+        public static void ImageReplaceImageEx()
+        {
+            var img = Selection.activeTransform.GetComponent<Image>();
+            var go = img.gameObject;
+            DestroyImmediate(img);
+            img = go.AddComponent<ImageEx>();
+        }
+
+        [MenuItem("CONTEXT/Image/替换为RawImage")]
+        public static void ImageReplaceRawImage()
+        {
+            var img = Selection.activeTransform.GetComponent<Image>();
+            var go = img.gameObject;
+            DestroyImmediate(img);
+            var rawImg = go.AddComponent<RawImage>();
+            rawImg.raycastTarget = false;
+        }
 
         [MenuItem("CONTEXT/Image/替换为TextEx")]
         public static void ImageReplaceTextEx()
@@ -120,15 +145,19 @@ namespace Framework
             txt.raycastTarget = btn != null;
             txt.font = null;
         }
+        #endregion
 
-        [MenuItem("CONTEXT/Image/替换为RawImage")]
-        public static void ImageReplaceRawImage()
+        [CustomEditor(typeof(ImageEx), true)]
+        public class ImageExEditor : ImageEditor
         {
-            var img = Selection.activeTransform.GetComponent<Image>();
-            var go = img.gameObject;
-            DestroyImmediate(img);
-            var rawImg = go.AddComponent<RawImage>();
-            rawImg.raycastTarget = false;
+            public override void OnInspectorGUI()
+            {
+                base.OnInspectorGUI();
+                ImageEx img = (ImageEx)target;
+                SerializedProperty sp = serializedObject.FindProperty("Offset");
+                EditorGUILayout.PropertyField(sp, new GUIContent("Offset 倾斜偏移"));
+                serializedObject.ApplyModifiedProperties();
+            }
         }
     }
 }

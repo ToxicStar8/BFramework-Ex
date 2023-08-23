@@ -92,6 +92,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MainPackage;
 
 namespace GameData
 {
@@ -180,6 +181,7 @@ namespace GameData
  *********************************************/
 
 using Framework;
+using MainPackage;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -334,7 +336,7 @@ namespace GameData
             
         }
 
-        public void FnShow()
+        public void OnShow()
         {
             
         }

@@ -1,6 +1,6 @@
 /*********************************************
  * BFramework
- * 游戏入口
+ * 游戏框架总控制器
  * 创建时间：2022/12/25 20:40:23
  *********************************************/
 using MainPackage;
@@ -14,7 +14,7 @@ using UnityEngine;
 namespace Framework
 {
     /// <summary>
-    /// 游戏总控制器
+    /// 游戏框架总控制器
     /// </summary>
     public class GameGod : MonoBehaviour
     {
@@ -102,6 +102,7 @@ namespace Framework
         private void OnDestroy()
         {
             //再执行
+            DataManager.OnDispose();
             ABManager.OnDispose();
             FsmManager.OnDispose();
             UIManager.OnDispose();
@@ -113,7 +114,6 @@ namespace Framework
             SocketManager.OnDispose();
             AudioManager.OnDispose();
             TimeManager.OnDispose();
-            DataManager.OnDispose();
         }
 
         /// <summary>

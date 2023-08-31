@@ -31,9 +31,18 @@ namespace Framework
             }
         }
 
-        //按钮按下拿起回调
+        //按钮进入、按下、点击、拿起、离开回调
+        public Action<PointerEventData> OnPointerEnterCallback;
         public Action<PointerEventData> OnPointerDownCallback;
+        public Action<PointerEventData> OnPointerClickCallback;
         public Action<PointerEventData> OnPointerUpCallback;
+        public Action<PointerEventData> OnPointerExitCallback;
+
+        public override void OnPointerEnter(PointerEventData eventData)
+        {
+            base.OnPointerEnter(eventData);
+            OnPointerEnterCallback?.Invoke(eventData);
+        }
 
         public override void OnPointerDown(PointerEventData eventData)
         {
@@ -41,10 +50,22 @@ namespace Framework
             OnPointerDownCallback?.Invoke(eventData);
         }
 
+        public override void OnPointerClick(PointerEventData eventData)
+        {
+            base.OnPointerClick(eventData);
+            OnPointerClickCallback?.Invoke(eventData);
+        }
+
         public override void OnPointerUp(PointerEventData eventData)
         {
             base.OnPointerUp(eventData);
             OnPointerUpCallback?.Invoke(eventData);
+        }
+
+        public override void OnPointerExit(PointerEventData eventData)
+        {
+            base.OnPointerExit(eventData);
+            OnPointerExitCallback?.Invoke(eventData);   
         }
     }
 }

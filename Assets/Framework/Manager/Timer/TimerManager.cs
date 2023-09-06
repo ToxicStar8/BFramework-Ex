@@ -33,13 +33,15 @@ namespace Framework
         /// <param name="inviteTime">执行间隔时间</param>
         /// <param name="isExecImmed">是否立即执行</param>
         /// <param name="callback">执行回调</param>
-        public void Init(int allCount, float inviteTime, bool isExecImmed, Action callback)
+        public static TimerInfo CreateTimer(int allCount, float inviteTime, bool isExecImmed, Action callback)
         {
-            AllCount = allCount;
-            InviteTime = inviteTime;
-            IsExecImmed = isExecImmed;
-            Callback = callback;
-            OldTime = -1;
+            var timerInfo = new TimerInfo();
+            timerInfo.AllCount = allCount;
+            timerInfo.InviteTime = inviteTime;
+            timerInfo.IsExecImmed = isExecImmed;
+            timerInfo.Callback = callback;
+            timerInfo.OldTime = -1;
+            return timerInfo;
         }
     }
 

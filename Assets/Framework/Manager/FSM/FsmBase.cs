@@ -37,6 +37,6 @@ namespace Framework
         /// <summary>
         /// 关闭状态机
         /// </summary>
-        public abstract void OnClose();
+        public abstract void OnDispose();
     }
 }

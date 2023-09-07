@@ -22,7 +22,7 @@ namespace Framework
         /// </summary>
         private Dictionary<string, UIBase> _uiBaseDic;
 
-        public override void OnStart()
+        public override void OnInit()
         {
             _uiBaseDic = new Dictionary<string, UIBase>();
         }
@@ -99,7 +99,7 @@ namespace Framework
             //已打开 直接关闭
             if (_uiBaseDic.TryGetValue(uiName, out var uiBase))
             {
-                uiBase.OnClose();
+                uiBase.OnDispose();
                 Object.Destroy(uiBase.gameObject);
                 uiBase = null;
                 _uiBaseDic.Remove(uiName);
@@ -114,7 +114,7 @@ namespace Framework
         {
             foreach (var item in _uiBaseDic)
             {
-                item.Value.OnClose();
+                item.Value.OnDispose();
                 Object.Destroy(item.Value.gameObject);
                 GameGod.Instance.LoadManager.UnloadAsset(item.Key + ".prefab");
             }

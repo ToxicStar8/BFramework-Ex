@@ -44,7 +44,7 @@ namespace Framework
             PlayerPrefs.SetFloat(ConstDefine.VolumSound, _volumeSound);
         }
 
-        public override void OnStart()
+        public override void OnInit()
         {
             gameObject = new GameObject("[Audio]");
             //音乐

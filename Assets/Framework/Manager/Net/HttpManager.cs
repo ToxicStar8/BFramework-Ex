@@ -31,7 +31,7 @@ namespace Framework
         //Token 适配不同的后端要求 例：Token、Authorization等
         public Dictionary<string,string> HttpHeaderDic { get; private set; }
 
-        public override void OnStart()
+        public override void OnInit()
         {
             Retry = 0;
             RetryInterval = 0;

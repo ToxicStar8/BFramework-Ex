@@ -17,7 +17,7 @@ namespace Framework
     {
         private Dictionary<Type, ModuleBase> _allModuleDic;
 
-        public override void OnStart()
+        public override void OnInit()
         {
             _allModuleDic = new Dictionary<Type, ModuleBase>();
         }
@@ -49,6 +49,12 @@ namespace Framework
         }
 
         public override void OnUpdate() { }
-        public override void OnDispose() { }
+        public override void OnDispose() 
+        {
+            foreach (var item in _allModuleDic)
+            {
+                item.Value.OnDispose();
+            }
+        }
     }
 }

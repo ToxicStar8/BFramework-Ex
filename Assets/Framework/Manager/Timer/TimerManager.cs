@@ -58,7 +58,7 @@ namespace Framework
         //等待添加的计时器
         public List<TimerInfo> WaitAddList { private set; get; }
 
-        public override void OnStart()
+        public override void OnInit()
         {
             TimerInfoDic = new Dictionary<string, TimerInfo>();
             WaitReycleList = new List<TimerInfo>();

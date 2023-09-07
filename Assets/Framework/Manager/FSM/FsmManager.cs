@@ -26,7 +26,7 @@ namespace Framework
 		/// </summary>
 		private int _tempFsmIndex = 0;
 
-		public override void OnStart()
+		public override void OnInit()
 		{
 			_fsmDic = new Dictionary<int, FsmBase>();
 		}
@@ -54,7 +54,7 @@ namespace Framework
 		{
 			if (_fsmDic.TryGetValue(fsmId, out var fsm))
 			{
-				fsm.OnClose();
+				fsm.OnDispose();
 				_fsmDic.Remove(fsmId);
 			}
 		}
@@ -71,7 +71,7 @@ namespace Framework
 		{
             foreach (var item in _fsmDic)
             {
-				item.Value.OnClose();
+				item.Value.OnDispose();
 			}
 			_fsmDic.Clear();
 			_fsmDic = null;

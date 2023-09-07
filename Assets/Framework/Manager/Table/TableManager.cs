@@ -20,7 +20,7 @@ namespace Framework
     {
         private Dictionary<Type, ITableCtrlBase> _allTableDic;
 
-        public override void OnStart()
+        public override void OnInit()
         {
             _allTableDic = new Dictionary<Type, ITableCtrlBase>();
         }
@@ -52,7 +52,7 @@ namespace Framework
             if (tableCtrl.GetCreateStatus() == 0)
             {
                 GameGod.Instance.Log(E_Log.Framework, "初始化表格",type.Name);
-                tableCtrl.OnInitData();
+                tableCtrl.OnInit();
             }
             return _allTableDic[type] as T;
         }

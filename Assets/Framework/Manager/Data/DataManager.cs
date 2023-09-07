@@ -33,7 +33,7 @@ namespace Framework
         /// </summary>
         private string _archivalPath;
 
-        public override void OnStart()
+        public override void OnInit()
         {
             InitData();
         }

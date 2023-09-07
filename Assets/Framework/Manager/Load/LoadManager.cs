@@ -37,7 +37,7 @@ namespace Framework
         /// </summary>
         private Dictionary<string, Object> _objLoadDic;
 
-        public override void OnStart()
+        public override void OnInit()
         {
             _loadedABPackageDic = new Dictionary<string, LoadABInfo>();
             _objLoadDic = new Dictionary<string, Object>();

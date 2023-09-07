@@ -37,47 +37,6 @@ namespace Framework
         public LoadHelper LoadHelper;
 
         /// <summary>
-        /// 关闭UI通用方法
-        /// </summary>
-        public void OnClose()
-        {
-            //回收加载器
-            LoadHelper.Recycle(LoadHelper);
-
-            //关闭前移除全部Update回调
-            if (_update != null)
-            {
-                GameGod.Instance.UpdateCallback -= _update;
-                _update = null;
-            }
-
-            //关闭前移除全部注册事件
-            if (_eventList != null)
-            {
-                for (int i = 0, count = _eventList.Count; i < count; i++)
-                {
-                    RemoveEventListener(_eventList[i]);
-                }
-                _eventList.Clear();
-                _eventList = null;
-            }
-
-            //关闭前移除全部定时器
-            if (_timerList != null)
-            {
-                for (int i = 0, count = _timerList.Count; i < count; i++)
-                {
-                    RemoveTimer(_timerList[i]);
-                }
-                _timerList.Clear();
-                _timerList = null;
-            }
-
-            //关闭前执行
-            OnBeforDestroy();
-        }
-
-        /// <summary>
         /// 创建单独的UnitPool
         /// </summary>
         public UnitPool<T> CreateSinglePool<T>()where T : UnitBase,new()
@@ -162,5 +121,46 @@ namespace Framework
         /// 销毁前调用
         /// </summary>
         public abstract void OnBeforDestroy();
+
+        /// <summary>
+        /// 关闭UI通用方法
+        /// </summary>
+        public void OnDispose()
+        {
+            //关闭前执行
+            OnBeforDestroy();
+
+            //回收加载器
+            LoadHelper.Recycle(LoadHelper);
+
+            //关闭前移除全部Update回调
+            if (_update != null)
+            {
+                GameGod.Instance.UpdateCallback -= _update;
+                _update = null;
+            }
+
+            //关闭前移除全部注册事件
+            if (_eventList != null)
+            {
+                for (int i = 0, count = _eventList.Count; i < count; i++)
+                {
+                    RemoveEventListener(_eventList[i]);
+                }
+                _eventList.Clear();
+                _eventList = null;
+            }
+
+            //关闭前移除全部定时器
+            if (_timerList != null)
+            {
+                for (int i = 0, count = _timerList.Count; i < count; i++)
+                {
+                    RemoveTimer(_timerList[i]);
+                }
+                _timerList.Clear();
+                _timerList = null;
+            }
+        }
     }
 }

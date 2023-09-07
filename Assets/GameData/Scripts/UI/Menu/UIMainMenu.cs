@@ -30,26 +30,20 @@ namespace GameData
 
         public override void OnShow(params object[] args)
         {
-            Btn_Continue.SetActive(!GameGod.Instance.DataManager.IsNullData);
-        }
-
-        private void FnContinueGame()
-        {
-            GameManager.Instance.InitGame();
-            CloseSelf();
+            //Btn_Continue.SetActive(!GameGod.Instance.DataManager.IsNullData);
         }
 
         private void OnClick_Btn_Start()
         {
             //PlayerModule.FnStartNewGame(new Action(() =>
             //{
-                FnContinueGame();
+            CloseSelf();
             //}));
         }
 
         private void OnClick_Btn_Continue()
         {
-            FnContinueGame();
+            CloseSelf();
         }
 
         private void OnClick_Btn_Exit()

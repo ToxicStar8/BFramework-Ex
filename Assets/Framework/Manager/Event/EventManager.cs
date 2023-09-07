@@ -18,7 +18,7 @@ namespace Framework
     {
         private Dictionary<ushort, Action<object[]>> _eventDic;
 
-        public override void OnStart() 
+        public override void OnInit() 
         {
             _eventDic = new Dictionary<ushort, Action<object[]>>();
         }

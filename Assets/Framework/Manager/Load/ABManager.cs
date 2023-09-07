@@ -16,7 +16,7 @@ namespace Framework
         /// </summary>
         public ABInfo ABInfo { private set; get; }
 
-        public override void OnStart()
+        public override void OnInit()
         {
             if (!GameEntry.Instance.IsEditorMode || GameEntry.Instance.IsRunABPackage)
             {

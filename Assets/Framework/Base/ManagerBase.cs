@@ -18,11 +18,20 @@ namespace Framework
         public ManagerBase()
         {
             GameGod.Instance.Log(E_Log.Framework, "初始化管理器", GetType().Name);
-            OnStart();
+            OnInit();
         }
 
-        public abstract void OnStart();
+        /// <summary>
+        /// 初始化Manager
+        /// </summary>
+        public abstract void OnInit();
+        /// <summary>
+        /// Update
+        /// </summary>
         public abstract void OnUpdate();
+        /// <summary>
+        /// 关闭Manager
+        /// </summary>
         public abstract void OnDispose();
     }
 }

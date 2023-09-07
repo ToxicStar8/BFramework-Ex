@@ -101,7 +101,7 @@ namespace Framework
 		/// <summary>
 		/// ¹Ø±Õ×´Ì¬»ú
 		/// </summary>
-		public override void OnClose()
+		public override void OnDispose()
 		{
 			if (_currState != null)
 			{

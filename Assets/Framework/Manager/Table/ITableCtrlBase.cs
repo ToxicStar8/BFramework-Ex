@@ -17,6 +17,6 @@ namespace Framework
     public interface ITableCtrlBase     //字典中的值类型不能使用不带参数的泛型方法 所以这里使用接口
     {
         public abstract int GetCreateStatus();
-        public abstract void OnInitData();
+        public abstract void OnInit();
     }
 }

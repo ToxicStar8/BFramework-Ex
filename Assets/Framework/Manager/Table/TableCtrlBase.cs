@@ -66,7 +66,7 @@ namespace Framework
 
         public int GetCreateStatus() => _initDataStatus;
 
-        public void OnInitData()
+        public void OnInit()
         {
             //表格的AB包不需要卸载
             var textAsset = GameGod.Instance.LoadManager.LoadSync<TextAsset>(TableName);

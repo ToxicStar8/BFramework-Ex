@@ -219,9 +219,9 @@ namespace Framework
         {
             GameGod.Instance.SocketManager.AddHeader(key, value);
         }
-        public virtual void SocketConnect(string wsUrl, Action callBack = null)
+        public virtual void SocketConnect(string wsUrl, Action openCallBack = null)
         {
-            GameGod.Instance.SocketManager.Connect(wsUrl,callBack);
+            GameGod.Instance.SocketManager.Connect(wsUrl,openCallBack);
         }
         public virtual void SocketSendMsg(string msg)
         {

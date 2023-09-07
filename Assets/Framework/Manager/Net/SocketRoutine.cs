@@ -44,13 +44,12 @@ namespace Framework
         /// </summary>
         private Action OpenCallback;
 
-        public void OnInit(string url)
+        private void Init(string url)
         {
             _url = url;
-
-            Socket = new WebSocket(_url);
             _eventQueue = new Queue<SocketEvent>();
 
+            Socket = new WebSocket(_url);
             Socket.OnMessage += (sender, e) =>
             {
                 lock (_eventQueue)
@@ -87,9 +86,11 @@ namespace Framework
         /// <summary>
         /// 连接
         /// </summary>
-        public void Connect(Action callback = null, Dictionary<string, string> headerDic = null)
+        public void Connect(string url, Action openCallback = null, Dictionary<string, string> headerDic = null)
         {
-            OpenCallback = callback;
+            Init(url);
+            GameGod.Instance.Log(E_Log.Proto, "WebSocket 尝试连接", _url);
+            OpenCallback = openCallback;
             Socket.ConnectAsync(headerDic);
         }
 
@@ -177,6 +178,8 @@ namespace Framework
             var msg = evt.msg;
             var jsonData = JsonMapper.ToObject(msg);
             Debug.Log(jsonData.ToString());
+            //分发消息
+            GameGod.Instance.EventManager.SendEven((ushort)jsonData["code"].ToInt(), jsonData);
         }
     }
 

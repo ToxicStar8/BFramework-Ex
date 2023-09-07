@@ -31,7 +31,7 @@ namespace Framework
         /// <summary>
         /// 全局用的加载器，基本不释放
         /// </summary>
-        //public LoadHelper LoadHelper { private set; get; }
+        public LoadHelper LoadHelper { private set; get; }
 
         public static GameGod Instance { private set; get; }
         public PoolManager PoolManager { private set; get; }
@@ -71,7 +71,7 @@ namespace Framework
             FsmManager = new FsmManager();
             ModuleManager = new ModuleManager();
 
-            //LoadHelper = LoadHelper.Create();
+            LoadHelper = LoadHelper.Create();
         }
 
         private void Start()

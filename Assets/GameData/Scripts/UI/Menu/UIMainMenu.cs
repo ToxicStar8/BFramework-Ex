@@ -41,10 +41,10 @@ namespace GameData
 
         private void OnClick_Btn_Start()
         {
-            PlayerModule.FnStartNewGame(new Action(() =>
-            {
+            //PlayerModule.FnStartNewGame(new Action(() =>
+            //{
                 FnContinueGame();
-            }));
+            //}));
         }
 
         private void OnClick_Btn_Continue()

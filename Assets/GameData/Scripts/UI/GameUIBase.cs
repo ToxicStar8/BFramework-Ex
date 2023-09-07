@@ -19,7 +19,7 @@ namespace GameData
     public abstract class GameUIBase : UIBase
     {
         #region Event
-        public void AddEventListener(UIEvent eventNo, Action<object[]> callback)
+        public void AddEventListener(UIEvent eventNo, Action<object[]> callback,string remark = null)
         {
             AddEventListener((ushort)eventNo, callback);
         }

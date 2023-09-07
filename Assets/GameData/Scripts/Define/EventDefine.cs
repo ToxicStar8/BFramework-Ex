@@ -23,6 +23,15 @@ namespace GameData
     /// </summary>
     public enum UIEvent
     {
-        OnUIMainShowCard = 10000,         //显示抽卡
+        OnUIBattleMainDrawCard = 10000,         //抽卡
+        OnUIBattleMainChangeRound,              //切换回合
+    }
+
+    /// <summary>
+    /// Module事件 每100一个模块
+    /// </summary>
+    public enum ModuleEvent
+    {
+        ModuleTest = 20000,
     }
 }

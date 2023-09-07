@@ -46,6 +46,8 @@ namespace Framework
         public TimerManager TimeManager { private set; get; }
         public DataManager DataManager { private set; get; }
         public FsmManager FsmManager { private set; get; }
+        public ModuleManager ModuleManager { private set; get; }
+        
 
         private void Awake()
         {
@@ -67,6 +69,7 @@ namespace Framework
             TimeManager = new TimerManager();
             DataManager = new DataManager();
             FsmManager = new FsmManager();
+            ModuleManager = new ModuleManager();
 
             //LoadHelper = LoadHelper.Create();
         }
@@ -90,6 +93,7 @@ namespace Framework
             TimeManager.OnUpdate();
             DataManager.OnUpdate();
             FsmManager.OnUpdate();
+            ModuleManager?.OnUpdate();
             UpdateCallback?.Invoke();
         }
 
@@ -114,6 +118,7 @@ namespace Framework
             SocketManager.OnDispose();
             AudioManager.OnDispose();
             TimeManager.OnDispose();
+            ModuleManager.OnDispose();
         }
 
         /// <summary>

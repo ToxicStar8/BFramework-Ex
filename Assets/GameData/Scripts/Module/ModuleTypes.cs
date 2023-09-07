@@ -12,10 +12,10 @@ namespace GameData
     /// </summary>
     public class ModuleTypes
     {
-        //public static Type[] ModuleTypeArr = new Type[]
-        //{
-        //    typeof(PlayerModule),
+        public static Type[] ModuleTypeArr = new Type[]
+        {
+            typeof(PlayerModule),
 
-        //};
+        };
     }
 }

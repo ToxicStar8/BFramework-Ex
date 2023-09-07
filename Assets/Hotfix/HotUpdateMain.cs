@@ -21,6 +21,8 @@ namespace GameData
             GameGod.Instance.Log(E_Log.Framework, "热更代码", "启动成功");
             //初始化表格
             GameGod.Instance.TableManager.Init(TableTypes.TableCtrlTypeArr);
+            //初始化Module
+            GameGod.Instance.ModuleManager.Init(ModuleTypes.ModuleTypeArr);
             //背景音乐
             GameGod.Instance.AudioManager.PlayBackground("RetroComedy.ogg");
             //游戏管理器

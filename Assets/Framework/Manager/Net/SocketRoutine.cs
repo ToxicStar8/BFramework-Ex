@@ -37,17 +37,26 @@ namespace Framework
         /// </summary>
         private Queue<SocketEvent> _eventQueue;
 
-        private string _url;       //当前需要链接的地址
+        /// <summary>
+        /// 当前需要链接的地址
+        /// </summary>
+        private string _url;       
 
         /// <summary>
         /// 开启回调
         /// </summary>
         private Action OpenCallback;
 
+        /// <summary>
+        /// 回调字典
+        /// </summary>
+        private Dictionary<ushort, Action<JsonData>> _callbackDic;
+
         private void Init(string url)
         {
             _url = url;
             _eventQueue = new Queue<SocketEvent>();
+            _callbackDic = new Dictionary<ushort, Action<JsonData>>();
 
             Socket = new WebSocket(_url);
             Socket.OnMessage += (sender, e) =>
@@ -97,8 +106,11 @@ namespace Framework
         /// <summary>
         /// 发送数据
         /// </summary>
-        public void SendMsg(string msg)
+        public void SendMsg(string msg, Action<JsonData> callback)
         {
+            var jsonData = JsonMapper.ToObject(msg);
+            var proto = (ushort)jsonData["proto"].ToInt();
+            _callbackDic[proto] = callback;
             GameGod.Instance.Log(E_Log.Proto, "WebSocket 发送消息", msg);
             Socket.SendAsync(msg);
         }
@@ -181,8 +193,15 @@ namespace Framework
             //根据实际项目情况修改
             var msg = evt.msg;
             var jsonData = JsonMapper.ToObject(msg);
+            var proto = (ushort)jsonData["proto"];
+            //如果有监听 就不需要分发消息
+            if (_callbackDic.TryGetValue(proto,out var callback))
+            {
+                callback?.Invoke(jsonData);
+                return; 
+            }
             //分发消息
-            GameGod.Instance.EventManager.SendEven((ushort)jsonData["msg"].ToInt(), jsonData);
+            GameGod.Instance.EventManager.SendEven(proto, jsonData);
         }
     }
 

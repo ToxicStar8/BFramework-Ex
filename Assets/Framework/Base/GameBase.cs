@@ -3,6 +3,7 @@
  * 所有游戏对象的基类 存放通用方法
  * 创建时间：2023/01/08 20:40:23
  *********************************************/
+using LitJson;
 using MainPackage;
 using System;
 using UnityEngine;
@@ -223,9 +224,9 @@ namespace Framework
         {
             GameGod.Instance.SocketManager.Connect(wsUrl,openCallBack);
         }
-        public virtual void SocketSendMsg(string msg)
+        public virtual void SocketSendMsg(string msg, Action<JsonData> callback)
         {
-            GameGod.Instance.SocketManager.SendMsg(msg);
+            GameGod.Instance.SocketManager.SendMsg(msg, callback);
         }
         public virtual void SocketSendMsg(byte[] msg)
         {

@@ -3,6 +3,7 @@
  * Socket管理器
  * 创建时间：2023/01/08 20:40:23
  *********************************************/
+using LitJson;
 using MainPackage;
 using System;
 using System.Collections;
@@ -60,9 +61,9 @@ namespace Framework
         /// <summary>
         /// 发送消息
         /// </summary>
-        public void SendMsg(string msg)
+        public void SendMsg(string msg, Action<JsonData> callback)
         {
-            _mainSocket.SendMsg(msg);
+            _mainSocket.SendMsg(msg, callback);
         }
 
         public void SendMsg(byte[] msg)

@@ -63,13 +63,13 @@ namespace Framework
             HttpManager = new HttpManager();
             SocketManager = new SocketManager();
             UIManager = new UIManager();
+            ModuleManager = new ModuleManager();
             EventManager = new EventManager();
             TableManager = new TableManager();
             AudioManager = new AudioManager();
             TimeManager = new TimerManager();
             DataManager = new DataManager();
             FsmManager = new FsmManager();
-            ModuleManager = new ModuleManager();
 
             LoadHelper = LoadHelper.Create();
         }
@@ -87,13 +87,13 @@ namespace Framework
             ABManager.OnUpdate();
             UIManager.OnUpdate();
             LoadManager.OnUpdate();
+            ModuleManager.OnUpdate();
             EventManager.OnUpdate();
             TableManager.OnUpdate();
             AudioManager.OnUpdate();
             TimeManager.OnUpdate();
             DataManager.OnUpdate();
             FsmManager.OnUpdate();
-            ModuleManager?.OnUpdate();
             UpdateCallback?.Invoke();
         }
 
@@ -112,13 +112,13 @@ namespace Framework
             UIManager.OnDispose();
             PoolManager.OnDispose();
             LoadManager.OnDispose();
+            ModuleManager.OnDispose();
             EventManager.OnDispose();
             TableManager.OnDispose();
             HttpManager.OnDispose();
             SocketManager.OnDispose();
             AudioManager.OnDispose();
             TimeManager.OnDispose();
-            ModuleManager.OnDispose();
         }
 
         /// <summary>

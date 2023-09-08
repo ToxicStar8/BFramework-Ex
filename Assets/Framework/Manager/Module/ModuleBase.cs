@@ -6,6 +6,7 @@
 using GameData;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Framework
 {
@@ -14,15 +15,7 @@ namespace Framework
     /// </summary>
     public abstract class ModuleBase : GameBase
     {
-        private EmtpyMono _emtpyMono;
-        protected EmtpyMono EmtpyMono
-        {
-            get
-            {
-                _emtpyMono = _emtpyMono ?? new EmtpyMono();
-                return _emtpyMono;
-            }
-        }
+        protected Coroutine Coroutine;
 
         /// <summary>
         /// 注册监听
@@ -31,7 +24,7 @@ namespace Framework
 
         #region Event
         private List<ushort> _eventList;
-        public void AddEventListener(ModuleEvent eventNo, Action<object[]> callBack)
+        public void AddEventListener(ModuleEvent eventNo, Action<object[]> callBack, string remark = null)
         {
             AddEventListener((ushort)eventNo, callBack);
         }

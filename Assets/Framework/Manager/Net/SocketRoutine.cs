@@ -151,18 +151,22 @@ namespace Framework
                 case 1:         // 错误
                     GameGod.Instance.Log(E_Log.Error, "WebSocket 错误", evt.msg);
                     break;
+
                 case 2:         // 消息
                     GameGod.Instance.Log(E_Log.Proto, "WebSocket 接收消息", evt.msg);
                     //分发消息
                     DispatchMsg(evt);
                     break;
+
                 case 3:         // WS 关闭
                     GameGod.Instance.Log(E_Log.Proto, "WebSocket 主动关闭");
                     break;
+
                 case 4:         // WS 打开
                     GameGod.Instance.Log(E_Log.Proto, "WebSocket 已连接");
                     OpenCallback?.Invoke();
                     break;
+
                 default:
                     break;
             }
@@ -177,9 +181,8 @@ namespace Framework
             //根据实际项目情况修改
             var msg = evt.msg;
             var jsonData = JsonMapper.ToObject(msg);
-            Debug.Log(jsonData.ToString());
             //分发消息
-            GameGod.Instance.EventManager.SendEven((ushort)jsonData["code"].ToInt(), jsonData);
+            GameGod.Instance.EventManager.SendEven((ushort)jsonData["msg"].ToInt(), jsonData);
         }
     }
 

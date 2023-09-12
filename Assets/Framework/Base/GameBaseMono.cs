@@ -15,9 +15,9 @@ namespace Framework
     public abstract class GameBaseMono : MonoBehaviour
     {
         #region Event 
-        public virtual void SendEven(ushort eventNo, params object[] args)
+        public virtual void SendEvent(ushort eventNo, params object[] args)
         {
-            GameGod.Instance.EventManager.SendEven(eventNo, args);
+            GameGod.Instance.EventManager.SendEvent(eventNo, args);
         }
         public virtual void AddEventListener(ushort eventNo, Action<object[]> callBack)
         {
@@ -190,6 +190,13 @@ namespace Framework
         public void RelaseFsm(int fsmId)
         {
             GameGod.Instance.FsmManager.RelaseFsm(fsmId);
+        }
+        #endregion
+
+        #region Module
+        public virtual T GetModule<T>() where T : ModuleBase
+        {
+            return GameGod.Instance.ModuleManager.GetModule<T>();
         }
         #endregion
 

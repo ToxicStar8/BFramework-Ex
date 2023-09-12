@@ -195,13 +195,14 @@ namespace Framework
             var jsonData = JsonMapper.ToObject(msg);
             var proto = (ushort)jsonData["proto"];
             //如果有监听 就不需要分发消息
-            if (_callbackDic.TryGetValue(proto,out var callback))
+            if (_callbackDic.TryGetValue(proto, out var callback))
             {
                 callback?.Invoke(jsonData);
-                return; 
+                _callbackDic.Remove(proto);
+                return;
             }
             //分发消息
-            GameGod.Instance.EventManager.SendEven(proto, jsonData);
+            GameGod.Instance.EventManager.SendEvent(proto, jsonData);
         }
     }
 

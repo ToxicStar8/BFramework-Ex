@@ -24,6 +24,7 @@ namespace Framework
 
         #region Event
         private List<ushort> _eventList;
+
         public void AddEventListener(ModuleEvent eventNo, Action<object[]> callBack, string remark = null)
         {
             AddEventListener((ushort)eventNo, callBack);
@@ -36,6 +37,15 @@ namespace Framework
             }
             _eventList.Add(eventNo);
             base.AddEventListener(eventNo, callBack);
+        }
+
+        public void SendEvent(UIEvent eventNo, params object[] args)
+        {
+            SendEvent((ushort)eventNo, args);
+        }
+        public void SendEvent(ModuleEvent eventNo, params object[] args)
+        {
+            SendEvent((ushort)eventNo, args);
         }
         #endregion
 

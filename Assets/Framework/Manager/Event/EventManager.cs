@@ -50,7 +50,7 @@ namespace Framework
         /// <summary>
         /// 发送事件
         /// </summary>
-        public void SendEven(ushort eventNo,params object[] args)
+        public void SendEvent(ushort eventNo,params object[] args)
         {
             if (!_eventDic.TryGetValue(eventNo, out var callBack))
             {

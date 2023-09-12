@@ -16,9 +16,9 @@ namespace Framework
     public abstract class GameBase
     {
         #region Event 
-        public virtual void SendEven(ushort eventNo, params object[] args)
+        public virtual void SendEvent(ushort eventNo, params object[] args)
         {
-            GameGod.Instance.EventManager.SendEven(eventNo, args);
+            GameGod.Instance.EventManager.SendEvent(eventNo, args);
         }
         public virtual void AddEventListener(ushort eventNo, Action<object[]> callBack)
         {
@@ -235,6 +235,13 @@ namespace Framework
         public virtual void SocketClose()
         {
             GameGod.Instance.SocketManager.CloseSocket();
+        }
+        #endregion
+
+        #region Module
+        public virtual T GetModule<T>() where T : ModuleBase
+        {
+            return GameGod.Instance.ModuleManager.GetModule<T>();
         }
         #endregion
 

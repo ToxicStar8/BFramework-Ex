@@ -111,6 +111,7 @@ namespace Framework
             var jsonData = JsonMapper.ToObject(msg);
             var proto = (ushort)jsonData["proto"].ToInt();
             _callbackDic[proto] = callback;
+
             GameGod.Instance.Log(E_Log.Proto, "WebSocket 发送消息", msg);
             Socket.SendAsync(msg);
         }
@@ -118,8 +119,13 @@ namespace Framework
         /// <summary>
         /// 发送数据
         /// </summary>
-        public void SendMsg(byte[] msg)
+        public void SendMsg(byte[] msg, Action<JsonData> callback)
         {
+            var strMsg = Encoding.UTF8.GetString(msg);
+            var jsonData = JsonMapper.ToObject(strMsg);
+            var proto = (ushort)jsonData["proto"].ToInt();
+            _callbackDic[proto] = callback;
+
             GameGod.Instance.Log(E_Log.Proto, "WebSocket 发送消息", msg.ToString());
             Socket.SendAsync(msg);
         }

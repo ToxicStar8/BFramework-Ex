@@ -66,9 +66,9 @@ namespace Framework
             _mainSocket.SendMsg(msg, callback);
         }
 
-        public void SendMsg(byte[] msg)
+        public void SendMsg(byte[] msg, Action<JsonData> callback)
         {
-            _mainSocket.SendMsg(msg);
+            _mainSocket.SendMsg(msg, callback);
         }
 
         /// <summary>

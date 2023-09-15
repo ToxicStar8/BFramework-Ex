@@ -228,9 +228,9 @@ namespace Framework
         {
             GameGod.Instance.SocketManager.SendMsg(msg, callback);
         }
-        public virtual void SocketSendMsg(byte[] msg)
+        public virtual void SocketSendMsg(byte[] msg, Action<JsonData> callback)
         {
-            GameGod.Instance.SocketManager.SendMsg(msg);
+            GameGod.Instance.SocketManager.SendMsg(msg, callback);
         }
         public virtual void SocketClose()
         {

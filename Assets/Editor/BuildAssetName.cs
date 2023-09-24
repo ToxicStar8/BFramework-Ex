@@ -27,7 +27,7 @@ namespace Framework
         /// </summary>
         public static string AssetNamesScriptPath = Application.dataPath + "/GameData/Scripts/Define/AssetName.cs";
 
-        [MenuItem("BFramework/Build Asset Name")]
+        [MenuItem("BFramework/Build Asset Name", false, 0)]
         public static void BuildAssetNamesScript()
         {
             string temp = @"/*********************************************
@@ -70,7 +70,9 @@ namespace GameData
                         if (file.Extension != ".meta" && file.Extension != ".spriteatlas")
                         {
                             var prefix = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(fileInfo.Extension.Replace(".", ""));
-                            var name = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(fileInfo.Name.Replace(fileInfo.Extension, ""));
+                            var name = fileInfo.Name.Replace(fileInfo.Extension, "");
+                            name = name.Replace(".", "_");
+                            name = name.Replace("-", "_");
                             //文本添加
                             assetNames += $"\r\n        public static string {prefix}_{name} => \"{fileInfo.Name}\";";
                         }

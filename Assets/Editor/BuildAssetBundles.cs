@@ -38,7 +38,7 @@ namespace Framework
         private static string _jsoninformationPath => ConstDefine.JsoninformationPath;
         private static ABConfig _abConfig => AssetDatabase.LoadAssetAtPath<ABConfig>(ConstDefine.ABConfigPath);
 
-        [MenuItem("BFramework/Build AssetBundles")]
+        [MenuItem("BFramework/Build AssetBundles", false, 2)]
         public static void BuildAsset()
         {
             //1.设置AB包路径和AB包名
@@ -98,7 +98,7 @@ namespace Framework
             var dllPath = HotfixDllOutPath + "/" + ConstDefine.HotfixDllName;
             if (File.Exists(dllPath))
             {
-                File.Copy(dllPath, HotfixDllPath + ConstDefine.HotfixDllName + ".bytes");
+                File.Copy(dllPath, HotfixDllPath + ConstDefine.HotfixDllName + ".bytes", true);
             }
             else
             {
@@ -110,6 +110,9 @@ namespace Framework
             {
                 File.Copy(AotDllOutPath + "/" + dll, HotfixDllPath + dll + ".bytes");
             }
+
+            //刷新编辑器，把依赖存放进来，不然打包会漏掉
+            AssetDatabase.Refresh();
         }
 
         /// <summary>

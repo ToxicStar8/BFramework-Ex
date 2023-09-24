@@ -178,6 +178,7 @@ namespace Framework
 
                 case 3:         // WS 关闭
                     GameGod.Instance.Log(E_Log.Proto, "WebSocket 主动关闭");
+                    GameGod.Instance.EventManager.SendEvent(65535);
                     break;
 
                 case 4:         // WS 打开

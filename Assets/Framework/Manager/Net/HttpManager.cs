@@ -29,7 +29,7 @@ namespace Framework
         public WaitForSeconds WaitSeconds { get; private set; }
 
         //Token 适配不同的后端要求 例：Token、Authorization等
-        public Dictionary<string,string> HttpHeaderDic { get; private set; }
+        public Dictionary<string, string> HttpHeaderDic { get; private set; }
 
         public override void OnInit()
         {
@@ -51,13 +51,22 @@ namespace Framework
         /// <summary>
         /// 添加浏览器请求标头
         /// </summary>
-        public void AddHeader(string key,string value)
+        public void AddHeader(string key, string value)
         {
             HttpHeaderDic.Add(key, value);
             GameGod.Instance.Log(E_Log.Framework, "添加浏览器标头" + key, value);
         }
 
         public HttpRoutine Get(string url, Action<string> callBack = null)
+        {
+            var pool = GameGod.Instance.PoolManager.CreateClassObjectPool<HttpRoutine>();
+            var routine = pool.CreateClassObj();
+            routine.ThisPool = pool;
+            routine.Get(url, callBack);
+            return routine;
+        }
+
+        public HttpRoutine GetTexture(string url, Action<Texture2D> callBack = null)
         {
             var pool = GameGod.Instance.PoolManager.CreateClassObjectPool<HttpRoutine>();
             var routine = pool.CreateClassObj();

@@ -37,6 +37,11 @@ namespace Framework
         public LoadHelper LoadHelper;
 
         /// <summary>
+        /// 协程
+        /// </summary>
+        protected Coroutine Coroutine;
+
+        /// <summary>
         /// 创建单独的UnitPool
         /// </summary>
         public UnitPool<T> CreateSinglePool<T>()where T : UnitBase,new()
@@ -160,6 +165,12 @@ namespace Framework
                 }
                 _timerList.Clear();
                 _timerList = null;
+            }
+
+            //移除协程
+            if (Coroutine != null)
+            {
+                GameGod.Instance.StopCoroutine(Coroutine);
             }
         }
     }

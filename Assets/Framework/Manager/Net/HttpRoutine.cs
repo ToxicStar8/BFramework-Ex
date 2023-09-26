@@ -3,14 +3,12 @@
  * Http访问器
  * 创建时间：2023/01/08 20:40:23
  *********************************************/
+using MainPackage;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
-using LitJson;
-using MainPackage;
 
 namespace Framework
 {
@@ -30,14 +28,14 @@ namespace Framework
         public HttpManager HttpMgr => GameGod.Instance.HttpManager;
 
         /// <summary>
-        /// Http请求回调
+        /// Http文本请求回调
         /// </summary>
-        private Action<string> _callBack;
+        private Action<string> _jsonDataCallBack;
 
         /// <summary>
-        /// Http请求回调数据
+        /// Http图片请求回调
         /// </summary>
-        private string _jsonData;
+        private Action<Texture2D> _Texture2DCallBack;
 
         /// <summary>
         /// 是否繁忙
@@ -71,7 +69,7 @@ namespace Framework
         }
 
         /// <summary>
-        /// 外部调用的Get
+        /// 外部调用的Get 0=普通Get 1=TextureGet
         /// </summary>
         public void Get(string url, Action<string> callBack = null)
         {
@@ -84,10 +82,29 @@ namespace Framework
             IsBusy = true;
 
             _url = url;
-            _callBack = callBack;
+            _jsonDataCallBack = callBack;
+            _Texture2DCallBack = null;
             _webRequest?.Dispose();
 
             GetUrl();
+        }
+
+        public void Get(string url, Action<Texture2D> callBack = null)
+        {
+            if (IsBusy)
+            {
+                GameGod.Instance.Log(E_Log.Error, "网络锁");
+                return;
+            }
+
+            IsBusy = true;
+
+            _url = url;
+            _jsonDataCallBack = null;
+            _Texture2DCallBack = callBack;
+            _webRequest?.Dispose();
+
+            GetTexture();
         }
 
         /// <summary>
@@ -105,7 +122,7 @@ namespace Framework
 
             _url = url;
             _json = json;
-            _callBack = callBack;
+            _jsonDataCallBack = callBack;
             _webRequest?.Dispose();
 
             PostUrl();
@@ -115,6 +132,13 @@ namespace Framework
         {
             GameGod.Instance.Log(E_Log.Proto, string.Format("Get===><color=#00ffff>{0}</color>\n\r重试===><color=#00ffff>{1}</color>", _url, _currRetry));
             _webRequest = UnityWebRequest.Get(_url);
+            GameGod.Instance.StartCoroutine(SendRequest());
+        }
+
+        public void GetTexture()
+        {
+            GameGod.Instance.Log(E_Log.Proto, string.Format("Get===><color=#00ffff>{0}</color>\n\r重试===><color=#00ffff>{1}</color>", _url, _currRetry));
+            _webRequest = UnityWebRequestTexture.GetTexture(_url);
             GameGod.Instance.StartCoroutine(SendRequest());
         }
 
@@ -178,32 +202,31 @@ namespace Framework
                     yield break;
                 }
 
-                //结束
-                IsBusy = false;
-                _jsonData = _webRequest.error;
                 //打印错误
-                if (!string.IsNullOrWhiteSpace(_jsonData))
+                if (!string.IsNullOrWhiteSpace(_webRequest.error))
                 {
-                    GameGod.Instance.Log(E_Log.Error, _jsonData);
+                    GameGod.Instance.Log(E_Log.Error, _webRequest.error);
                 }
             }
             else
             {
-                IsBusy = false;
-                _jsonData = _webRequest.downloadHandler.text;
+                var downloadHandler = _webRequest.downloadHandler;
                 //打印数据
-                if (!string.IsNullOrWhiteSpace(_jsonData))
+                if (!string.IsNullOrWhiteSpace(downloadHandler.text))
                 {
-                    GameGod.Instance.Log(E_Log.Proto, string.Format("<color=#FFF11A>{{\"code\":{0},\"data\":{1}}}</color>", _webRequest.responseCode, _jsonData));
+                    GameGod.Instance.Log(E_Log.Proto, string.Format("<color=#FFF11A>{{\"code\":{0},\"data\":{1}}}</color>", _webRequest.responseCode, downloadHandler.text));
                 }
                 //执行回调
-                _callBack?.Invoke(_jsonData);
+                _jsonDataCallBack?.Invoke(downloadHandler.text);
+                _Texture2DCallBack?.Invoke(DownloadHandlerTexture.GetContent(_webRequest));
             }
             //清理状态
-            _callBack = null;
+            IsBusy = false;
+            _jsonDataCallBack = null;
+            _Texture2DCallBack = null;
             _currRetry = 0;
             _url = null;
-            _jsonData = null;
+            _webRequest.Dispose();
             //回池
             ThisPool.Recycle(this);
         }

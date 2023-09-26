@@ -207,6 +207,10 @@ namespace Framework
         {
             return GameGod.Instance.HttpManager.Get(url, callBack);
         }
+        public virtual HttpRoutine HttpGetTexture(string url, Action<Texture2D> callBack = null)
+        {
+            return GameGod.Instance.HttpManager.GetTexture(url, callBack);
+        }
         public virtual HttpRoutine HttpPost(string url, string json = null, Action<string> callBack = null)
         {
             return GameGod.Instance.HttpManager.Post(url, json, callBack);
@@ -222,7 +226,7 @@ namespace Framework
         }
         public virtual void SocketConnect(string wsUrl, Action openCallBack = null)
         {
-            GameGod.Instance.SocketManager.Connect(wsUrl,openCallBack);
+            GameGod.Instance.SocketManager.Connect(wsUrl, openCallBack);
         }
         public virtual void SocketSendMsg(string msg, Action<JsonData> callback)
         {

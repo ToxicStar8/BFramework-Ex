@@ -54,6 +54,10 @@ namespace Framework
         /// </summary>
         public virtual void OnDispose()
         {
+            if (Coroutine != null)
+            {
+                GameGod.Instance.StopCoroutine(Coroutine);
+            }
             //关闭前移除全部注册事件
             if (_eventList != null)
             {

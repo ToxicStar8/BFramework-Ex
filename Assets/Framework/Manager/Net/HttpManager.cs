@@ -26,10 +26,20 @@ namespace Framework
         /// </summary>
         public int RetryInterval { get; private set; }
 
+        /// <summary>
+        /// 协程里重试间隔
+        /// </summary>
         public WaitForSeconds WaitSeconds { get; private set; }
 
-        //Token 适配不同的后端要求 例：Token、Authorization等
+        /// <summary>
+        /// Token 用于适配不同的后端要求 例：Token、Authorization等
+        /// </summary>
         public Dictionary<string, string> HttpHeaderDic { get; private set; }
+
+        /// <summary>
+        /// 网络请求获取的图片
+        /// </summary>
+        public Dictionary<string, Texture2D> HttpTextureDic { get; private set; }
 
         public override void OnInit()
         {
@@ -37,6 +47,7 @@ namespace Framework
             RetryInterval = 0;
             WaitSeconds = new WaitForSeconds(RetryInterval);
             HttpHeaderDic = new Dictionary<string, string>();
+            HttpTextureDic = new Dictionary<string, Texture2D>();
         }
 
         /// <summary>
@@ -68,10 +79,32 @@ namespace Framework
 
         public HttpRoutine GetTexture(string url, Action<Texture2D> callBack = null)
         {
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                GameGod.Instance.Log(E_Log.Error, "请求的url为空，url" + url);
+                return null;
+            }
+
+            if (HttpTextureDic.TryGetValue(url,out var texture2D))
+            {
+                GameGod.Instance.Log(E_Log.Framework, "请求的url图片已存在，直接返回图片");
+                callBack?.Invoke(texture2D);
+                return null;
+            }
+
             var pool = GameGod.Instance.PoolManager.CreateClassObjectPool<HttpRoutine>();
             var routine = pool.CreateClassObj();
             routine.ThisPool = pool;
-            routine.Get(url, callBack);
+            routine.Get(url, (texture2D) =>
+            {
+                if (texture2D == null)
+                {
+                    GameGod.Instance.Log(E_Log.Error, "请求的url返回图片为空，url" + url);
+                    return;
+                }
+                HttpTextureDic.Add(url, texture2D);
+                callBack?.Invoke(texture2D);
+            });
             return routine;
         }
 

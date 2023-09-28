@@ -30,14 +30,14 @@ namespace Framework
         /// <summary>
         /// 连接Socket
         /// </summary>
-        public void Connect(string wsUrl,Action openCallback = null)
+        public void Connect(string wsUrl, Action openCallback = null, Action closeCallback = null)
         {
             //关闭旧的Socket
             _mainSocket?.CloseSocket();
             //初始化新的Socket
             _mainSocket = new SocketRoutine();
             //正式连接
-            _mainSocket.Connect(wsUrl, openCallback, SocketHeaderDic);
+            _mainSocket.Connect(wsUrl, openCallback, closeCallback, SocketHeaderDic);
         }
 
         /// <summary>

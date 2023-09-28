@@ -137,6 +137,14 @@ namespace Framework
         {
             GameGod.Instance.UIManager.CloseUI(uiName);
         }
+
+        /// <summary>
+        /// 关闭全部UI
+        /// </summary>
+        public virtual void CloseAll()
+        {
+            GameGod.Instance.UIManager.CloseAll();
+        }
         #endregion
 
         #region Audio
@@ -224,9 +232,9 @@ namespace Framework
         {
             GameGod.Instance.SocketManager.AddHeader(key, value);
         }
-        public virtual void SocketConnect(string wsUrl, Action openCallBack = null)
+        public virtual void SocketConnect(string wsUrl, Action openCallBack = null, Action closeCallBack = null)
         {
-            GameGod.Instance.SocketManager.Connect(wsUrl, openCallBack);
+            GameGod.Instance.SocketManager.Connect(wsUrl, openCallBack, closeCallBack);
         }
         public virtual void SocketSendMsg(string msg, Action<JsonData> callback)
         {

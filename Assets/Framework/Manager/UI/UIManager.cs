@@ -110,7 +110,7 @@ namespace Framework
         /// <summary>
         /// 关闭全部UI
         /// </summary>
-        public void CloseAllUI()
+        public void CloseAll()
         {
             foreach (var item in _uiBaseDic)
             {
@@ -124,7 +124,7 @@ namespace Framework
         public override void OnUpdate() { }
         public override void OnDispose() 
         {
-            CloseAllUI();
+            CloseAll();
             _uiBaseDic = null;
         }
     }

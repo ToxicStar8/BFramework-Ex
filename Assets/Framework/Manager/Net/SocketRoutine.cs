@@ -40,12 +40,17 @@ namespace Framework
         /// <summary>
         /// 当前需要链接的地址
         /// </summary>
-        private string _url;       
+        private string _url;
 
         /// <summary>
         /// 开启回调
         /// </summary>
         private Action OpenCallback;
+
+        /// <summary>
+        /// 关闭回调
+        /// </summary>
+        private Action CloseCallback;
 
         /// <summary>
         /// 回调字典
@@ -95,11 +100,12 @@ namespace Framework
         /// <summary>
         /// 连接
         /// </summary>
-        public void Connect(string url, Action openCallback = null, Dictionary<string, string> headerDic = null)
+        public void Connect(string url, Action openCallback = null, Action closeCallback = null, Dictionary<string, string> headerDic = null)
         {
             Init(url);
             GameGod.Instance.Log(E_Log.Proto, "WebSocket 尝试连接", _url);
             OpenCallback = openCallback;
+            CloseCallback = closeCallback;
             Socket.ConnectAsync(headerDic);
         }
 
@@ -178,7 +184,8 @@ namespace Framework
 
                 case 3:         // WS 关闭
                     GameGod.Instance.Log(E_Log.Proto, "WebSocket 主动关闭");
-                    GameGod.Instance.EventManager.SendEvent(65535);
+                    _callbackDic.Clear();
+                    CloseCallback?.Invoke();
                     break;
 
                 case 4:         // WS 打开

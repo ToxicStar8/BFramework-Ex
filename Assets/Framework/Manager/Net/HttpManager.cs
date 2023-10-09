@@ -102,7 +102,7 @@ namespace Framework
                     GameGod.Instance.Log(E_Log.Error, "请求的url返回图片为空，url" + url);
                     return;
                 }
-                HttpTextureDic.Add(url, texture2D);
+                HttpTextureDic[url] = texture2D;
                 callBack?.Invoke(texture2D);
             });
             return routine;

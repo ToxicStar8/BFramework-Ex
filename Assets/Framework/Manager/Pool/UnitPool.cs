@@ -26,6 +26,16 @@ namespace Framework
         private GameObject gameObject;
 
         /// <summary>
+        /// UI根节点
+        /// </summary>
+        private UIBase _uiParent;
+
+        /// <summary>
+        /// Unit根节点 与UIParent相斥 二选一
+        /// </summary>
+        private UnitBase _unitParent;
+
+        /// <summary>
         /// 自己的模板对象
         /// </summary>
         private T _unitBase;
@@ -57,6 +67,7 @@ namespace Framework
         /// <param name="isShowGo">是否显示原游戏对象</param>
         public UnitPool(UIBase uiBase, GameObject go, bool isShowGo = false)
         {
+            _uiParent = uiBase;
             LoadHelper = uiBase.LoadHelper;
             _rootRect = uiBase.rectTransform;
             gameObject = go;
@@ -71,6 +82,7 @@ namespace Framework
         /// <param name="isShowGo">是否显示原游戏对象</param>
         public UnitPool(UnitBase unitBase, GameObject go, bool isShowGo = false)
         {
+            _unitParent = unitBase;
             LoadHelper = unitBase.LoadHelper;
             _rootRect = unitBase.rectTransform;
             gameObject = go;
@@ -87,6 +99,11 @@ namespace Framework
             {
                 //GameEntry.Instance.Log(E_Log.Framework, "不存在" + UnitName + "对象", "创建");
                 unitBase = new T();
+                //初始化
+                if (_uiParent != null)
+                    unitBase.UIParent = _uiParent;
+                else if (_unitParent != null)
+                    unitBase.UnitParent = _unitParent;
                 unitBase.gameObject = Object.Instantiate(gameObject, parent);
                 unitBase.LoadHelper = LoadHelper;
                 unitBase.OnCreate();

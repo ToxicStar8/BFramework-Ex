@@ -31,6 +31,16 @@ namespace Framework
         public LoadHelper LoadHelper;
 
         /// <summary>
+        /// UI根节点
+        /// </summary>
+        public UIBase UIParent;
+
+        /// <summary>
+        /// Unit根节点 与UIParent相斥 二选一
+        /// </summary>
+        public UnitBase UnitParent;
+
+        /// <summary>
         /// 加载组件
         /// </summary>
         public abstract void OnCreate();

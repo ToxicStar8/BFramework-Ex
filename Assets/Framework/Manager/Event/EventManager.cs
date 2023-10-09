@@ -54,7 +54,7 @@ namespace Framework
         {
             if (!_eventDic.TryGetValue(eventNo, out var callBack))
             {
-                GameGod.Instance.Log(E_Log.Error, "事件不存在！");
+                GameGod.Instance.Log(E_Log.Error, eventNo.ToString() + "事件不存在！");
             }
             callBack?.Invoke(args);
         }

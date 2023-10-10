@@ -32,6 +32,8 @@ MonoBehaviour:
     abName: font
   - path: Assets/GameData/Art/Sprite/Role
     abName: spriterole
+  - path: Assets/GameData/Art/Sprite
+    abName: sprite
   - path: Assets/GameData/Art/Texture
     abName: texture
   - path: Assets/GameData/Table

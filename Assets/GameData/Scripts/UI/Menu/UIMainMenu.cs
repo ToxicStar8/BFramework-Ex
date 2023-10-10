@@ -4,6 +4,7 @@
  * 创建时间：2023/03/14 11:19:54
  *********************************************/
 using Framework;
+using MainPackage;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -30,20 +31,17 @@ namespace GameData
 
         public override void OnShow(params object[] args)
         {
-            //Btn_Continue.SetActive(!GameGod.Instance.DataManager.IsNullData);
+
         }
 
         private void OnClick_Btn_Start()
         {
-            //PlayerModule.FnStartNewGame(new Action(() =>
-            //{
-            CloseSelf();
-            //}));
+            Log(E_Log.Log, "开始游戏");
         }
 
         private void OnClick_Btn_Continue()
         {
-            CloseSelf();
+            Log(E_Log.Log, "继续游戏");
         }
 
         private void OnClick_Btn_Exit()

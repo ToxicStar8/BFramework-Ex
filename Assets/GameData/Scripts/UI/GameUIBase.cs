@@ -23,9 +23,9 @@ namespace GameData
         {
             AddEventListener((ushort)eventNo, callback);
         }
-        public void SendEven(UIEvent eventNo, params object[] args)
+        public void SendEvent(UIEvent eventNo, params object[] args)
         {
-            SendEven((ushort)eventNo, args);
+            SendEvent((ushort)eventNo, args);
         }
         #endregion
 

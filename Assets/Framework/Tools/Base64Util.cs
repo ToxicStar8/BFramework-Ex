@@ -17,43 +17,55 @@ namespace Framework
         /// 文件转base64
         /// </summary>
         /// <param name="FilePath">文件路径</param>
-        /// <param name="ContentType">需要浏览器直接打开base64时指定</param>
+        /// <param name="contentType">需要浏览器直接打开base64时指定</param>
         /// <returns>Base64FileHelper</returns>
-        public static Base64Helper FileToBase64(string FilePath, string ContentType = null)
+        public static Base64Helper FileToBase64(string FilePath, string contentType = null)
         {
             using (FileStream filestream = new FileStream(FilePath, FileMode.Open))
             {
                 string Extension = Path.GetExtension(FilePath);
-                return FileToBase64(filestream, Extension, ContentType);
+                return StreamToBase64(filestream, Extension, contentType);
             }
         }
 
         /// <summary>
-        /// 文件转base64
+        /// 流转base64
         /// </summary>
         /// <param name="stream">文件流</param>
-        /// <param name="Extension">扩展名 示例:.jpg</param>
-        /// <param name="ContentType">需要浏览器直接打开base64时指定</param>
+        /// <param name="extension">扩展名 示例:.jpg</param>
+        /// <param name="contentType">需要浏览器直接打开base64时指定</param>
         /// <returns>Base64FileHelper</returns>
-        public static Base64Helper FileToBase64(System.IO.Stream stream, string Extension, string ContentType = null)
+        public static Base64Helper StreamToBase64(System.IO.Stream stream, string extension, string contentType = null)
         {
             stream.Position = 0;
             byte[] bt = new byte[stream.Length];
             stream.Read(bt, 0, bt.Length);
-            return FileToBase64(bt, Extension, ContentType);
+            return BytesToBase64(bt, extension, contentType);
         }
 
         /// <summary>
-        /// 文件转base64
+        /// 字节数组转base64
         /// </summary>
         /// <param name="bytes">字节数组</param>
-        /// <param name="Extension">扩展名 示例:.jpg</param>
-        /// <param name="ContentType">需要浏览器直接打开base64时指定</param>
+        /// <param name="extension">扩展名 示例:.jpg</param>
+        /// <param name="contentType">需要浏览器直接打开base64时指定</param>
         /// <returns>Base64FileHelper</returns>
-        public static Base64Helper FileToBase64(byte[] bytes, string Extension, string ContentType = null)
+        public static Base64Helper BytesToBase64(byte[] bytes, string extension, string contentType = null)
         {
             var base64Str = Convert.ToBase64String(bytes);
-            return new Base64Helper(Extension, base64Str, ContentType);
+            return new Base64Helper(extension, base64Str, contentType);
+        }
+
+        /// <summary>
+        /// Base64转文件
+        /// </summary>
+        /// <param name="base64Str">Base64字符串</param>
+        /// <param name="path">存储路径</param>
+        /// <param name="FileName">文件名，不带后缀</param>
+        public static void Base64ToFile(string extension, string base64Str, string path, string FileName)
+        {
+            var base64Helper = new Base64Helper(extension, base64Str, null);
+            base64Helper.Save(path, FileName);
         }
     }
 
@@ -67,15 +79,15 @@ namespace Framework
         /// <summary>
         /// 实例化
         /// </summary>
-        /// <param name="Extension">文件扩展 例如.jpg</param>
-        /// <param name="Base64">base64字符串</param>
-        /// <param name="ContentType">需要浏览器直接打开base64时指定</param>
-        public Base64Helper(string Extension, string Base64, string ContentType = null)
+        /// <param name="extension">文件扩展 例如.jpg</param>
+        /// <param name="base64">base64字符串</param>
+        /// <param name="contentType">需要浏览器直接打开base64时指定</param>
+        public Base64Helper(string extension, string base64, string contentType = null)
         {
             //先对扩展名赋值，因为假如扩展名不存在时在对Base64赋值会检索扩展名
-            this.Extension = Extension;
-            this.Base64 = Base64;
-            this.ContentType = ContentType;
+            this.Extension = extension;
+            this.Base64 = base64;
+            this.ContentType = contentType;
         }
 
         #region 私有参数

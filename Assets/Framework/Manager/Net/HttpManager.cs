@@ -41,6 +41,11 @@ namespace Framework
         /// </summary>
         public Dictionary<string, Texture2D> HttpTextureDic { get; private set; }
 
+        /// <summary>
+        /// 网络请求获取的音频
+        /// </summary>
+        public Dictionary<string, AudioClip> HttpAudioClipDic { get; private set; }
+
         public override void OnInit()
         {
             Retry = 0;
@@ -48,6 +53,7 @@ namespace Framework
             WaitSeconds = new WaitForSeconds(RetryInterval);
             HttpHeaderDic = new Dictionary<string, string>();
             HttpTextureDic = new Dictionary<string, Texture2D>();
+            HttpAudioClipDic = new Dictionary<string, AudioClip>();
         }
 
         /// <summary>
@@ -68,8 +74,20 @@ namespace Framework
             GameGod.Instance.Log(E_Log.Framework, "添加浏览器标头" + key, value);
         }
 
+        /// <summary>
+        /// Get数据
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="callBack"></param>
+        /// <returns></returns>
         public HttpRoutine Get(string url, Action<string> callBack = null)
         {
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                GameGod.Instance.Log(E_Log.Error, "请求的url为空，url" + url);
+                return null;
+            }
+
             var pool = GameGod.Instance.PoolManager.CreateClassObjectPool<HttpRoutine>();
             var routine = pool.CreateClassObj();
             routine.ThisPool = pool;
@@ -77,6 +95,12 @@ namespace Framework
             return routine;
         }
 
+        /// <summary>
+        /// Get贴图
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="callBack"></param>
+        /// <returns></returns>
         public HttpRoutine GetTexture(string url, Action<Texture2D> callBack = null)
         {
             if (string.IsNullOrWhiteSpace(url))
@@ -85,7 +109,7 @@ namespace Framework
                 return null;
             }
 
-            if (HttpTextureDic.TryGetValue(url,out var texture2D))
+            if (HttpTextureDic.TryGetValue(url, out var texture2D))
             {
                 GameGod.Instance.Log(E_Log.Framework, "请求的url图片已存在，直接返回图片");
                 callBack?.Invoke(texture2D);
@@ -104,6 +128,44 @@ namespace Framework
                 }
                 HttpTextureDic[url] = texture2D;
                 callBack?.Invoke(texture2D);
+            });
+            return routine;
+        }
+
+        /// <summary>
+        /// Get音频
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="audioType"></param>
+        /// <param name="callBack"></param>
+        /// <returns></returns>
+        public HttpRoutine GetAudioClip(string url, AudioType audioType, Action<AudioClip> callBack = null)
+        {
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                GameGod.Instance.Log(E_Log.Error, "请求的url为空，url" + url);
+                return null;
+            }
+
+            if (HttpAudioClipDic.TryGetValue(url, out var audioClip))
+            {
+                GameGod.Instance.Log(E_Log.Framework, "请求的url音频已存在，直接返回音频");
+                callBack?.Invoke(audioClip);
+                return null;
+            }
+
+            var pool = GameGod.Instance.PoolManager.CreateClassObjectPool<HttpRoutine>();
+            var routine = pool.CreateClassObj();
+            routine.ThisPool = pool;
+            routine.Get(url, audioType, (audioClip) =>
+            {
+                if (audioClip == null)
+                {
+                    GameGod.Instance.Log(E_Log.Error, "请求的url返回音频为空，url" + url);
+                    return;
+                }
+                HttpAudioClipDic[url] = audioClip;
+                callBack?.Invoke(audioClip);
             });
             return routine;
         }

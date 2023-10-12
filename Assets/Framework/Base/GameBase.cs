@@ -219,6 +219,10 @@ namespace Framework
         {
             return GameGod.Instance.HttpManager.GetTexture(url, callBack);
         }
+        public virtual HttpRoutine GetAudioClip(string url, AudioType audioType, Action<AudioClip> callBack = null)
+        {
+            return GameGod.Instance.HttpManager.GetAudioClip(url, audioType, callBack);
+        }
         public virtual HttpRoutine HttpPost(string url, string json = null, Action<string> callBack = null)
         {
             return GameGod.Instance.HttpManager.Post(url, json, callBack);

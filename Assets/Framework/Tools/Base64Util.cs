@@ -11,7 +11,7 @@ namespace Framework
     /// <summary>
     /// Base64工具类
     /// </summary>
-    public class Base64Util
+    public static class Base64Util
     {
         /// <summary>
         /// 文件转base64

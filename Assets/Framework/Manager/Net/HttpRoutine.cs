@@ -38,6 +38,11 @@ namespace Framework
         private Action<Texture2D> _Texture2DCallBack;
 
         /// <summary>
+        /// Http音频请求回调
+        /// </summary>
+        private Action<AudioClip> _AudioClipCallBack;
+
+        /// <summary>
         /// 是否繁忙
         /// </summary>
         public bool IsBusy { private set; get; }
@@ -84,6 +89,7 @@ namespace Framework
             _url = url;
             _jsonDataCallBack = callBack;
             _Texture2DCallBack = null;
+            _AudioClipCallBack = null;
             _webRequest?.Dispose();
 
             GetUrl();
@@ -102,9 +108,29 @@ namespace Framework
             _url = url;
             _jsonDataCallBack = null;
             _Texture2DCallBack = callBack;
+            _AudioClipCallBack = null;
             _webRequest?.Dispose();
 
             GetTexture();
+        }
+
+        public void Get(string url, AudioType audioType, Action<AudioClip> callBack = null)
+        {
+            if (IsBusy)
+            {
+                GameGod.Instance.Log(E_Log.Error, "网络锁");
+                return;
+            }
+
+            IsBusy = true;
+
+            _url = url;
+            _jsonDataCallBack = null;
+            _Texture2DCallBack = null;
+            _AudioClipCallBack = callBack;
+            _webRequest?.Dispose();
+
+            GetAudioClip(audioType);
         }
 
         /// <summary>
@@ -135,10 +161,17 @@ namespace Framework
             GameGod.Instance.StartCoroutine(SendRequest());
         }
 
-        public void GetTexture()
+        private void GetTexture()
         {
             GameGod.Instance.Log(E_Log.Proto, string.Format("Get===>{0}\n\r重试===>{1}", _url, _currRetry));
             _webRequest = UnityWebRequestTexture.GetTexture(_url);
+            GameGod.Instance.StartCoroutine(SendRequest());
+        }
+
+        private void GetAudioClip(AudioType audioType)
+        {
+            GameGod.Instance.Log(E_Log.Proto, string.Format("Get===>{0}\n\r重试===>{1}", _url, _currRetry));
+            _webRequest = UnityWebRequestMultimedia.GetAudioClip(_url, audioType);
             GameGod.Instance.StartCoroutine(SendRequest());
         }
 
@@ -211,14 +244,25 @@ namespace Framework
             else
             {
                 var downloadHandler = _webRequest.downloadHandler;
-                //打印数据
-                if (!string.IsNullOrWhiteSpace(downloadHandler.text))
+                //通过委托回调是否为空 来判断是请求什么玩楞
+                if(_jsonDataCallBack != null)
                 {
+                    //数据回调
                     GameGod.Instance.Log(E_Log.Proto, string.Format("<color=#FFF11A>{{\"code\":{0},\"data\":{1}}}</color>", _webRequest.responseCode, downloadHandler.text));
+                    _jsonDataCallBack.Invoke(downloadHandler.text);
                 }
-                //执行回调
-                _jsonDataCallBack?.Invoke(downloadHandler.text);
-                _Texture2DCallBack?.Invoke(DownloadHandlerTexture.GetContent(_webRequest));
+                else if (_Texture2DCallBack != null)
+                {
+                    //贴图回调
+                    _Texture2DCallBack?.Invoke(DownloadHandlerTexture.GetContent(_webRequest));
+                    GameGod.Instance.Log(E_Log.Proto, string.Format("<color=#FFF11A>{{\"code\":{0},\"data\":\"\"}}</color>", _webRequest.responseCode));
+                }
+                else if (_AudioClipCallBack != null)
+                {
+                    //音频回调
+                    _AudioClipCallBack?.Invoke(DownloadHandlerAudioClip.GetContent(_webRequest));
+                    GameGod.Instance.Log(E_Log.Proto, string.Format("<color=#FFF11A>{{\"code\":{0},\"data\":\"\"}}</color>", _webRequest.responseCode));
+                }
             }
             //清理状态
             IsBusy = false;

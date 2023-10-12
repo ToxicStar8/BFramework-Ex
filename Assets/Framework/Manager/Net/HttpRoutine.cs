@@ -130,14 +130,14 @@ namespace Framework
 
         private void GetUrl()
         {
-            GameGod.Instance.Log(E_Log.Proto, string.Format("Get===><color=#00ffff>{0}</color>\n\r重试===><color=#00ffff>{1}</color>", _url, _currRetry));
+            GameGod.Instance.Log(E_Log.Proto, string.Format("Get===>{0}\n\r重试===>{1}", _url, _currRetry));
             _webRequest = UnityWebRequest.Get(_url);
             GameGod.Instance.StartCoroutine(SendRequest());
         }
 
         public void GetTexture()
         {
-            GameGod.Instance.Log(E_Log.Proto, string.Format("Get===><color=#00ffff>{0}</color>\n\r重试===><color=#00ffff>{1}</color>", _url, _currRetry));
+            GameGod.Instance.Log(E_Log.Proto, string.Format("Get===>{0}\n\r重试===>{1}", _url, _currRetry));
             _webRequest = UnityWebRequestTexture.GetTexture(_url);
             GameGod.Instance.StartCoroutine(SendRequest());
         }
@@ -169,7 +169,7 @@ namespace Framework
             _webRequest.downloadHandler = new DownloadHandlerBuffer();
             _webRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(_json));
             _webRequest.SetRequestHeader("Content-Type", "application/json");
-            GameGod.Instance.Log(E_Log.Proto, string.Format("Post===><color=#00ffff>{0}</color>\n\r重试===><color=#00ffff>{1}</color>", _url + _json, _currRetry));
+            GameGod.Instance.Log(E_Log.Proto, string.Format("Post===>{0}\n\r重试===>{1}", _url + _json, _currRetry));
             GameGod.Instance.StartCoroutine(SendRequest());
         }
 
@@ -179,7 +179,7 @@ namespace Framework
             {
                 _webRequest.SetRequestHeader(item.Key, item.Value);
             }
-            _webRequest.timeout = 5;
+            _webRequest.timeout = 360000;
             yield return _webRequest.SendWebRequest();
             if (_webRequest.result == UnityWebRequest.Result.ConnectionError || _webRequest.result == UnityWebRequest.Result.ProtocolError)
             {

@@ -131,10 +131,10 @@ namespace Framework
         /// <summary>
         /// 直接创建对象
         /// </summary>
-        public GameObject CreateGameObject(string objName)
+        public GameObject CreateGameObject(string objName, Transform trans = null)
         {
             var obj = LoadSync<GameObject>(objName);
-            return Object.Instantiate(obj);
+            return Object.Instantiate(obj, trans);
         }
 
         /// <summary>

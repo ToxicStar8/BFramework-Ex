@@ -162,7 +162,7 @@ namespace Framework
         /// 销毁自己
         /// </summary>
         /// <param name="comp"></param>
-        public static void Destory(this Component comp)
+        public static void Destroy(this Component comp)
         {
             if (comp != null)
             {

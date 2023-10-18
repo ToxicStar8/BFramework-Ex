@@ -52,13 +52,13 @@ namespace Framework
             uiBase = new T();
             var obj = GameGod.Instance.LoadManager.LoadSync<GameObject>(uiName + ".prefab");
             var uiTrans = GameGod.Instance.GetUILevelTrans(uiLevel);
+            _uiBaseDic[uiName] = uiBase;
             uiBase.uiName = uiName;
             uiBase.gameObject = UnityEngine.Object.Instantiate(obj, uiTrans);
             uiBase.LoadHelper = LoadHelper.Create();
             uiBase.OnCreate();
             uiBase.OnInit();
             uiBase.OnShow(args);
-            _uiBaseDic[uiName] = uiBase;
         }
 
         /// <summary>

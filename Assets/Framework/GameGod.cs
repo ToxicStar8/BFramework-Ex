@@ -122,6 +122,11 @@ namespace Framework
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public Transform GameStart => GameEntry.Instance.GameStart;
+
+        /// <summary>
         /// 获得UI根节点下的层级节点
         /// </summary>
         /// <param name="uiLevel"></param>

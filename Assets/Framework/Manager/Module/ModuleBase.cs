@@ -25,11 +25,11 @@ namespace Framework
         #region Event
         private List<ushort> _eventList;
 
-        public void AddEventListener(ModuleEvent eventNo, Action<object[]> callBack, string remark = null)
+        protected void AddEventListener(ModuleEvent eventNo, Action<object[]> callBack, string remark = null)
         {
             AddEventListener((ushort)eventNo, callBack);
         }
-        public override void AddEventListener(ushort eventNo, Action<object[]> callBack)
+        protected override void AddEventListener(ushort eventNo, Action<object[]> callBack)
         {
             if (_eventList == null)
             {
@@ -39,11 +39,11 @@ namespace Framework
             base.AddEventListener(eventNo, callBack);
         }
 
-        public void SendEvent(UIEvent eventNo, params object[] args)
+        protected void SendEvent(UIEvent eventNo, params object[] args)
         {
             SendEvent((ushort)eventNo, args);
         }
-        public void SendEvent(ModuleEvent eventNo, params object[] args)
+        protected void SendEvent(ModuleEvent eventNo, params object[] args)
         {
             SendEvent((ushort)eventNo, args);
         }

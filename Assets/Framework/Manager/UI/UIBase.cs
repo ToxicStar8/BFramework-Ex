@@ -44,7 +44,7 @@ namespace Framework
         /// <summary>
         /// 创建单独的UnitPool
         /// </summary>
-        public UnitPool<T> CreateSinglePool<T>()where T : UnitBase,new()
+        protected UnitPool<T> CreateSinglePool<T>()where T : UnitBase,new()
         {
             var objName = typeof(T).Name.Split('_')[1] + ".prefab";
             var obj = LoadHelper.LoadSync<GameObject>(objName);
@@ -55,14 +55,14 @@ namespace Framework
         /// <summary>
         /// 获取UI节点
         /// </summary>
-        public RectTransform GetUILevelTrans(E_UILevel uiLevel)
+        protected RectTransform GetUILevelTrans(E_UILevel uiLevel)
         {
             return GameGod.Instance.GetUILevelTrans(uiLevel);
         }
 
         #region Update
         private Action _update;
-        public void RegisterUpdate(Action updateCallback)
+        protected void RegisterUpdate(Action updateCallback)
         {
             if (_update != null)
             {
@@ -78,7 +78,7 @@ namespace Framework
         #region Event
         private List<ushort> _eventList;
 
-        public override void AddEventListener(ushort eventNo, Action<object[]> callBack)
+        protected override void AddEventListener(ushort eventNo, Action<object[]> callBack)
         {
             if (_eventList == null)
             {
@@ -95,7 +95,7 @@ namespace Framework
         /// <summary>
         /// 添加定时器监听
         /// </summary>
-        public override void AddTimer(string timeName, TimerInfo countdownData)
+        protected override void AddTimer(string timeName, TimerInfo countdownData)
         {
             if (_timerList == null)
             {

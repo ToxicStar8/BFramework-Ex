@@ -33,15 +33,15 @@ namespace Framework
         /// </summary>
         /// <param name="outPath">输出的文件夹</param>
         /// <param name="newVideoName">新视频的名字</param>
-        //public static void CombineVideo(string video1FullPath, string video2FullPath, Vector2 cutSize, Vector2 video2Pos, string outPath = null, string newVideoName = null)
-        //{
-        //    //常规检测
-        //    newVideoName = CheckNewVideoName(newVideoName);
-        //    outPath = CheckOutPath(outPath);
-        //    //正式执行
-        //    var outFullPath = outPath + $"/{newVideoName}.mp4";
-        //    _ffpInfo.Execute($"-i {video1FullPath} -i {video2FullPath} -filter_complex \"pad=1080:1920:color=green[x0];[0:v]scale=w=1080:h=1920[inn0];[x0][inn0]overlay=0:0[x1];[1:v]scale=w={cutSize.x}:h={cutSize.y}[inn1];[x1][inn1]overlay={video2Pos.x}:{video2Pos.y}\" {outFullPath}");
-        //}
+        public static void CombineVideo(string video1FullPath, string video2FullPath, Vector2 cutSize, Vector2 video2Pos, string outPath = null, string newVideoName = null)
+        {
+            //常规检测
+            newVideoName = CheckNewVideoName(newVideoName);
+            outPath = CheckOutPath(outPath);
+            //正式执行
+            var outFullPath = outPath + $"/{newVideoName}.mp4";
+            Execute($"-i {video1FullPath} -i {video2FullPath} -filter_complex \"pad=1080:1920:color=green[x0];[0:v]scale=w=1080:h=1920[inn0];[x0][inn0]overlay=0:0[x1];[1:v]scale=w={cutSize.x}:h={cutSize.y}[inn1];[x1][inn1]overlay={video2Pos.x}:{video2Pos.y}\" {outFullPath}");
+        }
 
         /// <summary>
         /// 视频裁剪
@@ -51,20 +51,20 @@ namespace Framework
         /// <param name="inputFullPath">输入的文件全路径名</param>
         /// <param name="outPath">输出的文件夹</param>
         /// <param name="newVideoName">新视频的名字</param>
-        //public static void CutVideo(int startTime, int intervalTime, string inputFullPath, string outPath = null, string newVideoName = null)
-        //{
-        //    //常规检测
-        //    newVideoName = CheckNewVideoName(newVideoName);
-        //    CheckOutPath(outPath);
-        //    //正式执行
-        //    var outFullPath = outPath + $"/{newVideoName}.mp4";
-        //    _ffpInfo.Execute($"-i {inputFullPath} -ss {startTime} -t {intervalTime} -codec copy {outFullPath}");
-        //}
+        public static void CutVideo(int startTime, int intervalTime, string inputFullPath, string outPath = null, string newVideoName = null)
+        {
+            //常规检测
+            newVideoName = CheckNewVideoName(newVideoName);
+            CheckOutPath(outPath);
+            //正式执行
+            var outFullPath = outPath + $"/{newVideoName}.mp4";
+            Execute($"-i {inputFullPath} -ss {startTime} -t {intervalTime} -codec copy {outFullPath}");
+        }
 
         /// <summary>
         /// 检测是否有视频名
         /// </summary>
-        private static string CheckNewVideoName(string newVideoName)
+        public static string CheckNewVideoName(string newVideoName)
         {
             //视频名
             if (string.IsNullOrWhiteSpace(newVideoName))
@@ -77,7 +77,7 @@ namespace Framework
         /// <summary>
         /// 检测是否有输出路径
         /// </summary>
-        private static string CheckOutPath(string outPath)
+        public static string CheckOutPath(string outPath)
         {
             //输出位置
             if (string.IsNullOrWhiteSpace(outPath))
@@ -98,87 +98,98 @@ namespace Framework
         {
             _ffpInfo.CloseFFmpegProcess();
         }
-    }
 
-    public class FFmpegInfo
-    {
-        private Process _ffp;
-        private string _ffpPath = Application.dataPath + "/AppData/ffmpeg.exe";
-        private bool _isRunning;
-
-        /// <summary>
-        /// 执行FFmpeg的命令行
-        /// </summary>
-        /// <param name="cmdReadStr"></param>
-        /// <param name="isShowCmd"></param>
-        public void Execute(string cmdReadStr, bool isShowCmd = false)
+        public class FFmpegInfo
         {
-            //正在执行中
-            if (_isRunning)
-            {
-                Debug.LogError("视频处理正在执行中，请稍后再试！");
-                return;
-            }
-            _isRunning = true;
-            //杀死已有的ffmpeg进程，不要加.exe后缀
-            Process[] goDie = Process.GetProcessesByName("ffmpeg");
-            foreach (Process p in goDie)
-            {
-                p.Kill();
-            }
-            //执行新的
-            new Thread(() =>
-            {
-                _ffp = new Process();
-                _ffp.StartInfo.FileName = _ffpPath;                 // 进程可执行文件位置
-                _ffp.StartInfo.Arguments = cmdReadStr;              // 传给可执行文件的命令行参数
-                _ffp.StartInfo.CreateNoWindow = !isShowCmd;         // 是否显示控制台窗口
-                _ffp.StartInfo.UseShellExecute = isShowCmd;         // 是否使用操作系统Shell程序启动进程
-                _ffp.OutputDataReceived += (s, e) => ShowResult(e);
-                _ffp.ErrorDataReceived += (s, e) => ShowResult(e);
-                _ffp.Start();
+            private Process _ffp;
+            private string _ffpPath = Application.streamingAssetsPath + "/ffmpeg.exe";
+            private bool _isRunning;
 
-                _ffp.WaitForExit();
-
-                Debug.Log("ffmpeg执行完毕");
-                _ffp.Close();
-                _isRunning = false;
-            }).Start();
-        }
-
-        private static void ShowResult(DataReceivedEventArgs e)
-        {
-            if (!string.IsNullOrEmpty(e.Data))
+            /// <summary>
+            /// 执行FFmpeg的命令行
+            /// </summary>
+            /// <param name="cmdReadStr"></param>
+            /// <param name="isShowCmd"></param>
+            public void Execute(string cmdReadStr, bool isShowCmd = false)
             {
-                Debug.Log(e.Data);
-            }
-        }
-
-        /// <summary>
-        /// 主动退出进程
-        /// </summary>
-        public void CloseFFmpegProcess()
-        {
-            if (_ffp != null)
-            {
-                try
+                //正在执行中
+                if (_isRunning)
                 {
-                    _ffp.StandardInput.WriteLine("q");//在这个进程的控制台中模拟输入q,用于暂停录制
+                    Debug.LogError("视频处理正在执行中，请稍后再试！");
+                    return;
+                }
+                //杀死已有的ffmpeg进程，不要加.exe后缀
+                Process[] goDie = Process.GetProcessesByName("ffmpeg");
+                foreach (Process p in goDie)
+                {
+                    Debug.Log("杀死已有的ffmpeg进程");
+                    p.Kill();
+                }
+                //执行新的
+                new Thread(() =>
+                {
+                    _isRunning = true;
+                    Thread.CurrentThread.IsBackground = true;
+
+                    _ffp = new Process();
+                    _ffp.StartInfo.RedirectStandardOutput = true;
+                    _ffp.StartInfo.RedirectStandardError = true;
+                    _ffp.StartInfo.FileName = _ffpPath;                 // 进程可执行文件位置
+                    _ffp.StartInfo.Arguments = cmdReadStr;              // 传给可执行文件的命令行参数
+                    _ffp.StartInfo.CreateNoWindow = !isShowCmd;         // 是否显示控制台窗口
+                    _ffp.StartInfo.UseShellExecute = isShowCmd;         // 是否使用操作系统Shell程序启动进程
+                    _ffp.StartInfo.RedirectStandardInput = true;        //这句一定需要，用于模拟该进程控制台的输入
+                    _ffp.OutputDataReceived += (s, e) => ShowResult(e);
+                    _ffp.ErrorDataReceived += (s, e) => ShowResult(e);
+                    _ffp.Start();
+
+                    _ffp.BeginOutputReadLine();
+                    _ffp.BeginErrorReadLine();
+
+                    _ffp.WaitForExit();
+
+                    Debug.Log("ffmpeg执行完毕");
                     _ffp.Close();
-                    _ffp.Dispose();
-
-                    _ffp = null;
-                    Debug.Log("主动退出FFmpeg进程");
-                }
-                catch (Exception)
-                {
-                    Debug.LogError("没有进程可杀");
-                }
-
+                    _isRunning = false;
+                }).Start();
             }
-            else
+
+            private static void ShowResult(DataReceivedEventArgs e)
             {
-                Debug.LogError("FFmpeg进程为空");
+                if (!string.IsNullOrEmpty(e.Data))
+                {
+                    Debug.Log(e.Data);
+                }
+            }
+
+            /// <summary>
+            /// 主动退出进程
+            /// </summary>
+            public void CloseFFmpegProcess()
+            {
+                if (_ffp != null)
+                {
+                    try
+                    {
+                        _ffp.StandardInput.WriteLine("q");//在这个进程的控制台中模拟输入q,用于暂停录制
+                        _ffp.Close();
+                        _ffp.Dispose();
+
+                        _isRunning = false;
+
+                        _ffp = null;
+                        Debug.Log("主动退出FFmpeg进程");
+                    }
+                    catch (Exception)
+                    {
+                        Debug.LogError("没有进程可杀");
+                    }
+
+                }
+                else
+                {
+                    Debug.LogError("FFmpeg进程为空");
+                }
             }
         }
     }

@@ -51,7 +51,7 @@ namespace Framework
         {
             EditorGUILayout.BeginHorizontal("Box");
             EditorGUILayout.LabelField("当前版本：", GUILayout.Width(80f));
-            EditorGUILayout.LabelField(_version, GUILayout.Width(80f));
+            _version = EditorGUILayout.TextField(_version, GUILayout.Width(200f));
             if (GUILayout.Button("切换gpt-3.5"))
             {
                 _version = "gpt-3.5-turbo-1106";

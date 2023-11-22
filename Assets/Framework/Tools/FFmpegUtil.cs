@@ -22,9 +22,9 @@ namespace Framework
         /// <summary>
         /// 执行命令行
         /// </summary>
-        public static FFmpegInfo Execute(string cmdReadStr)
+        public static FFmpegInfo Execute(string cmdReadStr, Action callback)
         {
-            _ffpInfo.Execute(cmdReadStr);
+            _ffpInfo.Execute(cmdReadStr, callback);
             return _ffpInfo;
         }
 
@@ -40,7 +40,7 @@ namespace Framework
             outPath = CheckOutPath(outPath);
             //正式执行
             var outFullPath = outPath + $"/{newVideoName}.mp4";
-            Execute($"-i {video1FullPath} -i {video2FullPath} -filter_complex \"pad=1080:1920:color=green[x0];[0:v]scale=w=1080:h=1920[inn0];[x0][inn0]overlay=0:0[x1];[1:v]scale=w={cutSize.x}:h={cutSize.y}[inn1];[x1][inn1]overlay={video2Pos.x}:{video2Pos.y}\" {outFullPath}");
+            Execute($"-i {video1FullPath} -i {video2FullPath} -filter_complex \"pad=1080:1920:color=green[x0];[0:v]scale=w=1080:h=1920[inn0];[x0][inn0]overlay=0:0[x1];[1:v]scale=w={cutSize.x}:h={cutSize.y}[inn1];[x1][inn1]overlay={video2Pos.x}:{video2Pos.y}\" {outFullPath}", null);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace Framework
             CheckOutPath(outPath);
             //正式执行
             var outFullPath = outPath + $"/{newVideoName}.mp4";
-            Execute($"-i {inputFullPath} -ss {startTime} -t {intervalTime} -codec copy {outFullPath}");
+            Execute($"-i {inputFullPath} -ss {startTime} -t {intervalTime} -codec copy {outFullPath}", null);
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace Framework
             /// </summary>
             /// <param name="cmdReadStr"></param>
             /// <param name="isShowCmd"></param>
-            public void Execute(string cmdReadStr, bool isShowCmd = false)
+            public void Execute(string cmdReadStr, Action callback, bool isShowCmd = false)
             {
                 //正在执行中
                 if (_isRunning)
@@ -149,8 +149,9 @@ namespace Framework
                     _ffp.WaitForExit();
 
                     Debug.Log("ffmpeg执行完毕");
-                    _ffp.Close();
                     _isRunning = false;
+                    _ffp.Close();
+                    callback?.Invoke();
                 }).Start();
             }
 

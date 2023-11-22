@@ -34,7 +34,7 @@ namespace Framework
         public void OnInit()
         {
             _openaiSaveKeyPath = Application.persistentDataPath + "/openaikey.txt";
-            _version = "gpt-3.5-turbo-0613";
+            _version = "gpt-3.5-turbo-1106";
 
             if (File.Exists(_openaiSaveKeyPath))
             {
@@ -54,11 +54,11 @@ namespace Framework
             EditorGUILayout.LabelField(_version, GUILayout.Width(80f));
             if (GUILayout.Button("切换gpt-3.5"))
             {
-                _version = "gpt-3.5-turbo-0613";
+                _version = "gpt-3.5-turbo-1106";
             }
             if (GUILayout.Button("切换gpt-4"))
             {
-                _version = "gpt-4-0613";
+                _version = "gpt-4-1106-preview";
             }
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.Space(10f);

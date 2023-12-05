@@ -32,7 +32,7 @@ namespace Framework
         /// <param name="inviteTime">执行间隔时间</param>
         /// <param name="isExecImmed">是否立即执行</param>
         /// <param name="callback">执行回调</param>
-        public static TimerInfo CreateTimer(int allCount, float inviteTime, bool isExecImmed, Action callback)
+        public static TimerInfo Create(int allCount, float inviteTime, bool isExecImmed, Action callback)
         {
             var timerInfo = new TimerInfo();
             timerInfo.AllCount = allCount;
@@ -80,7 +80,7 @@ namespace Framework
             for (int i = 0, count = WaitAddList.Count; i < count; i++)
             {
                 var timerInfo = WaitAddList[i];
-                TimerInfoDic.Add(timerInfo.TimeName, timerInfo);
+                TimerInfoDic[timerInfo.TimeName] = timerInfo;
             }
             WaitAddList.Clear();
 
@@ -119,7 +119,7 @@ namespace Framework
         /// </summary>
         public void AddTimer(string timeName, TimerInfo timerInfo)
         {
-            if (TimerInfoDic.ContainsKey(timeName) && WaitReycleList.Find(x => x.TimeName == timeName) == null)
+            if (TimerInfoDic.ContainsKey(timeName))
             {
                 GameGod.Instance.Log(E_Log.Error, "定时器重复监听", timeName);
                 //TimerInfoDic.Remove(timeName);
@@ -196,6 +196,10 @@ namespace Framework
 
         public override void OnDispose()
         {
+            WaitReycleList.Clear();
+            WaitReycleList = null;
+            WaitAddList.Clear();
+            WaitAddList = null;
             TimerInfoDic.Clear();
             TimerInfoDic = null;
         }

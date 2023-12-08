@@ -57,12 +57,15 @@ namespace Framework
         public List<TimerInfo> WaitReycleList { private set; get; }
         //等待添加的计时器
         public List<TimerInfo> WaitAddList { private set; get; }
+        //记录下次刷新的时间节点
+        private float nextUpdateTime; 
 
         public override void OnInit()
         {
             TimerInfoDic = new Dictionary<string, TimerInfo>();
             WaitReycleList = new List<TimerInfo>();
             WaitAddList = new List<TimerInfo>();
+            nextUpdateTime = float.MaxValue;
         }
 
         public override void OnUpdate()
@@ -81,22 +84,40 @@ namespace Framework
             {
                 var timerInfo = WaitAddList[i];
                 TimerInfoDic[timerInfo.TimeName] = timerInfo;
+                UpdateNextExecTime(timerInfo);
             }
             WaitAddList.Clear();
 
-            //遍历计时器
-            foreach (var item in TimerInfoDic)
+            // 如果距离下次刷新的时间小于等于0，进行遍历字典并更新最短间隔时间
+            float timeUntilNextUpdate = nextUpdateTime - curTime;
+            if (timeUntilNextUpdate <= 0)
             {
-                var timerInfo = item.Value;
-                //正式执行
-                if (timerInfo.AllCount != 0 && curTime >= timerInfo.NextExecTime)
+                //进入遍历，重置下次执行时间
+                nextUpdateTime = float.MaxValue;
+                //遍历计时器
+                foreach (var item in TimerInfoDic)
                 {
-                    //刷新时间
-                    timerInfo.OldTime = curTime;
-                    //执行回调
-                    ExecCallback(timerInfo);
+                    var timerInfo = item.Value;
+                    //正式执行
+                    if (timerInfo.AllCount != 0 && curTime >= timerInfo.NextExecTime)
+                    {
+                        //刷新时间
+                        timerInfo.OldTime = curTime;
+                        //执行回调
+                        ExecCallback(timerInfo);
+                    }
+                    //不管是否执行完毕，都选最小值进行记录
+                    nextUpdateTime = Mathf.Min(nextUpdateTime, timerInfo.NextExecTime);
                 }
             }
+        }
+
+        /// <summary>
+        /// 用于添加计时器时更新下次执行时间
+        /// </summary>
+        private void UpdateNextExecTime(TimerInfo timerInfo)
+        {
+            nextUpdateTime = Mathf.Min(nextUpdateTime, timerInfo.NextExecTime);
         }
 
         /// <summary>

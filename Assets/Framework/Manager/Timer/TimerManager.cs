@@ -16,13 +16,13 @@ namespace Framework
     public class TimerInfo
     {
         //可传入数据
-        public Action Callback;             //执行回调
-        public int AllCount = -1;           //执行次数 -1=直至关闭
-        public float InviteTime = 1;        //执行间隔时间
-        public bool IsExecImmed = false;    //是否立即执行 如果需要立即执行最好间隔时间>0.3f
+        public Action Callback { get; set; }             //执行回调
+        public int AllCount { get; set; } = -1;          //执行次数 -1=直至关闭
+        public float InviteTime { get; set; } = 1;       //执行间隔时间
+        public bool IsExecImmed { get; set; } = false;    //是否立即执行 如果需要立即执行最好间隔时间>0.3f
         //非传入数据
-        public string TimeName;             //Key
-        public float OldTime = -1;          //上次执行时间
+        public string TimeName { get; set; }             //Key
+        public float OldTime { get; set; } = -1;          //上次执行时间
         public float NextExecTime => OldTime + InviteTime;      //下次执行时间
 
         /// <summary>
@@ -71,14 +71,23 @@ namespace Framework
         public override void OnUpdate()
         {
             var curTime = Time.time;
+            RecycleTimers();
+            AddNewTimers();
+            UpdateTimers(curTime);
+        }
 
+        private void RecycleTimers()
+        {
             //回收使用结束的计时器
             for (int i = 0, count = WaitReycleList.Count; i < count; i++)
             {
                 RemoveTimer(WaitReycleList[i]);
             }
             WaitReycleList.Clear();
+        }
 
+        private void AddNewTimers()
+        {
             //添加等待的计时器
             for (int i = 0, count = WaitAddList.Count; i < count; i++)
             {
@@ -87,7 +96,10 @@ namespace Framework
                 UpdateNextExecTime(timerInfo);
             }
             WaitAddList.Clear();
+        }
 
+        private void UpdateTimers(float curTime)
+        {
             // 如果距离下次刷新的时间小于等于0，进行遍历字典并更新最短间隔时间
             float timeUntilNextUpdate = nextUpdateTime - curTime;
             if (timeUntilNextUpdate <= 0)

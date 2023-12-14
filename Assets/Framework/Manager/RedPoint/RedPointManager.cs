@@ -40,7 +40,7 @@ namespace Framework
         ///                         => UI_a2  (UIMainMenu,UI_A1,UI_a2)
         ///                => UI_A2 => UI_aa  (UIMainMenu,UI_A2,UI_aa)
         ///                         => UI_ab  (UIMainMenu,UI_A2,UI_ab)
-        public TrieTreeNode AddNodeByFullPath(params string[] paths)
+        public TrieTreeNode AddOrGetNodeByFullPath(params string[] paths)
         {
             //从根节点开始搜索
             var tempNode = RootNode;
@@ -59,7 +59,7 @@ namespace Framework
         /// <param name="parent">目标父节点名</param>
         /// <param name="key">目标名</param>
         /// <returns></returns>
-        public TrieTreeNode AddNodeByParentKey(string parentKey, string key)
+        public TrieTreeNode AddOrGetNodeByParentKey(string parentKey, string key)
         {
             var child = RootNode.FindNodeByKey(parentKey);
             if (child == null)
@@ -72,14 +72,27 @@ namespace Framework
         }
 
         /// <summary>
+        /// 添加节点,根据父节点名
+        /// </summary>
+        /// <typeparam name="T">目标节点类</typeparam>
+        /// <param name="parentKey">目标的父节点名</param>
+        /// <returns></returns>
+        public TrieTreeNode AddOrGetNodeByParentKey<T>(string parentKey)
+        {
+            var key = typeof(T).Name;
+            var child = AddOrGetNodeByParentKey(parentKey, key);
+            return child;
+        }
+
+        /// <summary>
         /// 添加节点,根据父节点
         /// </summary>
         /// <param name="parent">目标父节点</param>
         /// <param name="key">目标名</param>
         /// <returns></returns>
-        public TrieTreeNode AddNodeByParent(TrieTreeNode parent, string key)
+        public TrieTreeNode AddOrGetNodeByParent(TrieTreeNode parent, string key)
         {
-            var child = AddNodeByParentKey(parent.Key, key);
+            var child = AddOrGetNodeByParentKey(parent.Key, key);
             return child;
         }
 

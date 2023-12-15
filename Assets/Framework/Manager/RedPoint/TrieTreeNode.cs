@@ -57,7 +57,7 @@ namespace Framework
         /// 获取或添加子节点
         /// </summary>
         /// <param name="key">节点名</param>
-        public TrieTreeNode GetOrAddChild(string key)
+        public TrieTreeNode GetOrAddNode(string key)
         {
             if (!ChildrenDic.TryGetValue(key, out var child))
             {
@@ -86,13 +86,25 @@ namespace Framework
             {
                 tempNode = node.Value.FindNodeByKey(key);
                 //找到了
-                if (tempNode.Key == key)
+                if (tempNode != null && tempNode.Key == key)
                 {
                     return tempNode;
                 }
             }
             //没找着
             return null;
+        }
+
+        /// <summary>
+        /// 移除指定节点
+        /// </summary>
+        public void RemoveNode(string key)
+        {
+            if (ChildrenDic.TryGetValue(key, out var child))
+            {
+                child.OnDispose();
+                ChildrenDic.Remove(key);
+            }
         }
 
         public void OnDispose()

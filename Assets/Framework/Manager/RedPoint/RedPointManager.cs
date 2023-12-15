@@ -47,7 +47,7 @@ namespace Framework
             foreach (var key in paths)
             {
                 //因为是全路径搜索，所以如果没有节点就直接添加，不会重复添加
-                tempNode = tempNode.GetOrAddChild(key);
+                tempNode = tempNode.GetOrAddNode(key);
             }
             //全路径检索完，最后的就是刚添加的节点，返回
             return tempNode;
@@ -67,7 +67,7 @@ namespace Framework
                 GameGod.Instance.Log(E_Log.Error, "没有找到父节点", parentKey);
                 return null;
             }
-            child = child.GetOrAddChild(key);
+            child = child.GetOrAddNode(key);
             return child;
         }
 
@@ -97,11 +97,38 @@ namespace Framework
         }
 
         /// <summary>
+        /// 移除节点,根据节点名
+        /// </summary>
+        public void RemoveNode(string key)
+        {
+            var child = RootNode.FindNodeByKey(key);
+            if (child == null)
+            {
+                GameGod.Instance.Log(E_Log.Error, "没有找到节点", key);
+                return;
+            }
+            child.Parent.RemoveNode(key);
+        }
+
+        /// <summary>
+        /// 移除节点,根据节点名
+        /// </summary>
+        public void RemoveNode<T>()
+        {
+            var key = typeof(T).Name;
+            RemoveNode(key);
+        }
+
+        /// <summary>
         /// 移除所有节点
         /// </summary>
-        public void RemoveAllTreeNode()
+        public void RemoveAllNode()
         {
-            RootNode.OnDispose();
+            foreach (var node in RootNode.ChildrenDic)
+            {
+                node.Value.OnDispose();
+            }
+            RootNode.ChildrenDic.Clear();
         }
 
         public override void OnDispose()

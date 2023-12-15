@@ -24,7 +24,7 @@ namespace Framework
     {
         private static RedPointTreeWindow _redPointWindow;
 
-        [MenuItem("BFramework/RedPoint Show")]
+        [MenuItem("BFramework/RedPoint Show", false, 100)]
         private static void OpenWindow()
         {
             var win = CreateWindow<RedPointTreeWindow>("红点树预览工具");
@@ -49,6 +49,9 @@ namespace Framework
             }
 
             DrawNode(GameGod.Instance.RedPointManager.RootNode, 0);
+
+            //实时重绘
+            Repaint();
         }
 
         private void DrawNode(TrieTreeNode node, int depth)

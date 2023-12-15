@@ -32,7 +32,7 @@ namespace Framework
         /// </summary>
         public static string AtlasScriptPath = Application.dataPath + "/GameData/Scripts/Define/AtlasName.cs";
 
-        [MenuItem("BFramework/Build SpriteAtlas", false, 1)]
+        [MenuItem("BFramework/Build SpriteAtlas", false, 0)]
         public static void BuildAtlas()
         {
             GenerateSpriteAtlas();

@@ -21,7 +21,7 @@ namespace Framework
     {
         private static ChatgptWindow _chatgptWindow;
 
-        [MenuItem("BFramework/Chatgpt Tools")]
+        [MenuItem("BFramework/Chatgpt Tools",false,1000)]
         private static void OpenWindow()
         {
             var win = CreateWindow<ChatgptWindow>("Chatgpt即时问答工具");

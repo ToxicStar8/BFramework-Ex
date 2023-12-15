@@ -27,7 +27,7 @@ namespace Framework
         /// </summary>
         public static string AssetNamesScriptPath = Application.dataPath + "/GameData/Scripts/Define/AssetName.cs";
 
-        [MenuItem("BFramework/Build Asset Name", false, 0)]
+        [MenuItem("BFramework/Build Asset Name", false, 1)]
         public static void BuildAssetNamesScript()
         {
             string temp = @"/*********************************************

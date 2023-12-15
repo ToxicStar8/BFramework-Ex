@@ -22,7 +22,7 @@ namespace Framework
         {
             Parent = parent;
             Key = key;
-            Value = "0";
+            Value = 0;
             ChildrenDic = new Dictionary<string, TrieTreeNode>();
         }
 
@@ -34,7 +34,7 @@ namespace Framework
         /// <summary>
         /// 值
         /// </summary>
-        public string Value { private set; get; }
+        public int Value { private set; get; }
 
         /// <summary>
         /// 父节点
@@ -45,6 +45,13 @@ namespace Framework
         /// 子节点字典
         /// </summary>
         public Dictionary<string, TrieTreeNode> ChildrenDic { private set; get; }
+
+#if UNITY_EDITOR
+        /// <summary>
+        /// 编辑器用 是否展开
+        /// </summary>
+        public bool IsExpanded = true;
+#endif
 
         /// <summary>
         /// 获取或添加子节点

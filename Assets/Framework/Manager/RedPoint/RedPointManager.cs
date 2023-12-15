@@ -96,6 +96,14 @@ namespace Framework
             return child;
         }
 
+        /// <summary>
+        /// 移除所有节点
+        /// </summary>
+        public void RemoveAllTreeNode()
+        {
+            RootNode.OnDispose();
+        }
+
         public override void OnDispose()
         {
             RootNode.OnDispose();

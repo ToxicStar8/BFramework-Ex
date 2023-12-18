@@ -219,5 +219,30 @@ namespace Framework
             _unitBase.gameObject.SetActive(true);
             return _unitBase;
         }
+
+        /// <summary>
+        /// 直接获取Panel
+        /// </summary>
+        public T GetUnitBase()
+        {
+            if (_unitBase == null)
+            {
+                CreateBase();
+            }
+            return _unitBase;
+        }
+
+        /// <summary>
+        /// 隐藏Panel
+        /// </summary>
+        public void HideUnitBase()
+        {
+            if (_unitBase == null)
+            {
+                GameGod.Instance.Log(E_Log.Error, UnitName, "的Panel不存在！");
+                return;
+            }
+            _unitBase.gameObject.SetActive(false);
+        }
     }
 }

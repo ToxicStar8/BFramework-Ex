@@ -36,7 +36,7 @@ namespace Framework
 
         private void Reset()
         {
-            Type = BindType.Component;
+            Type = name.Contains("Unit") ? BindType.Unit : BindType.Component;
             ResetBind();
         }
 

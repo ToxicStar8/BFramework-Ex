@@ -212,7 +212,8 @@ namespace Framework
             {
                 _webRequest.SetRequestHeader(item.Key, item.Value);
             }
-            _webRequest.timeout = 360000;
+
+            _webRequest.timeout = 10;
             yield return _webRequest.SendWebRequest();
             if (_webRequest.result == UnityWebRequest.Result.ConnectionError || _webRequest.result == UnityWebRequest.Result.ProtocolError)
             {
@@ -262,6 +263,11 @@ namespace Framework
                     //音频回调
                     _AudioClipCallBack?.Invoke(DownloadHandlerAudioClip.GetContent(_webRequest));
                     GameGod.Instance.Log(E_Log.Proto, string.Format("<color=#FFF11A>{{\"code\":{0},\"data\":\"\"}}</color>", _webRequest.responseCode));
+                }
+                else
+                {
+                    //空回调，直接打印内容
+                    GameGod.Instance.Log(E_Log.Proto, string.Format("<color=#FFF11A>{{\"code\":{0},\"data\":{1}}}</color>", _webRequest.responseCode, downloadHandler.text));
                 }
             }
             //清理状态

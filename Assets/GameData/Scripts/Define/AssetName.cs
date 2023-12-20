@@ -1,7 +1,7 @@
 /*********************************************
  * 自动生成代码，禁止手动修改文件
  * 脚本名：AssetName.cs
- * 创建时间：2023/06/19 14:13:11
+ * 创建时间：2023/12/13 15:27:17
  *********************************************/
 
 namespace GameData
@@ -11,54 +11,23 @@ namespace GameData
     /// </summary>
     public static class AssetName
     {
-        public static string Png_Map_Arable => "Map_Arable.png";
-        public static string Png_Map_Bigtree => "Map_BigTree.png";
-        public static string Png_Map_Grass => "Map_Grass.png";
-        public static string Png_Map_Grassdown => "Map_GrassDown.png";
-        public static string Png_Map_Grassleft => "Map_GrassLeft.png";
-        public static string Png_Map_Grassleftdown => "Map_GrassLeftDown.png";
-        public static string Png_Map_Grassleftdownsupply => "Map_GrassLeftDownSupply.png";
-        public static string Png_Map_Grassleftup => "Map_GrassLeftUp.png";
-        public static string Png_Map_Grassleftupsupply => "Map_GrassLeftUpSupply.png";
-        public static string Png_Map_Grassright => "Map_GrassRight.png";
-        public static string Png_Map_Grassrightdown => "Map_GrassRightDown.png";
-        public static string Png_Map_Grassrightdownsupply  => "Map_GrassRightDownSupply .png";
-        public static string Png_Map_Grassrightup => "Map_GrassRightUp.png";
-        public static string Png_Map_Grassrightupsupply => "Map_GrassRightUpSupply.png";
-        public static string Png_Map_Grasssingle => "Map_GrassSingle.png";
-        public static string Png_Map_Grassup => "Map_GrassUp.png";
-        public static string Png_Map_Select => "Map_Select.png";
-        public static string Png_Map_Water => "Map_Water.png";
-        public static string Png_Monster_01 => "Monster_01.png";
-        public static string Png_Monster_02 => "Monster_02.png";
-        public static string Png_Monster_03 => "Monster_03.png";
-        public static string Png_Dino_Blue => "Dino_Blue.png";
-        public static string Png_Dino_Green => "Dino_Green.png";
-        public static string Png_Dino_Red => "Dino_Red.png";
-        public static string Png_Dino_Yellow => "Dino_Yellow.png";
-        public static string Png_Backpack_Select => "Backpack_Select.png";
-        public static string Png_Clubs_88X124 => "Clubs_88x124.png";
-        public static string Png_Diamonds_88X124 => "Diamonds_88x124.png";
-        public static string Png_Hearts_88X124 => "Hearts_88x124.png";
-        public static string Png_Spades_88X124 => "Spades_88x124.png";
-        public static string Png_Uistyle => "UIStyle.png";
-        public static string Prefab_Map => "Map.prefab";
-        public static string Asset_Arable => "Arable.asset";
-        public static string Asset_Islandrule => "IslandRule.asset";
-        public static string Asset_Water => "Water.asset";
-        public static string Prefab_Hotupdateprefab => "HotUpdatePrefab.prefab";
+        public static string Bytes_Assembly_CSharp_dll => "Assembly-CSharp.dll.bytes";
+        public static string Bytes_DOTween_dll => "DOTween.dll.bytes";
+        public static string Cs_HotUpdateMain => "HotUpdateMain.cs";
+        public static string Prefab_HotUpdatePrefab => "HotUpdatePrefab.prefab";
+        public static string Bytes_Main_dll => "Main.dll.bytes";
+        public static string Bytes_mscorlib_dll => "mscorlib.dll.bytes";
+        public static string Bytes_System_Core_dll => "System.Core.dll.bytes";
+        public static string Bytes_System_dll => "System.dll.bytes";
+        public static string Bytes_UnityEngine_AssetBundleModule_dll => "UnityEngine.AssetBundleModule.dll.bytes";
+        public static string Bytes_UnityEngine_CoreModule_dll => "UnityEngine.CoreModule.dll.bytes";
         public static string Prefab_Btn_Back => "Btn_Back.prefab";
         public static string Prefab_Btn_Cancel => "Btn_Cancel.prefab";
         public static string Prefab_Btn_Confirm => "Btn_Confirm.prefab";
-        public static string Prefab_Uiadditemtips => "UIAddItemTips.prefab";
-        public static string Prefab_Uidialog => "UIDialog.prefab";
-        public static string Prefab_Uiselect => "UISelect.prefab";
-        public static string Prefab_Uitips => "UITips.prefab";
-        public static string Prefab_Uimain => "UIMain.prefab";
-        public static string Prefab_Uimainmenu => "UIMainMenu.prefab";
-        public static string Prefab_Cardunit => "CardUnit.prefab";
-        public static string Prefab_Monster_01 => "Monster_01.prefab";
-        public static string Prefab_Player => "Player.prefab";
-        public static string Prefab_Map_01 => "Map_01.prefab";
+        public static string Prefab_UIAddItemTips => "UIAddItemTips.prefab";
+        public static string Prefab_UIDialog => "UIDialog.prefab";
+        public static string Prefab_UISelect => "UISelect.prefab";
+        public static string Prefab_UITips => "UITips.prefab";
+        public static string Prefab_UIMainMenu => "UIMainMenu.prefab";
     }
 }

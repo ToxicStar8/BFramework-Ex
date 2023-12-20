@@ -4,9 +4,11 @@
  * 创建时间：2023/09/07 14:58:23
  *********************************************/
 using GameData;
+using LitJson;
 using MainPackage;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Framework
 {
@@ -15,11 +17,11 @@ namespace Framework
     /// </summary>
     public class ModuleManager : ManagerBase
     {
-        private Dictionary<Type, ModuleBase> _allModuleDic;
+        private Dictionary<string, ModuleBase> _allModuleDic;
 
         public override void OnInit()
         {
-            _allModuleDic = new Dictionary<Type, ModuleBase>();
+            _allModuleDic = new Dictionary<string, ModuleBase>();
         }
 
         public void Init(Type[] typeArr)
@@ -30,7 +32,7 @@ namespace Framework
                 var moduleType = typeArr[i];
                 var moduleBase = Activator.CreateInstance(moduleType) as ModuleBase;
                 moduleBase.OnInit();
-                _allModuleDic.Add(moduleType, moduleBase);  
+                _allModuleDic.Add( moduleType.Name, moduleBase);  
             }
         }
 
@@ -40,12 +42,12 @@ namespace Framework
         public T GetModule<T>() where T : ModuleBase
         {
             Type type = typeof(T);
-            if (!_allModuleDic.ContainsKey(type))
+            if (!_allModuleDic.ContainsKey(type.Name))
             {
                 GameGod.Instance.Log(E_Log.Error, type.Name, "未进行初始化！");
                 return null;
             }
-            return _allModuleDic[type] as T;
+            return _allModuleDic[type.Name] as T;
         }
 
         public override void OnUpdate() { }
@@ -55,6 +57,8 @@ namespace Framework
             {
                 item.Value.OnDispose();
             }
+            _allModuleDic.Clear();
+            _allModuleDic = null;
         }
     }
 }

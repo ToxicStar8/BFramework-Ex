@@ -44,7 +44,7 @@ namespace Framework
         public TableManager TableManager { private set; get; }
         public AudioManager AudioManager { private set; get; }
         public TimerManager TimeManager { private set; get; }
-        public DataManager DataManager { private set; get; }
+        //public DataManager DataManager { private set; get; }
         public FsmManager FsmManager { private set; get; }
         public ModuleManager ModuleManager { private set; get; }
         public RedPointManager RedPointManager { private set; get; }
@@ -69,7 +69,7 @@ namespace Framework
             TableManager = new TableManager();
             AudioManager = new AudioManager();
             TimeManager = new TimerManager();
-            DataManager = new DataManager();
+            //DataManager = new DataManager();
             FsmManager = new FsmManager();
             RedPointManager = new RedPointManager();
 
@@ -94,7 +94,7 @@ namespace Framework
             TableManager.OnUpdate();
             AudioManager.OnUpdate();
             TimeManager.OnUpdate();
-            DataManager.OnUpdate();
+            //DataManager.OnUpdate();
             FsmManager.OnUpdate();
             RedPointManager.OnUpdate();
             UpdateCallback?.Invoke();
@@ -109,13 +109,13 @@ namespace Framework
         private void OnDestroy()
         {
             //再执行
-            DataManager.OnDispose();
+            //DataManager.OnDispose();
+            ModuleManager.OnDispose();
             ABManager.OnDispose();
             FsmManager.OnDispose();
             UIManager.OnDispose();
             PoolManager.OnDispose();
             LoadManager.OnDispose();
-            ModuleManager.OnDispose();
             EventManager.OnDispose();
             TableManager.OnDispose();
             HttpManager.OnDispose();

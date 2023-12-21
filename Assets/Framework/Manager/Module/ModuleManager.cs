@@ -3,12 +3,12 @@
  * Module管理器
  * 创建时间：2023/09/07 14:58:23
  *********************************************/
-using GameData;
 using LitJson;
 using MainPackage;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.IO;
+using UnityEngine;
 
 namespace Framework
 {
@@ -17,11 +17,20 @@ namespace Framework
     /// </summary>
     public class ModuleManager : ManagerBase
     {
+        /// <summary>
+        /// 全部Module的字典
+        /// </summary>
         private Dictionary<string, ModuleBase> _allModuleDic;
+
+        /// <summary>
+        /// Module的存储地址
+        /// </summary>
+        private string _savePath;
 
         public override void OnInit()
         {
             _allModuleDic = new Dictionary<string, ModuleBase>();
+            _savePath = Application.persistentDataPath + "/";
         }
 
         public void Init(Type[] typeArr)
@@ -48,6 +57,31 @@ namespace Framework
                 return null;
             }
             return _allModuleDic[type.Name] as T;
+        }
+
+        /// <summary>
+        /// 保存Module数据到本地
+        /// </summary>
+        public void SaveModule<T>() where T : ModuleBase
+        {
+            Type type = typeof(T);
+            var module = GetModule<T>();
+            if (module != null)
+            {
+                File.WriteAllText(_savePath + type.Name, JsonMapper.ToJson(module));
+                GameGod.Instance.Log(E_Log.Framework, type.Name, "保存成功");
+            }
+        }
+
+        /// <summary>
+        /// 读取本地数据到Module
+        /// </summary>
+        public void LoadModule<T>() where T : ModuleBase
+        {
+            Type type = typeof(T);
+            var jsonData = File.ReadAllText(_savePath + type.Name);
+            _allModuleDic[type.Name] = JsonMapper.ToObject<T>(jsonData);
+            GameGod.Instance.Log(E_Log.Framework, type.Name, "加载成功");
         }
 
         public override void OnUpdate() { }

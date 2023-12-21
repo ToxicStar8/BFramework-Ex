@@ -3,7 +3,7 @@
  * 脚本名：ModuleBase.cs
  * 创建时间：2023/04/06 11:45:09
  *********************************************/
-using GameData;
+using MainPackage;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,10 +25,6 @@ namespace Framework
         #region Event
         private List<ushort> _eventList;
 
-        protected void AddEventListener(ModuleEvent eventNo, Action<object[]> callBack, string remark = null)
-        {
-            AddEventListener((ushort)eventNo, callBack);
-        }
         protected override void AddEventListener(ushort eventNo, Action<object[]> callBack)
         {
             if (_eventList == null)
@@ -38,14 +34,20 @@ namespace Framework
             _eventList.Add(eventNo);
             base.AddEventListener(eventNo, callBack);
         }
+        #endregion
 
-        protected void SendEvent(UIEvent eventNo, params object[] args)
+        #region Update
+        private Action _update;
+        protected void RegisterUpdate(Action updateCallback)
         {
-            SendEvent((ushort)eventNo, args);
-        }
-        protected void SendEvent(ModuleEvent eventNo, params object[] args)
-        {
-            SendEvent((ushort)eventNo, args);
+            if (_update != null)
+            {
+                GameGod.Instance.Log(E_Log.Error, GetType().Name , "Update重复注册！");
+                return;
+            }
+
+            _update = updateCallback;
+            GameGod.Instance.UpdateCallback += _update;
         }
         #endregion
 
@@ -54,10 +56,13 @@ namespace Framework
         /// </summary>
         public virtual void OnDispose()
         {
-            if (Coroutine != null)
+            //关闭前移除全部Update回调
+            if (_update != null)
             {
-                GameGod.Instance.StopCoroutine(Coroutine);
+                GameGod.Instance.UpdateCallback -= _update;
+                _update = null;
             }
+
             //关闭前移除全部注册事件
             if (_eventList != null)
             {
@@ -67,6 +72,12 @@ namespace Framework
                 }
                 _eventList.Clear();
                 _eventList = null;
+            }
+
+            //移除协程
+            if (Coroutine != null)
+            {
+                GameGod.Instance.StopCoroutine(Coroutine);
             }
         }
     }

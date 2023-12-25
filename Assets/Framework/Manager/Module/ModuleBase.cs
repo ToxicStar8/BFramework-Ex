@@ -18,7 +18,7 @@ namespace Framework
         protected Coroutine Coroutine;
 
         /// <summary>
-        /// 注册监听
+        /// 初始化Module，只有Init时会执行，Load时不执行
         /// </summary>
         public abstract void OnInit();
 

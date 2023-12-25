@@ -1,6 +1,7 @@
 ﻿/*********************************************
  * BFramework
  * Module管理器
+ * 对于网络游戏Module就是数据请求器以及数据缓存点，对于单机游戏Module就是数据的存档
  * 创建时间：2023/09/07 14:58:23
  *********************************************/
 using LitJson;
@@ -79,6 +80,13 @@ namespace Framework
         public void LoadModule<T>() where T : ModuleBase
         {
             Type type = typeof(T);
+            var filePath = _savePath + type.Name;
+            if(!File.Exists(filePath))
+            {
+                GameGod.Instance.Log(E_Log.Error, type.Name, "存档不存在");
+                return;
+            }
+
             var jsonData = File.ReadAllText(_savePath + type.Name);
             _allModuleDic[type.Name] = JsonMapper.ToObject<T>(jsonData);
             GameGod.Instance.Log(E_Log.Framework, type.Name, "加载成功");

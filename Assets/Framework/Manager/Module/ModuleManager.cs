@@ -42,7 +42,7 @@ namespace Framework
                 var moduleType = typeArr[i];
                 var moduleBase = Activator.CreateInstance(moduleType) as ModuleBase;
                 moduleBase.OnInit();
-                _allModuleDic.Add( moduleType.Name, moduleBase);  
+                _allModuleDic[moduleType.Name] = moduleBase;
             }
         }
 

@@ -125,7 +125,7 @@ namespace Framework
         /// <summary>
         /// 销毁前调用
         /// </summary>
-        public abstract void OnBeforDestroy();
+        public abstract void OnBeforeDestroy();
 
         /// <summary>
         /// 关闭UI通用方法
@@ -133,7 +133,7 @@ namespace Framework
         public void OnDispose()
         {
             //关闭前执行
-            OnBeforDestroy();
+            OnBeforeDestroy();
 
             //回收加载器
             LoadHelper.Recycle(LoadHelper);

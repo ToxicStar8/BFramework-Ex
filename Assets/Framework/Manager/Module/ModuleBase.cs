@@ -57,10 +57,18 @@ namespace Framework
         #endregion
 
         /// <summary>
+        /// 注销前调用
+        /// </summary>
+        public abstract void OnBeforeDispose();
+
+        /// <summary>
         /// 关闭Module
         /// </summary>
-        public virtual void OnDispose()
+        public void OnDispose()
         {
+            //注销前执行
+            OnBeforeDispose();
+
             //关闭前移除全部Update回调
             if (_update != null)
             {

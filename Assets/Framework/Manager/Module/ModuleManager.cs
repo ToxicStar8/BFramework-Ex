@@ -108,6 +108,18 @@ namespace Framework
             GameGod.Instance.Log(E_Log.Framework, type.Name, "加载成功");
         }
 
+        /// <summary>
+        /// 注销全部Module
+        /// </summary>
+        public void CloseAllModule()
+        {
+            foreach (var item in _allModuleDic)
+            {
+                item.Value.OnDispose();
+            }
+            _allModuleDic.Clear();
+        }
+
         public override void OnUpdate() { }
         public override void OnDispose() 
         {

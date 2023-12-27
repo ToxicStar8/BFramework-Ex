@@ -92,7 +92,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MainPackage;
 
 namespace GameData
 {
@@ -148,7 +147,7 @@ namespace GameData
                     {
                         string funcName = "OnClick_" + uiBind.name;
                         btnBindFunc += "\r\n            " + uiBind.name + ".AddListener(" + funcName + ");";
-                        btnOnClickStr += "\r\n        private void " + funcName + "()\r\n        {\r\n            Log(E_Log.Log,\"点击了" + uiBind.name + "\");\r\n        }\r\n";
+                        btnOnClickStr += "\r\n        private void " + funcName + "()\r\n        {\r\n            Log(\"点击了" + uiBind.name + "\");\r\n        }\r\n";
                         continue;
                     }
                 }
@@ -181,7 +180,6 @@ namespace GameData
  *********************************************/
 
 using Framework;
-using MainPackage;
 using UnityEngine;
 using UnityEngine.UI;
 

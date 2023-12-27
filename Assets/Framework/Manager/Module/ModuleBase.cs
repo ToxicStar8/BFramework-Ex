@@ -22,6 +22,11 @@ namespace Framework
         /// </summary>
         public abstract void OnInit();
 
+        /// <summary>
+        /// Load存档时执行，只有Load时会执行，Init时不执行
+        /// </summary>
+        public abstract void OnLoad();
+
         #region Event
         private List<ushort> _eventList;
 

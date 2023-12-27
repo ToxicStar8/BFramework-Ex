@@ -61,6 +61,20 @@ namespace Framework
         }
 
         /// <summary>
+        /// 获取指定的Module是否有存档在本地
+        /// </summary>
+        public bool GetModulePathIsNull<T>()
+        {
+            Type type = typeof(T);
+            var filePath = _savePath + type.Name;
+            if (!File.Exists(filePath))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
         /// 保存Module数据到本地
         /// </summary>
         public void SaveModule<T>() where T : ModuleBase
@@ -88,7 +102,9 @@ namespace Framework
             }
 
             var jsonData = File.ReadAllText(_savePath + type.Name);
-            _allModuleDic[type.Name] = JsonMapper.ToObject<T>(jsonData);
+            var moduleBase = JsonMapper.ToObject<T>(jsonData);
+            moduleBase.OnLoad();
+            _allModuleDic[type.Name] = moduleBase;
             GameGod.Instance.Log(E_Log.Framework, type.Name, "加载成功");
         }
 

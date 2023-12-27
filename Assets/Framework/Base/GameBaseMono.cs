@@ -266,6 +266,18 @@ namespace Framework
         {
             GameGod.Instance.Log(logType, title, content);
         }
+        protected virtual void Log(string title = null, string content = null)
+        {
+            GameGod.Instance.Log(E_Log.Log, title, content);
+        }
+        protected virtual void LogError(string title = null, string content = null)
+        {
+            GameGod.Instance.Log(E_Log.Error, title, content);
+        }
+        protected virtual void LogWarring(string title = null, string content = null)
+        {
+            GameGod.Instance.Log(E_Log.Warring, title, content);
+        }
         #endregion
     }
 }

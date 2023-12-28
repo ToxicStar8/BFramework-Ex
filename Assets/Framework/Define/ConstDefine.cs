@@ -24,5 +24,7 @@ namespace Framework
         public const string ABConfigPath = "Assets/Editor/ABConfig/ABConfig.asset";                 //ABConfig配置文件位置
         public const string JsoninformationDirPath = "Assets/Editor/ABConfig/JsonInformation/";     //依赖信息Json文件夹的路径
         public const string JsoninformationPath = JsoninformationDirPath + ABInfoName + ".json";    //依赖信息Json的路径
+
+        public const int RoomMaxPeople = 4;                                 //游戏最大人数上限
     }
 }

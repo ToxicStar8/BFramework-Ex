@@ -108,7 +108,12 @@ namespace Framework
             //AotDll
             foreach (var dll in AOTGenericReferences.PatchedAOTAssemblyList)
             {
-                File.Copy(AotDllOutPath + "/" + dll, HotfixDllPath + dll + ".bytes");
+                string aotDllPath = AotDllOutPath + "/" + dll;
+                if (File.Exists(aotDllPath))
+                {
+                    string targetPath = HotfixDllPath + dll + ".bytes";
+                    File.Copy(aotDllPath, targetPath);
+                }
             }
 
             //刷新编辑器，把依赖存放进来，不然打包会漏掉

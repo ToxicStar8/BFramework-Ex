@@ -1,4 +1,5 @@
-﻿/*********************************************
+﻿#if UNITY_STANDALONE_WIN
+/*********************************************
  * BFramework
  * SteamSDK工具类
  * 创建时间：2023/12/27 17:43:00
@@ -92,11 +93,11 @@ namespace Framework
         /// </summary>
         private void LobbyEnterCallback(LobbyEnter_t result)
         {
-            //如果是自己开的房间，就不连接
-            if (!string.IsNullOrWhiteSpace(_hostAddressValue))
-            {
-                return;
-            }
+            //如果是自己开的房间，就不连接（先不拦
+            //if (!string.IsNullOrWhiteSpace(_hostAddressValue))
+            //{
+            //    return;
+            //}
 
             string hostAddress = SteamMatchmaking.GetLobbyData(new CSteamID(result.m_ulSteamIDLobby), _hostAddressKey);
             SocketConnect(hostAddress, _openCallback, _closeCallback);
@@ -120,3 +121,4 @@ namespace Framework
         }
     }
 }
+#endif

@@ -68,28 +68,28 @@ namespace Framework
             {
                 lock (_eventQueue)
                 {
-                    _eventQueue.Enqueue(new SocketEvent(2, sender, e.Data, e.RawData));
+                    _eventQueue.Enqueue(new SocketEvent(2, e.Data, e.RawData));
                 }
             };
             Socket.OnOpen += (sender, e) =>
             {
                 lock (_eventQueue)
                 {
-                    _eventQueue.Enqueue(new SocketEvent(4, sender));
+                    _eventQueue.Enqueue(new SocketEvent(4));
                 }
             };
             Socket.OnError += (sender, e) =>
             {
                 lock (_eventQueue)
                 {
-                    _eventQueue.Enqueue(new SocketEvent(1, sender, e.Message));
+                    _eventQueue.Enqueue(new SocketEvent(1, e.Message));
                 }
             };
             Socket.OnClose += (sender, e) =>
             {
                 lock (_eventQueue)
                 {
-                    var evt = new SocketEvent(3, sender);
+                    var evt = new SocketEvent(3);
                     evt.code = e.Code;
                     evt.reason = e.Reason;
                     _eventQueue.Enqueue(evt);
@@ -233,7 +233,7 @@ namespace Framework
         public string reason;
         public byte[] bytes;
 
-        public SocketEvent(int type, object ws, string msg = null, byte[] bytes = null)
+        public SocketEvent(int type, string msg = null, byte[] bytes = null, object ws = null)
         {
             this.type = type;
             this.ws = ws;

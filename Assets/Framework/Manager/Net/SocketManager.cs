@@ -18,14 +18,10 @@ namespace Framework
     /// </summary>
     public class SocketManager : ManagerBase
     {
+        #region SocketClient
         private SocketRoutine _mainSocket;
         //Token 适配不同的后端要求 例：Token、Authorization等
         public Dictionary<string, string> SocketHeaderDic { get; private set; }
-
-        public override void OnInit()
-        {
-            SocketHeaderDic = new Dictionary<string, string>();
-        }
 
         /// <summary>
         /// 连接Socket
@@ -85,6 +81,12 @@ namespace Framework
         public void CloseSocket()
         {
             _mainSocket.CloseSocket();
+        }
+        #endregion
+
+        public override void OnInit()
+        {
+            SocketHeaderDic = new Dictionary<string, string>();
         }
 
         public override void OnUpdate() 

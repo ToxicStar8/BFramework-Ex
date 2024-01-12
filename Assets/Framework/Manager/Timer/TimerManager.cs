@@ -34,7 +34,7 @@ namespace Framework
         /// <param name="callback">执行回调</param>
         public static TimerInfo Create(int allCount, float inviteTime, bool isExecImmed, Action callback)
         {
-            var timerInfo = new TimerInfo();
+            var timerInfo = GameGod.Instance.PoolManager.CreateClassObj<TimerInfo>();
             timerInfo.AllCount = allCount;
             timerInfo.InviteTime = inviteTime;
             timerInfo.IsExecImmed = isExecImmed;

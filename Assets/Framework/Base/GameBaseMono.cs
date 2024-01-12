@@ -107,6 +107,14 @@ namespace Framework
         }
 
         /// <summary>
+        /// 获取UI
+        /// </summary>
+        protected virtual UIBase GetUI<T>() where T : UIBase, new()
+        {
+            return GameGod.Instance.UIManager.GetUI<T>();
+        }
+
+        /// <summary>
         /// 隐藏UI
         /// </summary>
         protected virtual void HideUI<T>() where T : UIBase, new()

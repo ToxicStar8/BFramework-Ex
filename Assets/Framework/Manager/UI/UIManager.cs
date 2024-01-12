@@ -62,6 +62,27 @@ namespace Framework
         }
 
         /// <summary>
+        /// 获取UI
+        /// </summary>
+        public UIBase GetUI<T>() where T : UIBase
+        {
+            var uiName = typeof(T).Name;
+            return GetUI(uiName);
+        }
+
+        /// <summary>
+        /// 获取UI
+        /// </summary>
+        public UIBase GetUI(string uiName)
+        {
+            if (!_uiBaseDic.TryGetValue(uiName, out var uiBase))
+            {
+                return null;
+            }
+            return uiBase;
+        }
+
+        /// <summary>
         /// 隐藏UI
         /// </summary>
         public void HideUI<T>() where T : UIBase

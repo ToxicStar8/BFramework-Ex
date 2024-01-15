@@ -25,6 +25,11 @@ namespace GameData
             //AddEventListener((ushort)ModuleEvent.ModuleTest, ModuleTest);
         }
 
+        public override void OnLoad()
+        {
+
+        }
+
         /// <summary>
         /// 登录至服务器
         /// </summary>
@@ -44,6 +49,11 @@ namespace GameData
             SocketConnect(Framework.ConstDefine.ServerWS, () => {
                 callback?.Invoke();
             });
+        }
+
+        public override void OnBeforeDispose()
+        {
+
         }
     }
 }

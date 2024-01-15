@@ -49,7 +49,7 @@ namespace GameData
             Application.Quit();
         }
 
-        public override void OnBeforDestroy()
+        public override void OnBeforeDestroy()
         {
 
         }

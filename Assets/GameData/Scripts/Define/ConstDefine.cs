@@ -15,9 +15,6 @@ namespace GameData
     /// </summary>
     public static class ConstDefine
     {
-        public const string ServerHttp = "http://toxicstar.top/";           //服务端Http地址
-        public const string ServerWS = "ws://175.178.9.175:8801";           //服务端WebSocket地址
-
         public const string DrawCardTimeKey = "DrawCardTimeKey";            //抽卡定时器Key
         public const string CreateMonsterTimeKey = "CreateMonsterTimeKey";  //刷怪定时器Key
     }

@@ -66,7 +66,7 @@ namespace GameData
             };
         }
 
-        public override void OnBeforDestroy()
+        public override void OnBeforeDestroy()
         {
             
         }

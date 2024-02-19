@@ -979,7 +979,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UIRoot: {fileID: 988591969}
-  UIRootRect: {fileID: 0}
+  UIRootRect: {fileID: 988591971}
   UICamera: {fileID: 644216477}
   ObjPool: {fileID: 1978671858}
   GameStart: {fileID: 1124249894}

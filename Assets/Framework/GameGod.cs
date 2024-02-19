@@ -21,12 +21,12 @@ namespace Framework
         /// <summary>
         /// Update回调
         /// </summary>
-        public Action UpdateCallback;
+        public event Action UpdateCallback;
 
         /// <summary>
         /// 退出回调回调
         /// </summary>
-        public Action DisposeCallback;
+        public event Action DisposeCallback;
 
         /// <summary>
         /// 全局用的加载器，基本不释放

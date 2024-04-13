@@ -20,6 +20,7 @@ namespace Framework
         {
             if (btn != null)
             {
+                btn.onClick.RemoveAllListeners();
                 btn.onClick.AddListener(onClick);
             }
         }

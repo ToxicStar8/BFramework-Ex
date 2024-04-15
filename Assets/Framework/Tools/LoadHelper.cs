@@ -161,7 +161,7 @@ namespace Framework
         /// 异步加载场景
         /// </summary>
         /// <param name="sceneName">加载场景一定要用全大小写名，全小写的名字只能用于预先放在BuildSetting里使用</param>
-        public async UniTask LoadSceneAsync(string sceneName)
+        public async UniTaskVoid LoadSceneAsync(string sceneName)
         {
             if (!GameEntry.Instance.IsEditorMode || GameEntry.Instance.IsRunABPackage)
             {

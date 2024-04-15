@@ -14,13 +14,24 @@ namespace Framework
     public static class Ex_Button
     {
         /// <summary>
+        /// 移除全部监听并添加按钮监听
+        /// </summary>
+        public static void RemoveAllAndAddListener(this Button btn, UnityAction onClick)
+        {
+            if (btn != null)
+            {
+                btn.onClick.RemoveAllListeners();
+                btn.onClick.AddListener(onClick);
+            }
+        }
+        
+        /// <summary>
         /// 添加按钮监听
         /// </summary>
         public static void AddListener(this Button btn, UnityAction onClick)
         {
             if (btn != null)
             {
-                btn.onClick.RemoveAllListeners();
                 btn.onClick.AddListener(onClick);
             }
         }

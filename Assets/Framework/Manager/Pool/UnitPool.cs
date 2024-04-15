@@ -134,17 +134,17 @@ namespace Framework
         }
 
         /// <summary>
-        /// 获取指定cell
+        /// 获取指定unit
         /// </summary>
         public T Find(RectTransform rt)
         {
-            T cell = null;
+            T unit = null;
             for (int i = 0; i < PoolList.Count; i++)
             {
-                cell = PoolList[i];
-                if (cell.rectTransform == rt)
+                unit = PoolList[i];
+                if (unit.rectTransform == rt)
                 {
-                    return cell;
+                    return unit;
                 }
             }
             return null;

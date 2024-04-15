@@ -7,6 +7,7 @@ using MainPackage;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
@@ -50,16 +51,16 @@ namespace Framework
         private List<string> _objNameList;
 
         /// <summary>
-        /// 加载Sprite
+        /// 同步加载Sprite
         /// </summary>
-        public Sprite GetSprite(string atlasName, string spriteName)
+        public Sprite GetSpriteSync(string atlasName, string spriteName)
         {
             if (_atlasNameList == null)
             {
                 _atlasNameList = new List<string>();
             }
             //真正加载Sp的地方
-            var sp = GameGod.Instance.LoadManager.GetSprite(atlasName,spriteName);
+            var sp = GameGod.Instance.LoadManager.GetSprite(atlasName, spriteName);
             if (sp == null)
             {
                 GameGod.Instance.Log(E_Log.Error, "图片资源为空", spriteName);
@@ -70,6 +71,16 @@ namespace Framework
             {
                 _atlasNameList.Add(atlasName);
             }
+            return sp;
+        }
+
+        /// <summary>
+        /// 异步加载Sprite
+        /// </summary>
+        public async UniTask<Sprite> GetSpriteAsync(string atlasName, string spriteName)
+        {
+            var sp = GetSpriteSync(atlasName, spriteName);
+            await UniTask.CompletedTask;
             return sp;
         }
 
@@ -107,23 +118,62 @@ namespace Framework
         }
 
         /// <summary>
+        /// 异步加载资源 带后缀
+        /// </summary>
+        public async UniTask<T> LoadAsync<T>(string objName) where T : Object
+        {
+            var obj = await LoadAsync(objName) as T;
+            return obj;
+        }
+
+        /// <summary>
+        /// 异步加载资源 带后缀
+        /// </summary>
+        public async UniTask<Object> LoadAsync(string objName)
+        {
+            var obj = LoadSync(objName);
+            await UniTask.CompletedTask;
+            return obj;
+        }
+
+        /// <summary>
         /// 同步加载场景
         /// </summary>
         /// <param name="sceneName">加载场景一定要用全大小写名，全小写的名字只能用于预先放在BuildSetting里使用</param>
         public void LoadSceneSync(string sceneName)
         {
-            //var sceneName = "Scene_Game";
-            LoadSync(sceneName + ".unity");
             if (!GameEntry.Instance.IsEditorMode || GameEntry.Instance.IsRunABPackage)
             {
+                LoadSync(sceneName + ".unity");
                 SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
             }
 #if UNITY_EDITOR
             else
             {
                 string path = GameGod.Instance.LoadManager.GetObjAssetPath(sceneName + ".unity");
-                var parameters = new LoadSceneParameters( LoadSceneMode.Single);
+                var parameters = new LoadSceneParameters(LoadSceneMode.Single);
                 UnityEditor.SceneManagement.EditorSceneManager.LoadSceneInPlayMode(path, parameters);
+            }
+#endif
+        }
+
+        /// <summary>
+        /// 异步加载场景
+        /// </summary>
+        /// <param name="sceneName">加载场景一定要用全大小写名，全小写的名字只能用于预先放在BuildSetting里使用</param>
+        public async UniTask LoadSceneAsync(string sceneName)
+        {
+            if (!GameEntry.Instance.IsEditorMode || GameEntry.Instance.IsRunABPackage)
+            {
+                await LoadAsync(sceneName + ".unity");
+                await SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+            }
+#if UNITY_EDITOR
+            else
+            {
+                string path = GameGod.Instance.LoadManager.GetObjAssetPath(sceneName + ".unity");
+                var parameters = new LoadSceneParameters(LoadSceneMode.Single);
+                await UnityEditor.SceneManagement.EditorSceneManager.LoadSceneAsyncInPlayMode(path, parameters);
             }
 #endif
         }
@@ -131,9 +181,18 @@ namespace Framework
         /// <summary>
         /// 直接创建对象
         /// </summary>
-        public GameObject CreateGameObject(string objName, Transform trans = null)
+        public GameObject CreateGameObjectSync(string objName, Transform trans = null)
         {
             var obj = LoadSync<GameObject>(objName);
+            return Object.Instantiate(obj, trans);
+        }
+
+        /// <summary>
+        /// 异步直接创建对象
+        /// </summary>
+        public async UniTask<GameObject> CreateGameObjectAsync(string objName, Transform trans = null)
+        {
+            var obj = await LoadAsync<GameObject>(objName);
             return Object.Instantiate(obj, trans);
         }
 

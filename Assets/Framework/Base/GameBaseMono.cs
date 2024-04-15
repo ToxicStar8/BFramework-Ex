@@ -92,7 +92,7 @@ namespace Framework
         /// </summary>
         protected virtual Sprite GetSprite(LoadHelper loadHelper, string atlasName, string spriteName)
         {
-            var sp = loadHelper.GetSprite(atlasName, spriteName);
+            var sp = loadHelper.GetSpriteSync(atlasName, spriteName);
             return sp;
         }
         #endregion

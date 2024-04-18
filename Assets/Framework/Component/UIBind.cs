@@ -5,6 +5,7 @@
  *********************************************/
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -50,6 +51,7 @@ namespace Framework
             BindComponent = BindComponent ?? GetComponent<Image>();
             BindComponent = BindComponent ?? GetComponent<Toggle>();
             BindComponent = BindComponent ?? GetComponent<Slider>();
+            BindComponent = BindComponent ?? GetComponent<TextMeshProUGUI>();
             BindComponent = BindComponent ?? GetComponent<Text>();
             BindComponent = BindComponent ?? GetComponent<RectTransform>();
         }

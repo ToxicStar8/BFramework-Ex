@@ -161,7 +161,7 @@ namespace GameData
                                 fnName += CultureInfo.CurrentCulture.TextInfo.ToTitleCase(fileName.Substring(0, 1)) + fileName.Remove(0, 1);
                             }
                             //文本添加
-                            spListStr += $"\r\n        public static Sprite {fnName}(LoadHelper loadHelper) => loadHelper.GetSprite(AtlasName.{dirInfo.Name},\"{fileInfo.Name}\");";
+                            spListStr += $"\r\n        public static Sprite {fnName}(LoadHelper loadHelper) => loadHelper.GetSpriteSync(AtlasName.{dirInfo.Name},\"{fileInfo.Name}\");";
                         }
                     }
                 }

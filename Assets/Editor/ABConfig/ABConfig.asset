@@ -15,10 +15,13 @@ MonoBehaviour:
   RootABList:
   - Assets/Editor/ABConfig/JsonInformation
   - Assets/Hotfix
+  - Assets/GameData/Art/Animation
   - Assets/GameData/Art/Audio
   - Assets/GameData/Art/Font
+  - Assets/GameData/Art/Shader
   - Assets/GameData/Art/Sprite
   - Assets/GameData/Art/Texture
+  - Assets/GameData/Art/Tile
   - Assets/GameData/Table
   - Assets/GameData/Prefabs/UI
   - Assets/GameData/Prefabs/Game
@@ -28,8 +31,16 @@ MonoBehaviour:
     abName: jsoninformation
   - path: Assets/Hotfix
     abName: hotfix
+  - path: Assets/GameData/Art/Animation/Npc
+    abName: animationnpc
+  - path: Assets/GameData/Art/Animation/Role
+    abName: animationrole
   - path: Assets/GameData/Art/Font
     abName: font
+  - path: Assets/GameData/Art/Shader
+    abName: shader
+  - path: Assets/GameData/Art/Sprite/Map
+    abName: spritemap
   - path: Assets/GameData/Art/Sprite/Role
     abName: spriterole
   - path: Assets/GameData/Art/Sprite/UI
@@ -44,5 +55,9 @@ MonoBehaviour:
     abName: uimain
   - path: Assets/GameData/Prefabs/UI/Menu
     abName: uimenu
-  - path: Assets/GameData/Prefabs/Game/Entity
-    abName: gameentity
+  - path: Assets/GameData/Prefabs/Game/Level
+    abName: gamelevel
+  - path: Assets/GameData/Prefabs/Game/Role
+    abName: gamerole
+  - path: Assets/GameData/Prefabs/Game
+    abName: game

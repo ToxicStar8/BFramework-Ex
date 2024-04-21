@@ -16,6 +16,7 @@ namespace GameData
     public enum GameEvent
     {
         GameTest = 0,
+        NpcEnterPlayer,
     }
 
     /// <summary>
@@ -23,8 +24,7 @@ namespace GameData
     /// </summary>
     public enum UIEvent
     {
-        OnUIBattleMainDrawCard = 10000,         //抽卡
-        OnUIBattleMainChangeRound,              //切换回合
+        OnCloseUIChange = 10000,             //关闭加载界面
     }
 
     /// <summary>

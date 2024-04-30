@@ -62,7 +62,7 @@ namespace GameData
             CloseSelf();
         }
 
-        public override void OnBeforeDestroy()
+        protected override void OnBeforeDestroy()
         {
             
         }

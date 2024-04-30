@@ -35,7 +35,7 @@ namespace Framework
             PlayerPrefs.SetFloat(ConstDefine.VolumBackground, _volumeBackground);
         }
         //音效音量
-        public float _volumeSound;
+        private float _volumeSound;
         public float GetVolumeSound() => _volumeSound;
         public void SetVolumeSound(float volume)
         { 

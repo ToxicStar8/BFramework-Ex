@@ -46,10 +46,11 @@ namespace GameData
 
         private void OnClick_Btn_Exit()
         {
+            CloseSelf();
             Application.Quit();
         }
 
-        public override void OnBeforeDestroy()
+        protected override void OnBeforeDestroy()
         {
 
         }

@@ -38,7 +38,7 @@ namespace GameData
             Img_Mask.DOFillAmount(1, 0.2f);
         }
 
-        public override void OnBeforeDestroy()
+        protected override void OnBeforeDestroy()
         {
             
         }

@@ -106,7 +106,7 @@ namespace GameData
             
         }
 #ButtonOnClick
-        public override void OnBeforeDestroy()
+        protected override void OnBeforeDestroy()
         {
             
         }

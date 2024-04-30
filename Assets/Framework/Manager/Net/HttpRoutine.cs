@@ -25,7 +25,7 @@ namespace Framework
         /// <summary>
         /// Http管理器
         /// </summary>
-        public HttpManager HttpMgr => GameGod.Instance.HttpManager;
+        private HttpManager HttpMgr => GameGod.Instance.HttpManager;
 
         /// <summary>
         /// Http文本请求回调
@@ -66,7 +66,7 @@ namespace Framework
         /// 
         /// </summary>
         private UnityWebRequest _webRequest;
-        public UnityWebRequest GetWWW() => _webRequest;
+        public UnityWebRequest GetUwr() => _webRequest;
 
         public HttpRoutine()
         {

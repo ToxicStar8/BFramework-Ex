@@ -43,12 +43,12 @@ namespace Framework
         /// <summary>
         /// UI的加载器
         /// </summary>
-        public LoadHelper LoadHelper { private set; get; }
+        private LoadHelper LoadHelper;
 
         /// <summary>
         /// 池队列
         /// </summary>
-        public Queue<T> PoolQueue { private set; get; } = new Queue<T>();
+        private Queue<T> PoolQueue = new Queue<T>();
 
         /// <summary>
         /// 已创建出来的对象

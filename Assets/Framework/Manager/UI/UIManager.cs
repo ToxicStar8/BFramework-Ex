@@ -4,10 +4,7 @@
  * 创建时间：2023/01/08 20:40:23
  *********************************************/
 using MainPackage;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace Framework
@@ -50,15 +47,14 @@ namespace Framework
             }
 
             uiBase = new T();
-            var obj = GameGod.Instance.LoadManager.LoadSync<GameObject>(uiName + ".prefab");
             var uiTrans = GameGod.Instance.GetUILevelTrans(uiLevel);
-            _uiBaseDic[uiName] = uiBase;
             uiBase.uiName = uiName;
-            uiBase.gameObject = UnityEngine.Object.Instantiate(obj, uiTrans);
             uiBase.LoadHelper = LoadHelper.Create();
+            uiBase.gameObject =  uiBase.LoadHelper.CreateGameObjectSync(uiName + ".prefab", uiTrans);
             uiBase.OnCreate();
             uiBase.OnInit();
             uiBase.OnShow(args);
+            _uiBaseDic[uiName] = uiBase;
         }
 
         /// <summary>
@@ -120,11 +116,10 @@ namespace Framework
             //已打开 直接关闭
             if (_uiBaseDic.TryGetValue(uiName, out var uiBase))
             {
-                uiBase.OnDispose();
                 Object.Destroy(uiBase.gameObject);
+                uiBase.OnDispose();
                 uiBase = null;
                 _uiBaseDic.Remove(uiName);
-                GameGod.Instance.LoadManager.UnloadAsset(uiName + ".prefab");
             }
         }
 

@@ -125,7 +125,7 @@ namespace Framework
         /// <summary>
         /// 销毁前调用
         /// </summary>
-        public abstract void OnBeforeDestroy();
+        protected abstract void OnBeforeDestroy();
 
         /// <summary>
         /// 关闭UI通用方法

@@ -25,6 +25,7 @@ namespace GameData
     public enum UIEvent
     {
         OnCloseUIChange = 10000,             //关闭加载界面
+        OnCloseUIMask,
     }
 
     /// <summary>

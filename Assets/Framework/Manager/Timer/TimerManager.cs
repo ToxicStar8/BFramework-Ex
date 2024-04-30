@@ -3,238 +3,150 @@
  * 计时器管理器
  * 创建时间：2023/01/30 11:12:23
  *********************************************/
+using Cysharp.Threading.Tasks;
 using MainPackage;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 namespace Framework
 {
     /// <summary>
-    /// 倒计时类
+    /// 定时器信息类
     /// </summary>
     public class TimerInfo
     {
-        //可传入数据
-        public Action Callback { get; set; }             //执行回调
-        public int AllCount { get; set; } = -1;          //执行次数 -1=直至关闭
-        public float InviteTime { get; set; } = 1;       //执行间隔时间
-        public bool IsExecImmed { get; set; } = false;    //是否立即执行 如果需要立即执行最好间隔时间>0.3f
-        //非传入数据
-        public string TimeName { get; set; }             //Key
-        public float OldTime { get; set; } = -1;          //上次执行时间
-        public float NextExecTime => OldTime + InviteTime;      //下次执行时间
+        public Action Callback;             //执行回调
+        public int AllCount;                //执行次数
+        public int InviteTime;              //执行间隔时间，毫秒
+        public bool IsExecImmed;            //是否立即执行
+        public CancellationTokenSource Cts; //取消用唯一Key
+        //定时器管理器里赋值
+        public string TimerName;            //定时器名
 
-        /// <summary>
-        /// 初始化
-        /// </summary>
-        /// <param name="allCount">执行次数 -1=直至关闭</param>
-        /// <param name="inviteTime">执行间隔时间</param>
-        /// <param name="isExecImmed">是否立即执行</param>
-        /// <param name="callback">执行回调</param>
-        public static TimerInfo Create(int allCount, float inviteTime, bool isExecImmed, Action callback)
+        public static TimerInfo Create(int allCount, int inviteTime, bool isExecImmed, Action callback)
         {
             var timerInfo = GameGod.Instance.PoolManager.CreateClassObj<TimerInfo>();
             timerInfo.AllCount = allCount;
             timerInfo.InviteTime = inviteTime;
             timerInfo.IsExecImmed = isExecImmed;
             timerInfo.Callback = callback;
-            timerInfo.OldTime = -1;
+            timerInfo.Cts = new CancellationTokenSource();
             return timerInfo;
+        }
+        public static void Recycle(TimerInfo timerInfo)
+        {
+            timerInfo.Cts = null;
+            timerInfo.Callback = null;
+            GameGod.Instance.PoolManager.RecycleClassObj(timerInfo);
         }
     }
 
     /// <summary>
-    /// 计时器管理器
+    /// 定时器管理器
     /// </summary>
     public class TimerManager : ManagerBase
     {
-        //临时索引
+        /// <summary>
+        /// 定时器字典
+        /// </summary>
+        public Dictionary<string, TimerInfo> TimerInfoDic;
+        /// <summary>
+        /// 临时Key
+        /// </summary>
         private int _tempIndex;
-        //使用中的计时器
-        public Dictionary<string, TimerInfo> TimerInfoDic { private set; get; }
-        //等待回收的计时器
-        public List<TimerInfo> WaitReycleList { private set; get; }
-        //等待添加的计时器
-        public List<TimerInfo> WaitAddList { private set; get; }
-        //记录下次刷新的时间节点
-        private float nextUpdateTime; 
 
-        public override void OnInit()
+        public override void OnInit() 
         {
             TimerInfoDic = new Dictionary<string, TimerInfo>();
-            WaitReycleList = new List<TimerInfo>();
-            WaitAddList = new List<TimerInfo>();
-            nextUpdateTime = float.MaxValue;
-        }
-
-        public override void OnUpdate()
-        {
-            var curTime = Time.time;
-            RecycleTimers();
-            AddNewTimers();
-            UpdateTimers(curTime);
-        }
-
-        private void RecycleTimers()
-        {
-            //回收使用结束的计时器
-            for (int i = 0, count = WaitReycleList.Count; i < count; i++)
-            {
-                RemoveTimer(WaitReycleList[i]);
-            }
-            WaitReycleList.Clear();
-        }
-
-        private void AddNewTimers()
-        {
-            //添加等待的计时器
-            for (int i = 0, count = WaitAddList.Count; i < count; i++)
-            {
-                var timerInfo = WaitAddList[i];
-                TimerInfoDic[timerInfo.TimeName] = timerInfo;
-                UpdateNextExecTime(timerInfo);
-            }
-            WaitAddList.Clear();
-        }
-
-        private void UpdateTimers(float curTime)
-        {
-            // 如果距离下次刷新的时间小于等于0，进行遍历字典并更新最短间隔时间
-            float timeUntilNextUpdate = nextUpdateTime - curTime;
-            if (timeUntilNextUpdate <= 0)
-            {
-                //进入遍历，重置下次执行时间
-                nextUpdateTime = float.MaxValue;
-                //遍历计时器
-                foreach (var item in TimerInfoDic)
-                {
-                    var timerInfo = item.Value;
-                    //正式执行
-                    if (timerInfo.AllCount != 0 && curTime >= timerInfo.NextExecTime)
-                    {
-                        //刷新时间
-                        timerInfo.OldTime = curTime;
-                        //执行回调
-                        ExecCallback(timerInfo);
-                    }
-                    //不管是否执行完毕，都选最小值进行记录
-                    nextUpdateTime = Mathf.Min(nextUpdateTime, timerInfo.NextExecTime);
-                }
-            }
         }
 
         /// <summary>
-        /// 用于添加计时器时更新下次执行时间
-        /// </summary>
-        private void UpdateNextExecTime(TimerInfo timerInfo)
-        {
-            nextUpdateTime = Mathf.Min(nextUpdateTime, timerInfo.NextExecTime);
-        }
-
-        /// <summary>
-        /// 添加一次性倒计时，执行次数永远不能为-1，即无限，否则无限循环无法跳出
+        /// 添加一次性定时器
         /// </summary>
         public void AddTempTimer(TimerInfo timerInfo)
         {
-            if (timerInfo.AllCount == -1)
-            {
-                GameGod.Instance.Log(E_Log.Error, "执行次数永远不能为-1！");
-                return;
-            }
-
             AddTimer(_tempIndex.ToString(), timerInfo);
             _tempIndex++;
         }
 
         /// <summary>
-        /// 添加倒计时
+        /// 添加定时器
         /// </summary>
-        public void AddTimer(string timeName, TimerInfo timerInfo)
+        public void AddTimer(string timerName,TimerInfo timerInfo)
         {
-            if (TimerInfoDic.ContainsKey(timeName))
+            if (timerInfo.AllCount <= 0)
             {
-                GameGod.Instance.Log(E_Log.Error, "定时器重复监听", timeName);
-                //TimerInfoDic.Remove(timeName);
+                GameGod.Instance.Log(E_Log.Error, "计时器的执行次数永远不能小于等于0！");
                 return;
             }
-            //更新名字
-            timerInfo.TimeName = timeName;
-            //更新时间
-            timerInfo.OldTime = Time.time;
-            //是否立即执行
+
+            GameGod.Instance.Log(E_Log.Framework, "定时器添加", timerName);
+            //记录名字
+            timerInfo.TimerName = timerName;
+            TimerInfoDic.Add(timerName, timerInfo);
+            ExecTimer(timerInfo).ToCoroutine();
+        }
+
+        /// <summary>
+        /// 定时器执行的地方
+        /// </summary>
+        private async UniTask ExecTimer(TimerInfo timerInfo)
+        {
+            //判断是否马上执行
             if (timerInfo.IsExecImmed)
             {
-                //执行回调
-                ExecCallback(timerInfo);
-            }
-            //如果执行完毕还存在 更新下次刷新时间并且添加到等待列表
-            if (timerInfo.AllCount != 0)
-            {
-                //添加到等待列表中
-                WaitAddList.Add(timerInfo);
-            }
-        }
-
-        /// <summary>
-        /// 获取计时器
-        /// </summary>
-        public TimerInfo GetTimerInfo(string timeName)
-        {
-            if (TimerInfoDic.TryGetValue(timeName, out var timerInfo))
-            {
-                return timerInfo;
-            }
-            GameGod.Instance.Log(E_Log.Error, "没有找到该计时器", timeName);
-            return null;
-        }
-
-        /// <summary>
-        /// 移除监听
-        /// </summary>
-        public void RemoveTimer(string timeName)
-        {
-            if (TimerInfoDic.TryGetValue(timeName, out var timerInfo))
-            {
-                timerInfo.AllCount = 0;
-                WaitReycleList.Add(timerInfo);
-            }
-        }
-
-        /// <summary>
-        /// 移除监听
-        /// </summary>
-        public void RemoveTimer(TimerInfo timerInfo)
-        {
-            GameGod.Instance.PoolManager.RecycleClassObj<TimerInfo>(timerInfo);
-            TimerInfoDic.Remove(timerInfo.TimeName);
-        }
-
-        /// <summary>
-        /// 执行回调
-        /// </summary>
-        private void ExecCallback(TimerInfo timerInfo)
-        {
-            timerInfo.Callback?.Invoke();
-            if (timerInfo.AllCount > 0)
-            {
                 timerInfo.AllCount--;
-                if (timerInfo.AllCount == 0)
+                timerInfo.Callback?.Invoke();
+            }
+
+            //如果取消了，则会抛出异常
+            try
+            {
+                for (int i = 0; i < timerInfo.AllCount; i++)
                 {
-                    //将计时器添加到等待回收的列表
-                    WaitReycleList.Add(timerInfo);
+                    await UniTask.Delay(timerInfo.InviteTime, cancellationToken: timerInfo.Cts.Token);
+                    timerInfo.Callback?.Invoke();
                 }
             }
+            catch (OperationCanceledException)
+            {
+                GameGod.Instance.Log(E_Log.Warring, "定时器主动取消", timerInfo.TimerName);
+            }
+
+            //不管是时间到了还是主动取消，都会在这里进行回收处理
+            TimerInfoDic.Remove(timerInfo.TimerName);
+            TimerInfo.Recycle(timerInfo);
+            GameGod.Instance.Log(E_Log.Framework, "定时器回收", timerInfo.TimerName);
         }
 
-        public override void OnDispose()
+        /// <summary>
+        /// 获取定时器
+        /// </summary>
+        public TimerInfo GetTimerInfo(string timerName)
         {
-            WaitReycleList.Clear();
-            WaitReycleList = null;
-            WaitAddList.Clear();
-            WaitAddList = null;
-            TimerInfoDic.Clear();
-            TimerInfoDic = null;
+            if (!TimerInfoDic.TryGetValue(timerName,out var timerInfo))
+            {
+                GameGod.Instance.Log(E_Log.Warring, "定时器不存在", timerName);
+                return null;
+            }
+            return timerInfo;
         }
+
+        /// <summary>
+        /// 回收定时器
+        /// </summary>
+        public void RemoveTimer(string timerName)
+        {
+            if (TimerInfoDic.ContainsKey(timerName))
+            {
+                TimerInfoDic[timerName].Cts.Cancel();
+            }
+        }
+
+        public override void OnUpdate() { }
+
+        public override void OnDispose() { }
     }
 }

@@ -95,7 +95,7 @@ namespace Framework
         /// <summary>
         /// 添加定时器监听
         /// </summary>
-        protected override void AddTimer(string timeName, TimerInfo countdownData)
+        protected override void AddTimer(string timeName, TimerInfo timerInfo)
         {
             if (_timerList == null)
             {
@@ -103,7 +103,7 @@ namespace Framework
             }
 
             _timerList.Add(timeName);
-            base.AddTimer(timeName, countdownData);
+            base.AddTimer(timeName, timerInfo);
         }
         #endregion
 

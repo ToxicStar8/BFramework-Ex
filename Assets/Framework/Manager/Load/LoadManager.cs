@@ -85,7 +85,7 @@ namespace Framework
 #if UNITY_EDITOR
                     if (!_allObjDirectoryDic.TryGetValue(objName, out var path))
                     {
-                        GameGod.Instance.Log(E_Log.Error, "找不到资源", objName);
+                        GameGod.Instance.Log(E_Log.Warring, "找不到资源", objName);
                         return null;
                     }
 

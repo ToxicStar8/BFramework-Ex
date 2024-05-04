@@ -54,6 +54,8 @@ namespace MainPackage
 #if UNITY_EDITOR
         [Header("时间倍率")]
         [SerializeField]
+        public bool IsEnableTimeScale;
+        [SerializeField]
         public float TimeScale;
 #endif
 
@@ -87,7 +89,10 @@ namespace MainPackage
 #if UNITY_EDITOR
         private void Update()
         {
-            Time.timeScale = TimeScale;
+            if (IsEnableTimeScale)
+            {
+                Time.timeScale = TimeScale;
+            }
         }
 #endif
 

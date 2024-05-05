@@ -5,10 +5,6 @@
  *********************************************/
 using Framework;
 using MainPackage;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace GameData
@@ -46,7 +42,7 @@ namespace GameData
 
         private void OnClick_Btn_Exit()
         {
-            CloseSelf();
+            Log(E_Log.Log, "退出游戏");
             Application.Quit();
         }
 

@@ -32,11 +32,11 @@ namespace GameData
     {
         public override void OnInit()
         {
-            Debug.Log("初始化Fsm1");
+            Debug.Log("鍒濆鍖朏sm1");
         }
         public override void OnEnter()
         {
-            Debug.Log(CurrFsm.Owner.name + "进入Fsm1");
+            Debug.Log(CurrFsm.Owner.name + "杩涘叆Fsm1");
         }
         public override void OnUpdate()
         {
@@ -44,11 +44,11 @@ namespace GameData
         }
         public override void OnLeave()
         {
-            Debug.Log("离开Fsm1");
+            Debug.Log("绂诲紑Fsm1");
         }
         public override void OnDestroy()
         {
-            Debug.Log("销毁Fsm1");
+            Debug.Log("閿�姣丗sm1");
         }
     }
 
@@ -56,11 +56,11 @@ namespace GameData
     {
         public override void OnInit()
         {
-            Debug.Log("初始化Fsm2");
+            Debug.Log("鍒濆鍖朏sm2");
         }
         public override void OnEnter()
         {
-            Debug.Log("进入Fsm2");
+            Debug.Log("杩涘叆Fsm2");
         }
         public override void OnUpdate()
         {
@@ -68,11 +68,11 @@ namespace GameData
         }
         public override void OnLeave()
         {
-            Debug.Log("离开Fsm2");
+            Debug.Log("绂诲紑Fsm2");
         }
         public override void OnDestroy()
         {
-            Debug.Log("销毁Fsm2");
+            Debug.Log("閿�姣丗sm2");
         }
     }
 }

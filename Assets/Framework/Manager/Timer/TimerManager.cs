@@ -7,8 +7,8 @@ using Cysharp.Threading.Tasks;
 using MainPackage;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
-using UnityEngine;
 
 namespace Framework
 {
@@ -51,7 +51,15 @@ namespace Framework
         /// <summary>
         /// 定时器字典
         /// </summary>
-        public Dictionary<string, TimerInfo> TimerInfoDic;
+        private Dictionary<string, TimerInfo> _timerInfoDic;
+
+#if UNITY_EDITOR
+        public Dictionary<string, TimerInfo> TimerInfoDic
+        {
+            get { return _timerInfoDic; }
+        }
+#endif
+
         /// <summary>
         /// 临时Key
         /// </summary>
@@ -59,7 +67,7 @@ namespace Framework
 
         public override void OnInit() 
         {
-            TimerInfoDic = new Dictionary<string, TimerInfo>();
+            _timerInfoDic = new Dictionary<string, TimerInfo>();
         }
 
         /// <summary>
@@ -85,12 +93,12 @@ namespace Framework
             GameGod.Instance.Log(E_Log.Framework, "定时器添加", timerName);
             //记录名字
             timerInfo.TimerName = timerName;
-            TimerInfoDic.Add(timerName, timerInfo);
+            _timerInfoDic.Add(timerName, timerInfo);
             ExecTimer(timerInfo).ToCoroutine();
         }
 
         /// <summary>
-        /// 定时器执行的地方
+        /// 执行定时器
         /// </summary>
         private async UniTask ExecTimer(TimerInfo timerInfo)
         {
@@ -101,6 +109,22 @@ namespace Framework
                 timerInfo.Callback?.Invoke();
             }
 
+            //线程池里开启线程处理回调
+#if UNITY_WEBGL
+            await Exec(timerInfo);
+#else
+            await UniTask.RunOnThreadPool(async () =>
+            {
+                await ExecCallback(timerInfo);
+            });
+#endif
+        }
+
+        /// <summary>
+        /// 执行定时器剩余的回调次数
+        /// </summary>
+        private async UniTask ExecCallback(TimerInfo timerInfo)
+        {
             //如果取消了，则会抛出异常
             try
             {
@@ -108,17 +132,19 @@ namespace Framework
                 {
                     await UniTask.Delay(timerInfo.InviteTime, cancellationToken: timerInfo.Cts.Token);
                     timerInfo.Callback?.Invoke();
-                }
+                };
             }
             catch (OperationCanceledException)
             {
                 GameGod.Instance.Log(E_Log.Warring, "定时器主动取消", timerInfo.TimerName);
             }
-
-            //不管是时间到了还是主动取消，都会在这里进行回收处理
-            TimerInfoDic.Remove(timerInfo.TimerName);
-            TimerInfo.Recycle(timerInfo);
-            GameGod.Instance.Log(E_Log.Framework, "定时器回收", timerInfo.TimerName);
+            finally
+            {
+                //不管是时间到了还是主动取消，都会在这里进行回收处理
+                _timerInfoDic.Remove(timerInfo.TimerName);
+                TimerInfo.Recycle(timerInfo);
+                GameGod.Instance.Log(E_Log.Framework, "定时器回收", timerInfo.TimerName);
+            }
         }
 
         /// <summary>
@@ -126,7 +152,7 @@ namespace Framework
         /// </summary>
         public TimerInfo GetTimerInfo(string timerName)
         {
-            if (!TimerInfoDic.TryGetValue(timerName,out var timerInfo))
+            if (!_timerInfoDic.TryGetValue(timerName,out var timerInfo))
             {
                 GameGod.Instance.Log(E_Log.Warring, "定时器不存在", timerName);
                 return null;
@@ -139,14 +165,22 @@ namespace Framework
         /// </summary>
         public void RemoveTimer(string timerName)
         {
-            if (TimerInfoDic.ContainsKey(timerName))
+            if (_timerInfoDic.ContainsKey(timerName))
             {
-                TimerInfoDic[timerName].Cts.Cancel();
+                _timerInfoDic[timerName].Cts.Cancel();
             }
         }
 
         public override void OnUpdate() { }
 
-        public override void OnDispose() { }
+        public override void OnDispose() 
+        {
+            var list = _timerInfoDic.Keys.ToList();
+            foreach (var item in list)
+            {
+                RemoveTimer(item);
+            }
+            _timerInfoDic.Clear();
+        }
     }
 }

@@ -22,7 +22,20 @@ namespace GameData
 
         private void Update()
         {
-
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                for (int i = 0; i < 100; i++)
+                {
+                    AddTimer(i.ToString(), TimerInfo.Create(4, 1000, true, () =>
+                    {
+                        Log(E_Log.Log, Time.time.ToString());
+                    }));
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                RemoveTimer("1");
+            }
         }
 
         public override void OnShow(params object[] args)

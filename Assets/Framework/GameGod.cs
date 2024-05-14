@@ -109,6 +109,7 @@ namespace Framework
             ModuleManager.OnDispose();
             ABManager.OnDispose();
             FsmManager.OnDispose();
+            TimeManager.OnDispose();
             UIManager.OnDispose();
             PoolManager.OnDispose();
             LoadManager.OnDispose();
@@ -118,7 +119,6 @@ namespace Framework
             SocketManager.OnDispose();
             AudioManager.OnDispose();
             RedPointManager.OnDispose();
-            TimeManager.OnDispose();
         }
 
         /// <summary>

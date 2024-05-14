@@ -53,6 +53,13 @@ namespace Framework
         /// </summary>
         private Dictionary<string, TimerInfo> _timerInfoDic;
 
+#if !UNITY_WEBGL
+        /// <summary>
+        /// 等待开始的列表
+        /// </summary>
+        private List<TimerInfo> _waitStartList;
+#endif
+
 #if UNITY_EDITOR
         public Dictionary<string, TimerInfo> TimerInfoDic
         {
@@ -68,7 +75,29 @@ namespace Framework
         public override void OnInit() 
         {
             _timerInfoDic = new Dictionary<string, TimerInfo>();
+
+            //WEBGL不支持多线程
+#if !UNITY_WEBGL
+            _waitStartList = new List<TimerInfo>();
+            //初始化的时候启动一个线程专门处理计时器
+            UniTask.RunOnThreadPool(Loop);
+#endif
         }
+
+#if !UNITY_WEBGL
+        private async UniTask Loop()
+        {
+            while (true)
+            {
+                for (int i = 0; i < _waitStartList.Count; i++)
+                {
+                    ExecTimer(_waitStartList[i]);
+                }
+                _waitStartList.Clear();
+                await UniTask.Yield();
+            }
+        }
+#endif
 
         /// <summary>
         /// 添加一次性定时器
@@ -93,14 +122,20 @@ namespace Framework
             GameGod.Instance.Log(E_Log.Framework, "定时器添加", timerName);
             //记录名字
             timerInfo.TimerName = timerName;
+            //添加到计时器的字典里
             _timerInfoDic.Add(timerName, timerInfo);
-            ExecTimer(timerInfo).ToCoroutine();
+            //添加到等待队列里
+#if !UNITY_WEBGL
+            _waitStartList.Add(timerInfo);
+#else
+            ExecTimer(timerInfo);
+#endif
         }
 
         /// <summary>
         /// 执行定时器
         /// </summary>
-        private async UniTask ExecTimer(TimerInfo timerInfo)
+        private async UniTaskVoid ExecTimer(TimerInfo timerInfo)
         {
             //判断是否马上执行
             if (timerInfo.IsExecImmed)
@@ -109,22 +144,6 @@ namespace Framework
                 timerInfo.Callback?.Invoke();
             }
 
-            //线程池里开启线程处理回调
-#if UNITY_WEBGL
-            await Exec(timerInfo);
-#else
-            await UniTask.RunOnThreadPool(async () =>
-            {
-                await ExecCallback(timerInfo);
-            });
-#endif
-        }
-
-        /// <summary>
-        /// 执行定时器剩余的回调次数
-        /// </summary>
-        private async UniTask ExecCallback(TimerInfo timerInfo)
-        {
             //如果取消了，则会抛出异常
             try
             {

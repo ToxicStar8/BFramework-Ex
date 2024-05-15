@@ -91,7 +91,7 @@ namespace Framework
             {
                 for (int i = 0; i < _waitStartList.Count; i++)
                 {
-                    ExecTimer(_waitStartList[i]);
+                    ExecTimer(_waitStartList[i]).Forget();
                 }
                 _waitStartList.Clear();
                 await UniTask.Yield();

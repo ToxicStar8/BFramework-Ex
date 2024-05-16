@@ -89,11 +89,14 @@ namespace Framework
         {
             while (true)
             {
-                for (int i = 0; i < _waitStartList.Count; i++)
+                if(_waitStartList.Count > 0)
                 {
-                    ExecTimer(_waitStartList[i]).Forget();
+                    for (int i = 0; i < _waitStartList.Count; i++)
+                    {
+                        ExecTimer(_waitStartList[i]).Forget();
+                    }
+                    _waitStartList.Clear();
                 }
-                _waitStartList.Clear();
                 await UniTask.Yield();
             }
         }

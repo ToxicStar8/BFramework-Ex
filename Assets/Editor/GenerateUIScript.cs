@@ -154,14 +154,12 @@ namespace GameData
                 //如果为空 加个回车 美观
                 btnBindFunc = string.IsNullOrWhiteSpace(btnBindFunc) ? "\r\n" : btnBindFunc;
 
-                //导出文件 替换文本
-                //var scripts = File.CreateText(path + go.name + ".cs");
+                //替换文本
                 temp = temp.Replace("#UIName", go.name);
                 temp = temp.Replace("#Time", System.DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
                 temp = temp.Replace("#ButtonBindFunc", btnBindFunc);
                 temp = temp.Replace("#ButtonOnClick", btnOnClickStr);
-                //scripts.Write(temp);
-                //scripts.Close();
+                //导出文件
                 File.WriteAllText(path + go.name + ".cs", temp, Encoding.UTF8);
             }
         }
@@ -200,16 +198,18 @@ namespace GameData
             //生成绑定关系
             GenerateBind(0, go, path, out newComponentStr, out newFindStr);
 
-            //创建对象
-            //var scripts = File.CreateText(path + go.name + ".Design.cs");
             //文本替换
             temp = temp.Replace("#UIName", go.name);
             temp = temp.Replace("#Time", System.DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
             temp = temp.Replace("#Component", newComponentStr);
             temp = temp.Replace("#Find", newFindStr);
-            //scripts.Write(temp);
-            //scripts.Close();
-            File.WriteAllText(path + go.name + ".Design.cs", temp, Encoding.UTF8);
+            //导出文件
+            var savePath = path + go.name + ".Design.cs";
+            if (IsNeedGenerateText(savePath, temp))
+            {
+                return;
+            }
+            File.WriteAllText(savePath, temp, Encoding.UTF8);
         }
 
         /// <summary>
@@ -353,12 +353,10 @@ namespace GameData
             //已经生成过了就不覆盖了
             if (!File.Exists(writePath))
             {
-                //导出文件 替换文本
-                //var scripts = File.CreateText(unitPath + "/" + go.name + ".cs");
+                //替换文本
                 temp = temp.Replace("#UnitName", uiName + "_" + go.name);
                 temp = temp.Replace("#Time", System.DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
-                //scripts.Write(temp);
-                //scripts.Close();
+                //导出文件
                 File.WriteAllText(writePath, temp, Encoding.UTF8);
             }
         }
@@ -403,16 +401,18 @@ namespace GameData
                 Directory.CreateDirectory(unitPath);
             }
 
+            //文本替换
             temp = temp.Replace("#UnitName", uiName + "_" + go.name);
             temp = temp.Replace("#Time", System.DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
             temp = temp.Replace("#Component", newComponentStr);
             temp = temp.Replace("#Find", newFindStr);
-            //创建对象
-            //var scripts = File.CreateText(unitPath + "/" + go.name + ".Design.cs");
-            //文本替换
-            //scripts.Write(temp);
-            //scripts.Close();
-            File.WriteAllText(unitPath + "/" + uiName + "_" + go.name + ".Design.cs", temp, Encoding.UTF8);
+            //导出文件
+            var savePath = unitPath + "/" + uiName + "_" + go.name + ".Design.cs";
+            if (IsNeedGenerateText(savePath, temp))
+            {
+                return;
+            }
+            File.WriteAllText(savePath, temp, Encoding.UTF8);
         }
 
         /// <summary>
@@ -443,6 +443,29 @@ namespace GameData
             path = path.Substring(parentGo.name.Length + 1);
 
             return path;
+        }
+
+        /// <summary>
+        /// 检测是否需要生成代码
+        /// </summary>
+        private static bool IsNeedGenerateText(string savePath, string newText)
+        {
+            if (!File.Exists(savePath))
+            {
+                return false;
+            }
+
+            using (var txt = File.OpenText(savePath))
+            {
+                var oldText = txt.ReadToEnd();
+                oldText = oldText.Substring(200, oldText.Length - 200);
+                var temp = newText.Substring(200, newText.Length - 200);
+                if (oldText.Equals(temp))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

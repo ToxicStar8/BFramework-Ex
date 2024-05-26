@@ -53,16 +53,16 @@ namespace GameData
                 return;
             }
 
-            var unit = TipsUnitPool.CreateUnit(rectTransform);
+            var unit = Unit_AddItemTipsPool.CreateUnit(rectTransform);
             var tipsData = _tipsQueue.Dequeue();
             //显示
-            unit.FnShow(/*tipsData.TbProp,*/ tipsData.ItemCount);
+            unit.OnShow(/*tipsData.TbProp,*/ tipsData.ItemCount);
             unit.rectTransform.SetParent(tipsData.Parent);
             unit.rectTransform.DOKill();
             unit.rectTransform.localPosition = Vector3.zero;
             unit.rectTransform.DOLocalMoveY(50, 0.3f).onComplete = () =>
             {
-                TipsUnitPool.Recycle(unit);
+                Unit_AddItemTipsPool.Recycle(unit);
             };
         }
 

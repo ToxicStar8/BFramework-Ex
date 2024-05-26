@@ -1,6 +1,6 @@
 ﻿/*********************************************
  * 自动生成代码，禁止手动修改文件
- * 脚本名：UIAddItemTips.Design.cs
+ * 脚本名：Unit_AddItemTips.cs
  * 修改时间：2024/05/26 17:34:28
  *********************************************/
 
@@ -11,17 +11,17 @@ using TMPro;
 
 namespace GameData
 {
-    public partial class UIAddItemTips
+    public partial class Unit_AddItemTips
     {
-        public GameObject Unit_AddItemTips;
+        public TextEx Txt_Tips;
 
-        public UnitPool<Unit_AddItemTips> Unit_AddItemTipsPool;
+        public ImageEx Img_Item;
 
         public override void OnCreate()
         {
             rectTransform = gameObject.GetComponent<RectTransform>();
-            Unit_AddItemTips = rectTransform.Find("Unit_AddItemTips").gameObject;
-			Unit_AddItemTipsPool = new UnitPool<Unit_AddItemTips>(this,Unit_AddItemTips);
+            Txt_Tips = rectTransform.Find("Txt_Tips").GetComponent<TextEx>();
+			Img_Item = rectTransform.Find("Txt_Tips/Img_Item").GetComponent<ImageEx>();
 			
         }
     }

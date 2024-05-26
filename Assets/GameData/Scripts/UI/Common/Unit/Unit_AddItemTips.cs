@@ -1,7 +1,7 @@
 ﻿/*********************************************
  * 
- * 脚本名：UIAddItemTips_TipsUnit.cs
- * 创建时间：2023/03/14 13:57:54
+ * 脚本名：Unit_AddItemTips.cs
+ * 创建时间：2024/05/26 17:34:28
  *********************************************/
 using Framework;
 using System;
@@ -11,14 +11,14 @@ using UnityEngine;
 
 namespace GameData
 {
-    public partial class UIAddItemTips_TipsUnit : UnitBase
+    public partial class Unit_AddItemTips : UnitBase
     {
         public override void OnInit()
         {
             
         }
 
-        public void FnShow(/*TableProp tbProp,*/ int itemCount)
+        public void OnShow(/*TableProp tbProp,*/ int itemCount)
         {
             //Txt_Tips.text = tbProp.Name + "+" + itemCount.ToString();
             Txt_Tips.text = "看配表" + "+" + itemCount.ToString();

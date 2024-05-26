@@ -47,7 +47,6 @@ GameObject:
   - component: {fileID: 3084343758631276594}
   - component: {fileID: 8476970053661135833}
   - component: {fileID: 1171970194767201812}
-  - component: {fileID: 3413328194242851344}
   m_Layer: 5
   m_Name: Img_Mask
   m_TagString: Untagged
@@ -113,18 +112,3 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   Offset: []
---- !u!114 &3413328194242851344
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8922650322474755979}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0592d36259aecfc459364bb68546ab4b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BindComponent: {fileID: 1171970194767201812}
-  Type: 0
-  Content: 

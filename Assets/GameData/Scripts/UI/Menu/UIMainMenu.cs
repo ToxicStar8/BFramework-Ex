@@ -24,6 +24,8 @@ namespace GameData
         {
             if (Input.GetKeyDown(KeyCode.A))
             {
+                ShowTips("测试1");
+
                 //AddTimer("1", TimerInfo.Create(4, 1000, true, () =>
                 //{
                 //    Log(E_Log.Log, Time.time.ToString());

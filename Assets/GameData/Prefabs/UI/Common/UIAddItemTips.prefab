@@ -47,7 +47,6 @@ GameObject:
   - component: {fileID: 344937736843562491}
   - component: {fileID: 6922778738439025419}
   - component: {fileID: 4969366250072522486}
-  - component: {fileID: 5805131077955536059}
   m_Layer: 5
   m_Name: Img_Item
   m_TagString: Untagged
@@ -113,21 +112,6 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   Offset: []
---- !u!114 &5805131077955536059
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5754679493427087476}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0592d36259aecfc459364bb68546ab4b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BindComponent: {fileID: 4969366250072522486}
-  Type: 0
-  Content: 
 --- !u!1 &6030142038214683729
 GameObject:
   m_ObjectHideFlags: 0
@@ -139,7 +123,6 @@ GameObject:
   - component: {fileID: 5651640077871348806}
   - component: {fileID: 3356901600293728415}
   - component: {fileID: 8998917479571473362}
-  - component: {fileID: 1369418162153297748}
   - component: {fileID: 7077895993370835602}
   m_Layer: 5
   m_Name: Txt_Tips
@@ -210,21 +193,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: +100
---- !u!114 &1369418162153297748
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6030142038214683729}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0592d36259aecfc459364bb68546ab4b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BindComponent: {fileID: 8998917479571473362}
-  Type: 0
-  Content: 
 --- !u!114 &7077895993370835602
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -248,7 +216,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3084343758631276594}
-  - component: {fileID: 3413328194242851344}
   m_Layer: 5
   m_Name: TipsUnit
   m_TagString: Untagged
@@ -276,18 +243,3 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &3413328194242851344
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8922650322474755979}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0592d36259aecfc459364bb68546ab4b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BindComponent: {fileID: 3084343758631276594}
-  Type: 1
-  Content: 

@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 561880302317886526}
   - component: {fileID: 2688048286400313101}
   - component: {fileID: 7511360186664213216}
-  - component: {fileID: 7275798251847963765}
   m_Layer: 5
   m_Name: Btn_Confirm
   m_TagString: Untagged
@@ -123,21 +122,6 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   Offset: []
---- !u!114 &7275798251847963765
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 496742530611991588}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0592d36259aecfc459364bb68546ab4b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BindComponent: {fileID: 2688048286400313101}
-  Type: 0
-  Content: 
 --- !u!1 &1024755377637862908
 GameObject:
   m_ObjectHideFlags: 0
@@ -150,7 +134,6 @@ GameObject:
   - component: {fileID: 7105921959401384066}
   - component: {fileID: 2689086419647138242}
   - component: {fileID: 389322627384491259}
-  - component: {fileID: 1554798691901601797}
   m_Layer: 5
   m_Name: Txt_Confirm
   m_TagString: Untagged
@@ -234,18 +217,3 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
---- !u!114 &1554798691901601797
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1024755377637862908}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0592d36259aecfc459364bb68546ab4b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BindComponent: {fileID: 2689086419647138242}
-  Type: 0
-  Content: 

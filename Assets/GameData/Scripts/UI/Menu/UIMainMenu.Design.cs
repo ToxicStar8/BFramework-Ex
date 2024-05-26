@@ -1,56 +1,39 @@
 ﻿/*********************************************
  * 自动生成代码，禁止手动修改文件
  * 脚本名：UIMainMenu.Design.cs
- * 修改时间：2024/04/18 22:21:50
+ * 修改时间：2024/05/26 16:29:29
  *********************************************/
 
 using Framework;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace GameData
 {
     public partial class UIMainMenu
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public UnityEngine.UI.Button Btn_Start;
+        public ButtonEx Btn_Start;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public TMPro.TextMeshProUGUI Tmp_Start;
+        public TextMeshProUGUI Tmp_Start;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public UnityEngine.UI.Button Btn_Continue;
+        public ButtonEx Btn_Continue;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public TMPro.TextMeshProUGUI Tmp_Continue;
+        public TextMeshProUGUI Tmp_Continue;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public UnityEngine.UI.Button Btn_Exit;
+        public ButtonEx Btn_Exit;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public TMPro.TextMeshProUGUI Tmp_Exit;
+        public TextMeshProUGUI Tmp_Exit;
 
         public override void OnCreate()
         {
             rectTransform = gameObject.GetComponent<RectTransform>();
-            Btn_Start = rectTransform.Find("Btn_Start").GetComponent<UnityEngine.UI.Button>();
-			Tmp_Start = rectTransform.Find("Btn_Start/Tmp_Start").GetComponent<TMPro.TextMeshProUGUI>();
-			Btn_Continue = rectTransform.Find("Btn_Continue").GetComponent<UnityEngine.UI.Button>();
-			Tmp_Continue = rectTransform.Find("Btn_Continue/Tmp_Continue").GetComponent<TMPro.TextMeshProUGUI>();
-			Btn_Exit = rectTransform.Find("Btn_Exit").GetComponent<UnityEngine.UI.Button>();
-			Tmp_Exit = rectTransform.Find("Btn_Exit/Tmp_Exit").GetComponent<TMPro.TextMeshProUGUI>();
+            Btn_Start = rectTransform.Find("Btn_Start").GetComponent<ButtonEx>();
+			Tmp_Start = rectTransform.Find("Btn_Start/Tmp_Start").GetComponent<TextMeshProUGUI>();
+			Btn_Continue = rectTransform.Find("Btn_Continue").GetComponent<ButtonEx>();
+			Tmp_Continue = rectTransform.Find("Btn_Continue/Tmp_Continue").GetComponent<TextMeshProUGUI>();
+			Btn_Exit = rectTransform.Find("Btn_Exit").GetComponent<ButtonEx>();
+			Tmp_Exit = rectTransform.Find("Btn_Exit/Tmp_Exit").GetComponent<TextMeshProUGUI>();
 			
         }
     }

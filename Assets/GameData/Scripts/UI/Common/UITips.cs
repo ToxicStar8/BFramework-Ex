@@ -58,7 +58,7 @@ namespace GameData
             }
             _isShowing = true;
 
-            var unit = TipsUnitPool.CreateUnit(rectTransform);
+            var unit = Unit_TipsPool.CreateUnit(rectTransform);
             var tipsData = _tipsQueue.Dequeue();
             //字符串拼接
             //if (tipsData.TbProp != null)
@@ -72,7 +72,7 @@ namespace GameData
             unit.rectTransform.DOLocalMoveY(200, 0.3f).onComplete = () =>
             {
                 _isShowing = false;
-                TipsUnitPool.Recycle(unit);
+                Unit_TipsPool.Recycle(unit);
                 ShowTips();
             };
         }

@@ -3,12 +3,12 @@
  * UI代码生成
  * 创建时间：2022/12/25 20:40:23
  *********************************************/
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Framework
 {
@@ -21,15 +21,15 @@ namespace Framework
         public static void GenerateUI()
         {
             var go = Selection.activeGameObject;
-            if (go == null || !(go.name.StartsWith("UI") || go.name.EndsWith("Unit")))
+            if (go == null || !(go.name.StartsWith("UI") || go.name.StartsWith("Unit")))
             {
                 Debug.LogError("未选中UI/Unit！");
                 return;
             }
 
             //寻找到当前obj的路径
-            var directoryInfo = new DirectoryInfo(Application.dataPath);
             string prefabName = go.name + ".prefab";
+            var directoryInfo = new DirectoryInfo(Application.dataPath);
             string path = string.Empty;
             foreach (var item in directoryInfo.GetFiles("*.*", SearchOption.AllDirectories))
             {
@@ -55,17 +55,25 @@ namespace Framework
                 Debug.LogError("UI内的Unit请直接使用UI生成代码");
                 return;
             }
+
             //创建目录
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
+
             if (go.name.StartsWith("UI"))
             {
+                //创建目录
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+
                 CreateUIScript(go, path);
                 CreateUIDesignScript(go, path);
             }
-            else if (go.name.EndsWith("Unit"))
+            else if (go.name.StartsWith("Unit"))
             {
                 //没有父物体就直接用父文件夹名
                 var parentName = new DirectoryInfo(path).Name;
@@ -116,38 +124,23 @@ namespace GameData
             if (!File.Exists(path + go.name + ".cs"))
             {
                 //按钮绑定方法
-                var uiBindtList = go.GetComponentsInChildren<UIBind>().ToList();
                 string btnBindFunc = string.Empty;
                 string btnOnClickStr = string.Empty;
-                for (int i = 0; i < uiBindtList.Count; i++)
+                var bindDatas = FindAllComponent(go);
+                for (int i = 0; i < bindDatas.Count; i++)
                 {
-                    var uiBind = uiBindtList[i];
+                    var bindData = bindDatas[i];
                     //空就跳过
-                    if(uiBind == null)
+                    if (bindData == null)
                     {
                         continue;
                     }
-                    //如果有Unit 就把Unit下面的绑定组件全部置空
-                    if (uiBind.Type != BindType.Component)
-                    {
-                        var unitBindtArr = uiBind.GetComponentsInChildren<UIBind>();
-                        foreach (var unitComponent in unitBindtArr)
-                        {
-                            if (uiBind.name == unitComponent.name)
-                            {
-                                continue;
-                            }
-
-                            var index = uiBindtList.FindIndex(x => x != null && x.GetHashCode() == unitComponent.GetHashCode());
-                            uiBindtList[index] = null;
-                        }
-                    }
                     //如果是按钮 就直接追加方法
-                    if (uiBind.GetComponent<Button>() != null)
+                    if (bindData.Type == "ButtonEx")
                     {
-                        string funcName = "OnClick_" + uiBind.name;
-                        btnBindFunc += "\r\n            " + uiBind.name + ".AddListener(" + funcName + ");";
-                        btnOnClickStr += "\r\n        private void " + funcName + "()\r\n        {\r\n            Log(\"点击了" + uiBind.name + "\");\r\n        }\r\n";
+                        string funcName = "OnClick_" + bindData.Rect.name;
+                        btnBindFunc += "\r\n            " + bindData.Rect.name + ".AddListener(" + funcName + ");";
+                        btnOnClickStr += "\r\n        private void " + funcName + "()\r\n        {\r\n            Log(\"点击了" + bindData.Rect.name + "\");\r\n        }\r\n";
                         continue;
                     }
                 }
@@ -180,6 +173,7 @@ namespace GameData
 using Framework;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace GameData
 {
@@ -196,7 +190,7 @@ namespace GameData
             string newComponentStr;
             string newFindStr;
             //生成绑定关系
-            GenerateBind(0, go, path, out newComponentStr, out newFindStr);
+            GenerateBind(go, path, out newComponentStr, out newFindStr);
 
             //文本替换
             temp = temp.Replace("#UIName", go.name);
@@ -215,99 +209,60 @@ namespace GameData
         /// <summary>
         /// 生成绑定关系
         /// </summary>
-        /// <param name="startIndex">UI=0 Unit=1 因为UIBind会获取自己 如果Unit也是0会出问题</param>
         /// <param name="go">目标对象</param>
         /// <param name="path">脚本路径</param>
-        /// <param name="componentStr">组件文本模板</param>
-        /// <param name="FindStr">寻找文本模板</param>
         /// <param name="newComponentStr">拿去替换的组件文本</param>
         /// <param name="newFindStr">拿去替换的寻找文本</param>
-        private static void GenerateBind(int startIndex, GameObject go, string path, out string newComponentStr, out string newFindStr)
+        private static void GenerateBind(GameObject go, string path, out string newComponentStr, out string newFindStr)
         {
             string componentStr = @"
-        /// <summary>
-        /// #Content
-        /// </summary>
         public #Component #Name;
 ";
+            string UnitStr = "#Name = rectTransform.Find(\"#Path\").gameObject;";
             string FindStr = "#Name = rectTransform.Find(\"#Path\").GetComponent<#Component>();";
 
             string PoolStr = "#PoolName = new UnitPool<#UnitName>(this,#Obj);";
 
-            var componentList = go.GetComponentsInChildren<UIBind>(true).ToList();
             newComponentStr = string.Empty;
             newFindStr = string.Empty;
-            for (int i = startIndex; i < componentList.Count; i++)
+            var bindDatas = FindAllComponent(go);
+            for (int i = 0; i < bindDatas.Count; i++)
             {
-                var uiBind = componentList[i];
-                //Unit下置空的可能性
-                if (uiBind == null)
+                var bindData = bindDatas[i];
+                //声明变量
+                var tempComponentStr = componentStr.Replace("#Name", bindData.Rect.name);
+                var componentType = bindData.Type == "Unit" ? "GameObject" : bindData.Type;
+                tempComponentStr = tempComponentStr.Replace("#Component", componentType);
+                newComponentStr += tempComponentStr;
+
+                //寻找对象
+                var targetStr = bindData.Type == "Unit" ? UnitStr : FindStr;
+                var tempFindStr = targetStr.Replace("#Component", componentType);
+                tempFindStr = tempFindStr.Replace("#Name", bindData.Rect.name);
+                tempFindStr = tempFindStr.Replace("#Path", FindComponentInPrefabPath(go.name, bindData.Rect.gameObject));
+                tempFindStr += "\r\n\t\t\t";
+                newFindStr += tempFindStr;
+
+                //Unit类型
+                if (bindData.Type == "Unit")
                 {
-                    continue;
-                }
-                //只生成组件
-                if (uiBind.Type != BindType.Component)
-                {
-                    if (!uiBind.name.EndsWith("Unit"))
-                    {
-                        Debug.LogError(uiBind.name + "必须是以Unit结尾才允许设置类型为Unit！");
-                    }
-                    else
-                    {
-                        //生成Unit代码
-                        CreateUnitDesignScript(go.name,uiBind.gameObject, path);
-                        CreateUnitScript(go.name, uiBind.gameObject, path);
-                    }
-                    //把这个组件树下的全部组件删除不生成
-                    foreach (var unitComponent in uiBind.GetComponentsInChildren<UIBind>())
-                    {
-                        if (uiBind.name == unitComponent.name)
-                        {
-                            continue;
-                        }
+                    CreateUnitScript(go.name, bindData.Rect.gameObject, path);
+                    CreateUnitDesignScript(go.name, bindData.Rect.gameObject, path);
 
-                        var findIndex = componentList.FindIndex(x => x != null && x.GetHashCode() == unitComponent.GetHashCode());
-                        componentList[findIndex] = null;
-                    }
-                }
-                //文本存储
-                if (uiBind.BindComponent != null)
-                {
-                    //声明变量
-                    var tempComponentStr = componentStr.Replace("#Name", uiBind.BindComponent.name);
-                    tempComponentStr = tempComponentStr.Replace("#Component", uiBind.BindComponent.GetType().ToString());
-                    tempComponentStr = tempComponentStr.Replace("#Content", uiBind.Content);
-                    newComponentStr += tempComponentStr;
+                    var poolName = bindData.Rect.name + "Pool";
+                    var className = bindData.Rect.name;
 
-                    //寻找对象
-                    var tempFindStr = FindStr.Replace("#Component", uiBind.BindComponent.GetType().ToString());
-                    tempFindStr = tempFindStr.Replace("#Name", uiBind.BindComponent.name);
-                    tempFindStr = tempFindStr.Replace("#Path", FindComponentInPrefabPath(go.name, uiBind.gameObject));
-                    tempFindStr += "\r\n\t\t\t";
-                    newFindStr += tempFindStr;
+                    //追加一个Pool
+                    var tempComponentPoolStr = componentStr.Replace("#Name", poolName);
+                    tempComponentPoolStr = tempComponentPoolStr.Replace("#Component", "UnitPool<" + className + ">");
+                    tempComponentPoolStr = tempComponentPoolStr.Replace("#Content", "");
+                    newComponentStr += tempComponentPoolStr;
 
-                    //Unit类型
-                    if (uiBind.Type != BindType.Component)
-                    {
-                        var poolName = uiBind.BindComponent.name + "Pool";
-                        var className = go.name + "_" + uiBind.BindComponent.name;
-
-                        //追加一个Pool
-                        var tempComponentPoolStr = componentStr.Replace("#Name", poolName);
-                        tempComponentPoolStr = tempComponentPoolStr.Replace("#Component", "UnitPool<" + className + ">");
-                        tempComponentPoolStr = tempComponentPoolStr.Replace("#Content", "");
-                        newComponentStr += tempComponentPoolStr;
-
-                        var tempFindPoolStr = PoolStr.Replace("#PoolName", poolName);
-                        tempFindPoolStr = tempFindPoolStr.Replace("#UnitName", className);
-                        tempFindPoolStr = tempFindPoolStr.Replace("#Obj", uiBind.gameObject.name + ".gameObject");
-                        tempFindPoolStr += "\r\n\t\t\t";
-                        newFindStr += tempFindPoolStr;
-                    }
-                }
-                else
-                {
-                    Debug.LogError(uiBind.name + "没有绑定组件");
+                    var tempFindPoolStr = PoolStr.Replace("#PoolName", poolName);
+                    tempFindPoolStr = tempFindPoolStr.Replace("#UnitName", className);
+                    tempFindPoolStr = tempFindPoolStr.Replace("#Obj", bindData.Rect.name);
+                    tempFindPoolStr += "\r\n\t\t\t";
+                    newFindStr += tempFindPoolStr;
                 }
             }
         }
@@ -349,22 +304,22 @@ namespace GameData
                 Directory.CreateDirectory(unitPath);
             }
 
-            var writePath = unitPath + "/" + uiName + "_" + go.name + ".cs";
+            var savePath = unitPath + "/" + go.name + ".cs";
             //已经生成过了就不覆盖了
-            if (!File.Exists(writePath))
+            if (!File.Exists(savePath))
             {
                 //替换文本
-                temp = temp.Replace("#UnitName", uiName + "_" + go.name);
+                temp = temp.Replace("#UnitName", go.name);
                 temp = temp.Replace("#Time", System.DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
                 //导出文件
-                File.WriteAllText(writePath, temp, Encoding.UTF8);
+                File.WriteAllText(savePath, temp, Encoding.UTF8);
             }
         }
 
         /// <summary>
         /// 生成Unit绑定关系 每次覆盖
         /// </summary>
-        private static void CreateUnitDesignScript(string uiName,GameObject go, string path)
+        private static void CreateUnitDesignScript(string uiName, GameObject go, string path)
         {
             string temp = @"/*********************************************
  * 自动生成代码，禁止手动修改文件
@@ -375,6 +330,7 @@ namespace GameData
 using Framework;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace GameData
 {
@@ -392,7 +348,7 @@ namespace GameData
             string newComponentStr;
             string newFindStr;
             //生成绑定关系
-            GenerateBind(1, go, path, out newComponentStr, out newFindStr);
+            GenerateBind(go, path, out newComponentStr, out newFindStr);
 
             var unitPath = path + "/Unit";
             //创建目录
@@ -402,12 +358,12 @@ namespace GameData
             }
 
             //文本替换
-            temp = temp.Replace("#UnitName", uiName + "_" + go.name);
+            temp = temp.Replace("#UnitName", go.name);
             temp = temp.Replace("#Time", System.DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
             temp = temp.Replace("#Component", newComponentStr);
             temp = temp.Replace("#Find", newFindStr);
             //导出文件
-            var savePath = unitPath + "/" + uiName + "_" + go.name + ".Design.cs";
+            var savePath = unitPath + "/" + go.name + ".Design.cs";
             if (IsNeedGenerateText(savePath, temp))
             {
                 return;
@@ -467,5 +423,84 @@ namespace GameData
             }
             return false;
         }
+
+        private static List<BindData> FindAllComponent(GameObject go)
+        {
+            var bindDatas = new List<BindData>();
+            var childs = go.GetComponentsInChildren<RectTransform>(true).ToList();
+            for (int i = 0; i < childs.Count; i++)
+            {
+                var child = childs[i];
+                //跳过自己
+                if (child.name == go.name)
+                {
+                    continue;
+                }
+                //切割类型和名字
+                var strArr = child.name.Split('_');
+                if (strArr.Length != 2)
+                {
+                    continue;
+                }
+                //如果UI下有Unit 就把Unit下面的绑定组件全部置空
+                if (child.name.StartsWith("Unit"))
+                {
+                    var unitChildArr = child.GetComponentsInChildren<RectTransform>(true);
+                    foreach (var unitChild in unitChildArr)
+                    {
+                        //跳过自己
+                        if (child.name == unitChild.name)
+                        {
+                            continue;
+                        }
+                        childs.Remove(unitChild);
+                    }
+                }
+
+                bindDatas.Add(new BindData()
+                {
+                    Rect = child,
+                    Type = GetTypeByStr(strArr[0])
+                });
+            }
+            return bindDatas;
+        }
+
+        private static string GetTypeByStr(string type)
+        {
+            switch (type)
+            {
+                case "Lsr":
+                    return "LoopScrollRect";
+                case "Sv":
+                    return "ScrollRect";
+                case "Btn":
+                    return "ButtonEx";
+                case "Inf":
+                    return "InputField";
+                case "Img":
+                    return "ImageEx";
+                case "Tg":
+                    return "Toggle";
+                case "Sd":
+                    return "Slider";
+                case "Tmp":
+                    return "TextMeshProUGUI";
+                case "Txt":
+                    return "TextEx";
+                case "Rt":
+                    return "RectTransform";
+                case "Unit":
+                    return "Unit";
+                default:
+                    return "Error";
+            }
+        }
+    }
+
+    public class BindData
+    {
+        public RectTransform Rect;
+        public string Type;
     }
 }

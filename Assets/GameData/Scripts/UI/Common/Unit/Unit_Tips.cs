@@ -1,6 +1,6 @@
 ﻿/*********************************************
  * 
- * 脚本名：UITips_TipsUnit.cs
+ * 脚本名：Unit_Tips.cs
  * 创建时间：2023/03/14 13:57:39
  *********************************************/
 using Framework;
@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace GameData
 {
-    public partial class UITips_TipsUnit : UnitBase
+    public partial class Unit_Tips : UnitBase
     {
         public override void OnInit()
         {

@@ -26,24 +26,24 @@ namespace GameData
             {
                 ShowTips("测试1");
 
-                //AddTimer("1", TimerInfo.Create(4, 1000, true, () =>
-                //{
-                //    Log(E_Log.Log, Time.time.ToString());
-                //}));
+                AddTimer("1", TimerInfo.Create(4, 1000, true, () =>
+                {
+                    Log(E_Log.Log, Time.time.ToString());
+                }));
             }
             if (Input.GetKeyDown(KeyCode.S))
             {
-                //RemoveTimer("1");
+                RemoveTimer("1");
             }
             if (Input.GetKeyDown(KeyCode.D))
             {
-                //for (int i = 0; i < 5; i++)
-                //{
-                //    AddTimer(i.ToString(), TimerInfo.Create(4, 1000, true, () =>
-                //    {
-                //        Log(E_Log.Log, Time.time.ToString());
-                //    }));
-                //}
+                for (int i = 0; i < 5; i++)
+                {
+                    AddTimer(i.ToString(), TimerInfo.Create(4, 1000, true, () =>
+                    {
+                        Log(E_Log.Log, Time.time.ToString());
+                    }));
+                }
             }
         }
 

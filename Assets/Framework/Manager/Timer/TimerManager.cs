@@ -55,9 +55,9 @@ namespace Framework
 
 #if !UNITY_WEBGL
         /// <summary>
-        /// 等待开始的列表
+        /// 等待开始的队列，如果是列表会发生多线程的资源竞争
         /// </summary>
-        private List<TimerInfo> _waitStartList;
+        private Queue<TimerInfo> _waitStartQueue;
 #endif
 
 #if UNITY_EDITOR
@@ -78,7 +78,7 @@ namespace Framework
 
             //WEBGL不支持多线程
 #if !UNITY_WEBGL
-            _waitStartList = new List<TimerInfo>();
+            _waitStartQueue = new();
             //初始化的时候启动一个线程专门处理计时器
             UniTask.RunOnThreadPool(Loop);
 #endif
@@ -89,15 +89,18 @@ namespace Framework
         {
             while (true)
             {
-                if(_waitStartList.Count > 0)
-                {
-                    for (int i = 0; i < _waitStartList.Count; i++)
-                    {
-                        ExecTimer(_waitStartList[i]).Forget();
-                    }
-                    _waitStartList.Clear();
-                }
+                TryExecTimer();
                 await UniTask.Yield();
+            }
+        }
+
+        private void TryExecTimer()
+        {
+            _waitStartQueue.TryDequeue(out var timerInfo);
+            if (timerInfo != null)
+            {
+                ExecTimer(timerInfo).Forget();
+                TryExecTimer();
             }
         }
 #endif
@@ -129,7 +132,7 @@ namespace Framework
             _timerInfoDic.Add(timerName, timerInfo);
             //添加到等待队列里
 #if !UNITY_WEBGL
-            _waitStartList.Add(timerInfo);
+            _waitStartQueue.Enqueue(timerInfo);
 #else
             ExecTimer(timerInfo);
 #endif

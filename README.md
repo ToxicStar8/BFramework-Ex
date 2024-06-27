@@ -1,6 +1,6 @@
 # BFramework-Ex
 ## 简介
-+ `BFEX`基于本人制作的基础热更框架<a href='https://github.com/ToxicStar8/BFramework'>`BFramework`</a>的带有丰富功能的扩展框架。
++ `BFEX`是基于本人制作的基础热更框架<a href='https://github.com/ToxicStar8/BFramework'>`BFramework`</a>的带有丰富功能的扩展框架。
 
 ## MainPackage
 + 使用`DowloadManager`原生实现了对可配置的资源下载，实现基本的热更需求。

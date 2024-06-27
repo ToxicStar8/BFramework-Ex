@@ -3,7 +3,7 @@
 + `BFEX`是基于本人制作的基础热更框架<a href='https://github.com/ToxicStar8/BFramework'>`BFramework`</a>的带有丰富功能的扩展框架。
 
 ## MainPackage
-+ 使用`DowloadManager`原生实现了对可配置的资源下载，实现基本的热更需求。
++ 使用`DowloadManager`原生实现了对资源的下载，实现基本的热更需求。
 
 ## Editor
 + 带有便捷的编辑器选项，可以通过菜单栏快速进行`资源名、图集、AB包`的生成操作。

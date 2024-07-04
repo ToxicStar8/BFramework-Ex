@@ -31,11 +31,12 @@ namespace Framework
         /// 数据列表
         /// </summary>
         public List<T> DataList { private set; get; } = new List<T>();
+        public Dictionary<int,T> DataDic { private set; get; } = new Dictionary<int, T>();
         public int Count => DataList.Count;
         public T this[int index] => GetDataByIndex(index);
 
         /// <summary>
-        /// 安全的通过索引获得数据
+        /// 安全的通过索引获得数据（列表获取）
         /// </summary>
         public T GetDataByIndex(int index)
         {
@@ -48,20 +49,15 @@ namespace Framework
         }
 
         /// <summary>
-        /// 通过Id获得数据
+        /// 通过Id获得数据（字典获取）
         /// </summary>
         public T GetDataById(int id)
         {
-            for (int i = 0, count = DataList.Count; i < count; i++)
+            if(!DataDic.TryGetValue(id,out var table))
             {
-                var table = DataList[i];
-                if (table.Id == id)
-                {
-                    return table;
-                }
+                GameGod.Instance.Log(E_Log.Error, "没有找到表数据 id", id.ToString());
             }
-            GameGod.Instance.Log(E_Log.Error, "没有找到表数据 id", id.ToString());
-            return null;
+            return table;
         }
 
         public int GetCreateStatus() => _initDataStatus;
@@ -78,6 +74,7 @@ namespace Framework
                 T table = new T();
                 table.OnInit(groupArr, allArr[i]);
                 DataList.Add(table);
+                DataDic.Add(table.Id, table);
             }
 
             _initDataStatus = 2;

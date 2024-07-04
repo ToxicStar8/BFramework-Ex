@@ -59,7 +59,10 @@ namespace MainPackage
             Img_Progress.fillAmount = 0;
         }
 
-        public void StartLoading()
+        /// <summary>
+        /// 开始下载
+        /// </summary>
+        public void StartDowload()
         {
             Txt_VersionCheck.gameObject.SetActive(false);
             Txt_LoadingAsset.gameObject.SetActive(true);
@@ -67,6 +70,9 @@ namespace MainPackage
             _isLoading = true;
         }
 
+        /// <summary>
+        /// 显示异常
+        /// </summary>
         public void ShowError()
         {
             Rt_Error.gameObject.SetActive(true);
@@ -84,10 +90,33 @@ namespace MainPackage
                 return;
             }
 
+            //下载异常
+            if (GameEntry.Instance.DowloadManager.IsDowloadError)
+            {
+                if (gameObject.activeSelf)
+                {
+                    ShowError();
+                }
+                return;
+            }
+
             if (_isLoading)
             {
                 Txt_LoadingAsset.text = GameEntry.Instance.DowloadManager.LoadedABTimes.ToString() + "/" + GameEntry.Instance.DowloadManager.ABMd5InfoList.Count.ToString();
                 Img_Progress.fillAmount = (float)GameEntry.Instance.DowloadManager.LoadedABTimes / GameEntry.Instance.DowloadManager.ABMd5InfoList.Count;
+            }
+            else
+            {
+                //检查更新
+                if (GameEntry.Instance.DowloadManager.DowloadStatus == 1)
+                {
+                    CheckUpdate();
+                }
+                //开始下载
+                if (GameEntry.Instance.DowloadManager.DowloadStatus == 2)
+                {
+                    StartDowload();
+                }
             }
         }
     }

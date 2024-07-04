@@ -42,6 +42,16 @@ namespace MainPackage
         public int LoadedABTimes { private set; get; } = 0;
 
         /// <summary>
+        /// 下载状态 0=未开始 1=检查更新 2=开始下载 3=下载完毕
+        /// </summary>
+        public int DowloadStatus { private set; get; } = 0;
+
+        /// <summary>
+        /// 是否下载异常
+        /// </summary>
+        public bool IsDowloadError { private set; get; } = false;
+
+        /// <summary>
         /// 是否下载完毕
         /// </summary>
         public bool IsDowloadEnd { private set; get; } = false;
@@ -49,8 +59,8 @@ namespace MainPackage
         /// <summary>
         /// 项目的AB包下载地址 空为StreamingAssets
         /// </summary>
-        public string DownloadUrl = "";
-        //public string DownloadUrl = "http://toxicstar.top/app/Test/CDN";
+        //public string DownloadUrl = "";
+        public string DownloadUrl = "https://toxicstar.top/app/Test/CDN/";
 
         /// <summary>
         /// AB包MD5信息名（用于比对需要更新的AB包）
@@ -91,7 +101,7 @@ namespace MainPackage
         {
             //检查资源变动
             GameEntry.Instance.Log(E_Log.Framework, "检查更新中……");
-            GameEntry.Instance.WinLoading.CheckUpdate();
+            DowloadStatus = 1;
             //
             _request = UnityWebRequest.Get(url);
             yield return _request.SendWebRequest();
@@ -109,8 +119,8 @@ namespace MainPackage
                 //打印错误 退出
                 if (!string.IsNullOrWhiteSpace(_request.error))
                 {
-                    GameEntry.Instance.Log(E_Log.Error, _request.error);
-                    GameEntry.Instance.WinLoading.ShowError();
+                    GameEntry.Instance.Log(E_Log.Error, url,_request.error);
+                    IsDowloadError = true;
                     yield break;
                 }
             }
@@ -129,8 +139,8 @@ namespace MainPackage
         private IEnumerator DownloadRely()
         {
             //1.显示加载
-            GameEntry.Instance.Log(E_Log.Framework, "加载资源中……");
-            GameEntry.Instance.WinLoading.StartLoading();
+            GameEntry.Instance.Log(E_Log.Framework, "下载AB包中……");
+            DowloadStatus = 2;
             //2.循环MD5索引信息下载AB包到本地 注：不是AB依赖信息！！
             for (int i = 0, count = ABMd5InfoList.Count; i < count; i++)
             {
@@ -143,6 +153,7 @@ namespace MainPackage
                 yield return new WaitUntil(() => isComplete);
             }
             //3.清空状态
+            DowloadStatus = 3;
             GameEntry.Instance.Log(E_Log.Framework, "全部下载完毕");
             yield return null;
             IsDowloadEnd = true;
@@ -195,8 +206,8 @@ namespace MainPackage
                 //打印错误 退出
                 if (!string.IsNullOrWhiteSpace(_request.error))
                 {
-                    GameEntry.Instance.Log(E_Log.Error, _request.error);
-                    GameEntry.Instance.WinLoading.ShowError();
+                    GameEntry.Instance.Log(E_Log.Error, url, _request.error);
+                    IsDowloadError = true;
                     yield break;
                 }
             }

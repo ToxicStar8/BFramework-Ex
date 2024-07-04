@@ -64,6 +64,8 @@ namespace Framework
 
         public void OnInit()
         {
+            _initDataStatus = 1;
+
             //表格的AB包不需要卸载
             var textAsset = GameGod.Instance.LoadManager.LoadSync<TextAsset>(TableName);
             var allArr = textAsset.text.Split("\r\n", System.StringSplitOptions.RemoveEmptyEntries);  //全部的文本

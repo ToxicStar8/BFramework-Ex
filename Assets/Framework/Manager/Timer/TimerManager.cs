@@ -17,7 +17,8 @@ namespace Framework
     /// </summary>
     public class TimerInfo
     {
-        public Action Callback;             //执行回调
+        public Action ExecCallback;         //执行回调
+        public Action EndCallback;          //结束回调
         public int AllCount;                //执行次数
         public int InviteTime;              //执行间隔时间，毫秒
         public bool IsExecImmed;            //是否立即执行
@@ -25,20 +26,22 @@ namespace Framework
         //定时器管理器里赋值
         public string TimerName;            //定时器名
 
-        public static TimerInfo Create(int allCount, int inviteTime, bool isExecImmed, Action callback)
+        public static TimerInfo Create(int allCount, int inviteTime, bool isExecImmed, Action execCallback, Action endCallback = null)
         {
             var timerInfo = GameGod.Instance.PoolManager.CreateClassObj<TimerInfo>();
             timerInfo.AllCount = allCount;
             timerInfo.InviteTime = inviteTime;
             timerInfo.IsExecImmed = isExecImmed;
-            timerInfo.Callback = callback;
+            timerInfo.ExecCallback = execCallback;
+            timerInfo.EndCallback = endCallback;
             timerInfo.Cts = new CancellationTokenSource();
             return timerInfo;
         }
         public static void Recycle(TimerInfo timerInfo)
         {
             timerInfo.Cts = null;
-            timerInfo.Callback = null;
+            timerInfo.ExecCallback = null;
+            timerInfo.EndCallback = null;
             GameGod.Instance.PoolManager.RecycleClassObj(timerInfo);
         }
     }
@@ -147,7 +150,7 @@ namespace Framework
             if (timerInfo.IsExecImmed)
             {
                 timerInfo.AllCount--;
-                timerInfo.Callback?.Invoke();
+                timerInfo.ExecCallback?.Invoke();
             }
 
             //如果取消了，则会抛出异常
@@ -156,7 +159,7 @@ namespace Framework
                 for (int i = 0; i < timerInfo.AllCount; i++)
                 {
                     await UniTask.Delay(timerInfo.InviteTime, cancellationToken: timerInfo.Cts.Token);
-                    timerInfo.Callback?.Invoke();
+                    timerInfo.ExecCallback?.Invoke();
                 };
             }
             catch (OperationCanceledException)
@@ -166,6 +169,7 @@ namespace Framework
             finally
             {
                 //不管是时间到了还是主动取消，都会在这里进行回收处理
+                timerInfo.EndCallback?.Invoke();
                 _timerInfoDic.Remove(timerInfo.TimerName);
                 TimerInfo.Recycle(timerInfo);
                 GameGod.Instance.Log(E_Log.Framework, "定时器回收", timerInfo.TimerName);
@@ -201,11 +205,12 @@ namespace Framework
         public override void OnDispose() 
         {
             var list = _timerInfoDic.Keys.ToList();
-            foreach (var item in list)
+            for (int i = 0; i < list.Count; i++)
             {
-                RemoveTimer(item);
+                RemoveTimer(list[i]);
             }
             _timerInfoDic.Clear();
+            _timerInfoDic = null;
         }
     }
 }

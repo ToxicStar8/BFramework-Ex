@@ -18,7 +18,7 @@ namespace Framework
     public class TimerInfo
     {
         public Action ExecCallback;         //执行回调
-        public Action EndCallback;          //结束回调
+        public Action<bool> EndCallback;    //结束回调
         public int AllCount;                //执行次数
         public int InviteTime;              //执行间隔时间，毫秒
         public bool IsExecImmed;            //是否立即执行
@@ -26,7 +26,7 @@ namespace Framework
         //定时器管理器里赋值
         public string TimerName;            //定时器名
 
-        public static TimerInfo Create(int allCount, int inviteTime, bool isExecImmed, Action execCallback, Action endCallback = null)
+        public static TimerInfo Create(int allCount, int inviteTime, bool isExecImmed, Action execCallback, Action<bool> endCallback = null)
         {
             var timerInfo = GameGod.Instance.PoolManager.CreateClassObj<TimerInfo>();
             timerInfo.AllCount = allCount;
@@ -169,7 +169,7 @@ namespace Framework
             finally
             {
                 //不管是时间到了还是主动取消，都会在这里进行回收处理
-                timerInfo.EndCallback?.Invoke();
+                timerInfo.EndCallback?.Invoke(timerInfo.Cts.IsCancellationRequested);
                 _timerInfoDic.Remove(timerInfo.TimerName);
                 TimerInfo.Recycle(timerInfo);
                 GameGod.Instance.Log(E_Log.Framework, "定时器回收", timerInfo.TimerName);

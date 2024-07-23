@@ -156,10 +156,18 @@ namespace Framework
             //如果取消了，则会抛出异常
             try
             {
+                //初始化一个时间用来计算时间偏移
+                long offsetTime = 0;
                 for (int i = 0; i < timerInfo.AllCount; i++)
                 {
-                    await UniTask.Delay(timerInfo.InviteTime, cancellationToken: timerInfo.Cts.Token);
+                    //计算偏差值，初始化时值相同偏差为0
+                    long startTime = TimeUtil.GetNowTimeMilliseconds();
+                    //下次延迟时间 = 原来延迟的时间 - 上次偏移的时间        //例：inviteTime = 1000 - 1 = 999
+                    int inviteTime = (int)(timerInfo.InviteTime - offsetTime);
+                    await UniTask.Delay(inviteTime, cancellationToken: timerInfo.Cts.Token);
                     timerInfo.ExecCallback?.Invoke();
+                    //新的偏移时间 = 现在时间 - 延迟前的时间 - 间隔时间     //例：offsetTime = 2001 - 1000 - 1000 = 1
+                    offsetTime = TimeUtil.GetNowTimeMilliseconds() - startTime - inviteTime;
                 };
             }
             catch (OperationCanceledException)

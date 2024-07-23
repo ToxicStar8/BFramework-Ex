@@ -24,7 +24,11 @@ namespace GameData
         {
             if (Input.GetKeyDown(KeyCode.A))
             {
-
+                AddTempTimer(TimerInfo.Create(101, 100, false, () =>
+                {
+                    var curTime = TimeUtil.GetNowTimeMilliseconds();
+                    Log(E_Log.Log, curTime.ToString());
+                }));
             }
             if (Input.GetKeyDown(KeyCode.S))
             {

@@ -480,6 +480,8 @@ namespace GameData
                     return "InputField";
                 case "Img":
                     return "ImageEx";
+                case "Raw":
+                    return "RawImage";
                 case "Tg":
                     return "Toggle";
                 case "Sd":

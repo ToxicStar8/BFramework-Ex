@@ -4,6 +4,7 @@
  * 创建时间：2022/12/25 20:40:23
  *********************************************/
 using System.IO;
+using TMPro;
 using UnityEditor;
 using UnityEditor.UI;
 using UnityEngine;
@@ -33,9 +34,8 @@ namespace Framework
             img = go.AddComponent<ImageEx>();
             btn.targetGraphic = img;
 
-            var txt = ReplaceTextEx(go.GetComponentInChildren<Text>());
+            var txt = ReplaceTmp(go.GetComponentInChildren<Text>());
             txt.text = "Button";
-            txt.alignment = TextAnchor.MiddleCenter;
         }
 
         [MenuItem("GameObject/UI/ImageEx", false, 1)]
@@ -56,7 +56,7 @@ namespace Framework
         {
             var trans = Selection.activeTransform;
             EditorApplication.ExecuteMenuItem("GameObject/UI/Legacy/Text");
-            var txt = ReplaceTextEx(Selection.activeTransform.GetComponent<Text>());
+            var txt = ReplaceTmp(Selection.activeTransform.GetComponent<Text>());
             txt.name = "Txt_";
             var go = txt.gameObject;
             go.transform.SetParent(trans);
@@ -67,36 +67,64 @@ namespace Framework
         /// <summary>
         /// Text替换成TextEx
         /// </summary>
-        private static Text ReplaceTextEx(Text txt)
+        private static TextMeshProUGUI ReplaceTmp(Text txt)
         {
             var go = txt.gameObject;
             DestroyImmediate(txt);
-            txt = go.AddComponent<TextEx>();
+            var tmp = go.AddComponent<TmpEx>();
             var fontDirPath = Application.dataPath + "/GameData/Art/Font/";
-            var fileArr = new DirectoryInfo(fontDirPath).GetFiles("*", SearchOption.AllDirectories);
+            var fileArr = new DirectoryInfo(fontDirPath).GetFiles("*.asset", SearchOption.AllDirectories);
             if (fileArr.Length != 0)
             {
                 var fontPath = fileArr[0].FullName;
                 fontPath = "Assets" + fontPath.Split("Assets")[1];
-                txt.font = UnityEditor.AssetDatabase.LoadAssetAtPath<Font>(fontPath);
+                tmp.font = UnityEditor.AssetDatabase.LoadAssetAtPath<TMPro.TMP_FontAsset>(fontPath);
             }
-            txt.supportRichText = false;
-            txt.raycastTarget = false;
-            txt.text = "TextEx...";
-            txt.color = "#323232".ToColor32();
-            return txt;
+            tmp.richText = false;
+            tmp.raycastTarget = false;
+            tmp.text = "TmpEx...";
+            tmp.color = "#323232".ToColor32();
+            return tmp;
+        }
+        /// <summary>
+        /// Tmp替换成TmpEx
+        /// </summary>
+        private static TextMeshProUGUI ReplaceTmp(TextMeshProUGUI tmp)
+        {
+            var go = tmp.gameObject;
+            DestroyImmediate(tmp);
+            tmp = go.AddComponent<TmpEx>();
+            var fontDirPath = Application.dataPath + "/GameData/Art/Font/";
+            var fileArr = new DirectoryInfo(fontDirPath).GetFiles("*.asset", SearchOption.AllDirectories);
+            if (fileArr.Length != 0)
+            {
+                var fontPath = fileArr[0].FullName;
+                fontPath = "Assets" + fontPath.Split("Assets")[1];
+                tmp.font = UnityEditor.AssetDatabase.LoadAssetAtPath<TMPro.TMP_FontAsset>(fontPath);
+            }
+            tmp.richText = false;
+            tmp.raycastTarget = false;
+            tmp.text = "TmpEx...";
+            tmp.color = "#323232".ToColor32();
+            return tmp;
         }
 
-        [MenuItem("CONTEXT/Text/替换为TextEx")]
+        [MenuItem("CONTEXT/Text/替换为TmpEx")]
         public static void TextReplaceTextEx()
         {
-            ReplaceTextEx(Selection.activeTransform.GetComponent<Text>());
+            ReplaceTmp(Selection.activeTransform.GetComponent<Text>());
+        }
+
+        [MenuItem("CONTEXT/TextMeshProUGUI/替换为TmpEx")]
+        public static void TextMeshProUGUIReplaceTmpEx()
+        {
+            ReplaceTmp(Selection.activeTransform.GetComponent<TextMeshProUGUI>());
         }
 
         [MenuItem("CONTEXT/TextEx/替换为ImageEx")]
         public static void TextExReplaceImageEx()
         {
-            var txt = Selection.activeTransform.GetComponent<TextEx>();
+            var txt = Selection.activeTransform.GetComponent<TmpEx>();
             var go = txt.gameObject;
             DestroyImmediate(txt);
             var img = go.AddComponent<ImageEx>();
@@ -135,15 +163,28 @@ namespace Framework
             var img = Selection.activeTransform.GetComponent<Image>();
             var go = img.gameObject;
             DestroyImmediate(img);
-            var txt = go.AddComponent<TextEx>();
+            var txt = go.AddComponent<TmpEx>();
             var btn = go.GetComponent<Button>();
             if (btn != null)
             {
                 btn.targetGraphic = txt;
             }
-            txt.supportRichText = false;
+            txt.richText = false;
             txt.raycastTarget = btn != null;
             txt.font = null;
+        }
+        #endregion
+
+        #region Replace ButtonEx
+        [MenuItem("CONTEXT/Image/替换为ButtonEx")]
+        public static void ButtonReplaceButtonEx()
+        {
+            var btn = Selection.activeTransform.GetComponent<Button>();
+            var go = btn.gameObject;
+            var target = btn.targetGraphic;
+            DestroyImmediate(btn);
+            btn = go.AddComponent<ButtonEx>();
+            btn.targetGraphic = target;
         }
         #endregion
 

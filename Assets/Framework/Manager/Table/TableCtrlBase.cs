@@ -68,7 +68,7 @@ namespace Framework
 
             //表格的AB包不需要卸载
             var textAsset = GameGod.Instance.LoadManager.LoadSync<TextAsset>(TableName);
-            var allArr = textAsset.text.Split("\r\n", System.StringSplitOptions.RemoveEmptyEntries);  //全部的文本
+            var allArr = textAsset.text.Split("`", System.StringSplitOptions.RemoveEmptyEntries);  //全部的文本
             var groupArr = allArr[1].Split('^');   //变量名的组
             //从第四行开始出数据
             for (int i = 3, length = allArr.Length; i < length; i++)

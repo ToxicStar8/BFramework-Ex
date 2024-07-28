@@ -184,10 +184,10 @@ namespace GameData
                     }
                 }
 
-                //只要不是最后一行 就添加换行符
+                //只要不是最后一行 就添加`符
                 if (i < row)
                 {
-                    sb.Append("\r\n");
+                    sb.AppendLine("`");
                 }
             }
 

@@ -1,10 +1,14 @@
-/*********************************************
+﻿/*********************************************
  * 
  * 脚本名：UIMainMenu.cs
  * 创建时间：2023/03/14 11:19:54
  *********************************************/
 using Framework;
 using MainPackage;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace GameData
@@ -22,22 +26,7 @@ namespace GameData
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                AddTempTimer(TimerInfo.Create(101, 100, false, () =>
-                {
-                    var curTime = TimeUtil.GetNowTimeMilliseconds();
-                    Log(E_Log.Log, curTime.ToString());
-                }));
-            }
-            if (Input.GetKeyDown(KeyCode.S))
-            {
 
-            }
-            if (Input.GetKeyDown(KeyCode.D))
-            {
-
-            }
         }
 
         public override void OnShow(params object[] args)
@@ -57,13 +46,9 @@ namespace GameData
 
         private void OnClick_Btn_Exit()
         {
-            Log(E_Log.Log, "退出游戏");
             Application.Quit();
         }
 
-        protected override void OnBeforeDestroy()
-        {
-
-        }
+        protected override void OnBeforeDestroy() { }
     }
 }

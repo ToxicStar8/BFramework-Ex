@@ -37,17 +37,17 @@ namespace GameData
         public override void OnShow(params object[] args)
         {
             _uiDialogData = args[0] as UIDialogData;
-            Txt_Title.text = _uiDialogData.Title;
-            Txt_Content.text = _uiDialogData.Content;
-            Txt_Confirm.text = _uiDialogData.ConfirmStr;
-            Txt_Cancel.text = _uiDialogData.CancelStr;
+            Tmp_Title.text = _uiDialogData.Title;
+            Tmp_Content.text = _uiDialogData.Content;
+            Tmp_Confirm.text = _uiDialogData.ConfirmStr;
+            Tmp_Cancel.text = _uiDialogData.CancelStr;
             Btn_Confirm.gameObject.SetActive(_uiDialogData.IsShowConfirm);
             Btn_Cancel.gameObject.SetActive(_uiDialogData.IsShowCancel);
-            var sizeFitter = Txt_Content.GetComponent<UnityEngine.UI.ContentSizeFitter>();
+            var sizeFitter = Tmp_Content.GetComponent<UnityEngine.UI.ContentSizeFitter>();
             //强制刷新高度
             sizeFitter.SetLayoutVertical();     
             //更新背景高度
-            Img_Bg.rectTransform.sizeDelta = new Vector2(670, Txt_Content.rectTransform.sizeDelta.y + 250);
+            Img_Bg.rectTransform.sizeDelta = new Vector2(670, Tmp_Content.rectTransform.sizeDelta.y + 250);
         }
 
         private void OnClick_Btn_Confirm()
@@ -62,9 +62,6 @@ namespace GameData
             CloseSelf();
         }
 
-        protected override void OnBeforeDestroy()
-        {
-            
-        }
+        protected override void OnBeforeDestroy() { }
     }
 }

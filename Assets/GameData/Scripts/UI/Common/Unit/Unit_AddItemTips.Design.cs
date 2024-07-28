@@ -1,7 +1,7 @@
 ﻿/*********************************************
  * 自动生成代码，禁止手动修改文件
  * 脚本名：Unit_AddItemTips.cs
- * 修改时间：2024/05/26 17:34:28
+ * 修改时间：2024/07/28 19:27:50
  *********************************************/
 
 using Framework;
@@ -13,15 +13,15 @@ namespace GameData
 {
     public partial class Unit_AddItemTips
     {
-        public TextEx Txt_Tips;
+        public TextMeshProUGUI Tmp_Tips;
 
         public ImageEx Img_Item;
 
         public override void OnCreate()
         {
             rectTransform = gameObject.GetComponent<RectTransform>();
-            Txt_Tips = rectTransform.Find("Txt_Tips").GetComponent<TextEx>();
-			Img_Item = rectTransform.Find("Txt_Tips/Img_Item").GetComponent<ImageEx>();
+            Tmp_Tips = rectTransform.Find("Tmp_Tips").GetComponent<TextMeshProUGUI>();
+			Img_Item = rectTransform.Find("Tmp_Tips/Img_Item").GetComponent<ImageEx>();
 			
         }
     }

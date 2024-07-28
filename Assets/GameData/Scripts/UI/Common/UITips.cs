@@ -66,7 +66,7 @@ namespace GameData
             //    tipsData.Tips = tipsData.TbProp.Name + tipsData.Tips;
             //}
             //显示
-            unit.FnShow(/*tipsData.TbProp,*/ tipsData.Tips);
+            unit.OnShow(/*tipsData.TbProp,*/ tipsData.Tips);
             unit.rectTransform.DOKill();
             unit.rectTransform.localPosition = Vector3.zero;
             unit.rectTransform.DOLocalMoveY(200, 0.3f).onComplete = () =>

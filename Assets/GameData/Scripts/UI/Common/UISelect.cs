@@ -14,10 +14,10 @@ namespace GameData
     public class UISelectData
     {
         public string Title;
-        public string Txt_A;
-        public string Txt_B;
-        public string Txt_C;
-        public string Txt_D;
+        public string Tmp_A;
+        public string Tmp_B;
+        public string Tmp_C;
+        public string Tmp_D;
         public Action ACallback;
         public Action BCallback;
         public Action CCallback;
@@ -40,15 +40,15 @@ namespace GameData
         public override void OnShow(params object[] args)
         {
             _data = args[0] as UISelectData;
-            Btn_A.SetActive(!string.IsNullOrWhiteSpace(_data.Txt_A));
-            Btn_B.SetActive(!string.IsNullOrWhiteSpace(_data.Txt_B));
-            Btn_C.SetActive(!string.IsNullOrWhiteSpace(_data.Txt_C));
-            Btn_D.SetActive(!string.IsNullOrWhiteSpace(_data.Txt_D));
-            Txt_Title.text = _data.Title;
-            Txt_A.text = _data.Txt_A;
-            Txt_B.text = _data.Txt_B;
-            Txt_C.text = _data.Txt_C;
-            Txt_D.text = _data.Txt_D;
+            Btn_A.SetActive(!string.IsNullOrWhiteSpace(_data.Tmp_A));
+            Btn_B.SetActive(!string.IsNullOrWhiteSpace(_data.Tmp_B));
+            Btn_C.SetActive(!string.IsNullOrWhiteSpace(_data.Tmp_C));
+            Btn_D.SetActive(!string.IsNullOrWhiteSpace(_data.Tmp_D));
+            Tmp_Title.text = _data.Title;
+            Tmp_A.text = _data.Tmp_A;
+            Tmp_B.text = _data.Tmp_B;
+            Tmp_C.text = _data.Tmp_C;
+            Tmp_D.text = _data.Tmp_D;
         }
 
         private void OnClick_Btn_Mask()
@@ -80,9 +80,6 @@ namespace GameData
             CloseSelf();
         }
 
-        protected override void OnBeforeDestroy()
-        {
-            
-        }
+        protected override void OnBeforeDestroy() { }
     }
 }

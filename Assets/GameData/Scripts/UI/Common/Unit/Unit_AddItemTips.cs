@@ -1,7 +1,7 @@
 ﻿/*********************************************
  * 
  * 脚本名：Unit_AddItemTips.cs
- * 创建时间：2024/05/26 17:34:28
+ * 创建时间：2024/07/28 19:27:50
  *********************************************/
 using Framework;
 using System;
@@ -20,8 +20,7 @@ namespace GameData
 
         public void OnShow(/*TableProp tbProp,*/ int itemCount)
         {
-            //Txt_Tips.text = tbProp.Name + "+" + itemCount.ToString();
-            Txt_Tips.text = "看配表" + "+" + itemCount.ToString();
+            Tmp_Tips.text = "看配表" + "+" + itemCount.ToString();
         }
     }
 }

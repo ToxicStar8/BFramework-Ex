@@ -1,74 +1,45 @@
-/*********************************************
+﻿/*********************************************
  * 自动生成代码，禁止手动修改文件
  * 脚本名：UIDialog.Design.cs
- * 修改时间：2023/01/28 14:04:17
+ * 修改时间：2024/07/28 19:23:33
  *********************************************/
 
 using Framework;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace GameData
 {
     public partial class UIDialog
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public Framework.ButtonEx Btn_Mask;
+        public ButtonEx Btn_Mask;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public Framework.ImageEx Img_Bg;
+        public ImageEx Img_Bg;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public Framework.TextEx Txt_Content;
+        public TextMeshProUGUI Tmp_Content;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public Framework.TextEx Txt_Title;
+        public TextMeshProUGUI Tmp_Title;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public UnityEngine.RectTransform Btns;
+        public ButtonEx Btn_Cancel;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public Framework.ButtonEx Btn_Cancel;
+        public TextMeshProUGUI Tmp_Cancel;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public Framework.TextEx Txt_Cancel;
+        public ButtonEx Btn_Confirm;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public Framework.ButtonEx Btn_Confirm;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public Framework.TextEx Txt_Confirm;
+        public TextMeshProUGUI Tmp_Confirm;
 
         public override void OnCreate()
         {
             rectTransform = gameObject.GetComponent<RectTransform>();
-            Btn_Mask = rectTransform.Find("Btn_Mask").GetComponent<Framework.ButtonEx>();
-			Img_Bg = rectTransform.Find("Img_Bg").GetComponent<Framework.ImageEx>();
-			Txt_Content = rectTransform.Find("Txt_Content").GetComponent<Framework.TextEx>();
-			Txt_Title = rectTransform.Find("Txt_Content/Txt_Title").GetComponent<Framework.TextEx>();
-			Btns = rectTransform.Find("Txt_Content/Btns").GetComponent<UnityEngine.RectTransform>();
-			Btn_Cancel = rectTransform.Find("Txt_Content/Btns/Btn_Cancel").GetComponent<Framework.ButtonEx>();
-			Txt_Cancel = rectTransform.Find("Txt_Content/Btns/Btn_Cancel/Txt_Cancel").GetComponent<Framework.TextEx>();
-			Btn_Confirm = rectTransform.Find("Txt_Content/Btns/Btn_Confirm").GetComponent<Framework.ButtonEx>();
-			Txt_Confirm = rectTransform.Find("Txt_Content/Btns/Btn_Confirm/Txt_Confirm").GetComponent<Framework.TextEx>();
+            Btn_Mask = rectTransform.Find("Btn_Mask").GetComponent<ButtonEx>();
+			Img_Bg = rectTransform.Find("Img_Bg").GetComponent<ImageEx>();
+			Tmp_Content = rectTransform.Find("Tmp_Content").GetComponent<TextMeshProUGUI>();
+			Tmp_Title = rectTransform.Find("Tmp_Content/Tmp_Title").GetComponent<TextMeshProUGUI>();
+			Btn_Cancel = rectTransform.Find("Tmp_Content/Btns/Btn_Cancel").GetComponent<ButtonEx>();
+			Tmp_Cancel = rectTransform.Find("Tmp_Content/Btns/Btn_Cancel/Tmp_Cancel").GetComponent<TextMeshProUGUI>();
+			Btn_Confirm = rectTransform.Find("Tmp_Content/Btns/Btn_Confirm").GetComponent<ButtonEx>();
+			Tmp_Confirm = rectTransform.Find("Tmp_Content/Btns/Btn_Confirm/Tmp_Confirm").GetComponent<TextMeshProUGUI>();
 			
         }
     }

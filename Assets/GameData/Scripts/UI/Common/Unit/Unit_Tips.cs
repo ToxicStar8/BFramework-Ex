@@ -1,7 +1,7 @@
 ﻿/*********************************************
  * 
  * 脚本名：Unit_Tips.cs
- * 创建时间：2023/03/14 13:57:39
+ * 创建时间：2024/07/28 19:18:52
  *********************************************/
 using Framework;
 using System;
@@ -18,11 +18,9 @@ namespace GameData
             
         }
 
-        public void FnShow(/*TableProp tbProp,*/ string tips)
+        public void OnShow(/*TableProp tbProp,*/ string tips)
         {
-            //Img_Item.SetActive(itemId != 0);
-            Img_Item.SetActive(false);
-            Txt_Tips.text = tips;
+            Tmp_Tips.text = tips;
         }
     }
 }

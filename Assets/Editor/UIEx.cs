@@ -121,8 +121,8 @@ namespace Framework
             ReplaceTmp(Selection.activeTransform.GetComponent<TextMeshProUGUI>());
         }
 
-        [MenuItem("CONTEXT/TextEx/替换为ImageEx")]
-        public static void TextExReplaceImageEx()
+        [MenuItem("CONTEXT/TmpEx/替换为ImageEx")]
+        public static void TmpExReplaceImageEx()
         {
             var txt = Selection.activeTransform.GetComponent<TmpEx>();
             var go = txt.gameObject;
@@ -157,8 +157,8 @@ namespace Framework
             rawImg.raycastTarget = false;
         }
 
-        [MenuItem("CONTEXT/Image/替换为TextEx")]
-        public static void ImageReplaceTextEx()
+        [MenuItem("CONTEXT/Image/替换为TmpEx")]
+        public static void ImageReplaceTmpEx()
         {
             var img = Selection.activeTransform.GetComponent<Image>();
             var go = img.gameObject;

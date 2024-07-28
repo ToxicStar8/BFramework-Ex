@@ -15,7 +15,6 @@ namespace GameData
     /// </summary>
     public abstract class GameUIBase : UIBase
     {
-        #region Event
         public void AddEventListener(UIEvent eventNo, Action<object[]> callback,string remark = null)
         {
             AddEventListener((ushort)eventNo, callback);
@@ -24,25 +23,6 @@ namespace GameData
         {
             SendEvent((ushort)eventNo, args);
         }
-        #endregion
-
-        #region UI操作
-        /// <summary>
-        /// 关闭自己
-        /// </summary>
-        public void CloseSelf()
-        {
-            CloseUI(uiName);
-        }
-
-        /// <summary>
-        /// 隐藏自己
-        /// </summary>
-        public void HideSelf()
-        {
-            HideUI(uiName);
-        }
-        #endregion
 
         /// <summary>
         /// 显示新增道具

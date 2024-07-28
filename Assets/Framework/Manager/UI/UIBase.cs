@@ -60,6 +60,24 @@ namespace Framework
             return GameGod.Instance.GetUILevelTrans(uiLevel);
         }
 
+        #region UI操作
+        /// <summary>
+        /// 关闭自己
+        /// </summary>
+        public void CloseSelf()
+        {
+            CloseUI(uiName);
+        }
+
+        /// <summary>
+        /// 隐藏自己
+        /// </summary>
+        public void HideSelf()
+        {
+            HideUI(uiName);
+        }
+        #endregion
+
         #region Update
         private Action _update;
         protected void RegisterUpdate(Action updateCallback)

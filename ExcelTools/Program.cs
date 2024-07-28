@@ -152,9 +152,9 @@ namespace GameData
                 {
                     continue;
                 }
-                //跳过注释行
+                //跳过空行和注释行
                 var temp = table.Cells[i, 1].Value?.ToString();
-                if (temp != null && temp.StartsWith("#"))
+                if (temp == null || temp.StartsWith("#"))
                 {
                     continue;
                 }

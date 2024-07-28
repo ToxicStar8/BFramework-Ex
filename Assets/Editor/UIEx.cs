@@ -176,7 +176,7 @@ namespace Framework
         #endregion
 
         #region Replace ButtonEx
-        [MenuItem("CONTEXT/Image/替换为ButtonEx")]
+        [MenuItem("CONTEXT/Button/替换为ButtonEx")]
         public static void ButtonReplaceButtonEx()
         {
             var btn = Selection.activeTransform.GetComponent<Button>();

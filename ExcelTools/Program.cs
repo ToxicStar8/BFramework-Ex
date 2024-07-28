@@ -25,7 +25,7 @@ namespace ExcelTools
             _outScriptPath = _excelPath + "/ExcelTools/GameData/Scripts/Table";
             _outTxtPath = _excelPath + "/ExcelTools/GameData/Table";
 
-            CreateAllTable(()=> {
+            CreateAllTable(() => {
                 var config = File.OpenText(_toolsPath + "/config.txt");     //配置文件
                 var src = config.ReadLine();
 
@@ -72,9 +72,9 @@ namespace GameData
 }";
             //先删除目录文件夹（清空数据） 再创建数据目录
             var gdPath = _toolsPath + "/GameData";
-            if(Directory.Exists(gdPath))
+            if (Directory.Exists(gdPath))
             {
-                Directory.Delete(gdPath,true);
+                Directory.Delete(gdPath, true);
             }
             Directory.CreateDirectory(gdPath);
             Directory.CreateDirectory(gdPath + "/Scripts");
@@ -109,7 +109,7 @@ namespace GameData
                             Console.WriteLine("导出" + excelPackage.File.Name + "中...");
                             CreateTableTxt(table);
                             CreateTableScript(table, excelPackage.File.Name);
-                            typeofStr +=  "typeof(" + CreateTableCtrlScript(table, excelPackage.File.Name) + "),\r\n\t\t\t";
+                            typeofStr += "typeof(" + CreateTableCtrlScript(table, excelPackage.File.Name) + "),\r\n\t\t\t";
                             Console.WriteLine(table.Name + "已完成...");
 
                             isOutExcel = true;
@@ -148,7 +148,13 @@ namespace GameData
             for (int i = 2, row = table.Dimension.End.Row; i <= row; i++)
             {
                 //备注行跳过
-                if(i == 5)
+                if (i == 5)
+                {
+                    continue;
+                }
+                //跳过注释行
+                var temp = table.Cells[i, 1].Value?.ToString();
+                if (temp != null && temp.StartsWith("#"))
                 {
                     continue;
                 }
@@ -194,7 +200,7 @@ namespace GameData
         /// 创建表控制器文件
         /// </summary>
         /// <param name="table"></param>
-        private static string CreateTableCtrlScript(ExcelWorksheet table,string excelName)
+        private static string CreateTableCtrlScript(ExcelWorksheet table, string excelName)
         {
             string allTemp = @"/*********************************************
  * 自动生成代码，禁止手动修改文件
@@ -280,7 +286,7 @@ namespace GameData
 
             //拿到变量名
             string outValueStr = string.Empty;
-            for (int i = 1,column = column = table.Dimension.End.Column; i <= column; i++)
+            for (int i = 1, column = column = table.Dimension.End.Column; i <= column; i++)
             {
                 //空数据就结束
                 if (table.Cells[1, i].Value == null)
@@ -295,7 +301,7 @@ namespace GameData
                 }
 
                 //具体导出
-                var valueStr = valueTemp.Replace("#Type", GetValueType(table.Cells[2,i].Value.ToString()));
+                var valueStr = valueTemp.Replace("#Type", GetValueType(table.Cells[2, i].Value.ToString()));
                 valueStr = valueStr.Replace("#Name", GetValueName(table.Cells[2, i].Value.ToString(), CultureInfo.CurrentCulture.TextInfo.ToTitleCase(table.Cells[3, i].Value.ToString())));
                 valueStr = valueStr.Replace("#Remark", table.Cells[4, i].Value?.ToString());
                 outValueStr += valueStr;
@@ -318,7 +324,7 @@ namespace GameData
                     continue;
                 }
 
-                var caseStr = caseTemp.Replace("#tableValueName", "\"" + table.Cells[3, i].Value.ToString()+ "\"");
+                var caseStr = caseTemp.Replace("#tableValueName", "\"" + table.Cells[3, i].Value.ToString() + "\"");
                 caseStr = caseStr.Replace("#Name", GetValueName(table.Cells[2, i].Value.ToString(), CultureInfo.CurrentCulture.TextInfo.ToTitleCase(table.Cells[3, i].Value.ToString())));
                 caseStr = caseStr.Replace("#Type", GetCaseType(table.Cells[2, i].Value.ToString()));
                 outCaseStr += caseStr;
@@ -374,7 +380,7 @@ namespace GameData
         /// <summary>
         /// 根据传入名字 返回转换文本
         /// </summary>
-        private static string GetValueName(string valueStr,string name)
+        private static string GetValueName(string valueStr, string name)
         {
             string outValueStr = string.Empty;
             switch (valueStr)
@@ -392,7 +398,7 @@ namespace GameData
                     break;
 
                 case "array":
-                    outValueStr = "Array_"+ name;
+                    outValueStr = "Array_" + name;
                     break;
             }
             return outValueStr;

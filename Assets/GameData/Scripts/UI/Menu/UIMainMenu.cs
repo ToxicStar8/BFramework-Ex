@@ -8,6 +8,7 @@ using MainPackage;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,7 +32,43 @@ namespace GameData
 
         public override void OnShow(params object[] args)
         {
+        /*
+            var tbRegionCtrl = GetTableCtrl<TableRegionCtrl>();
+            for (int i = 0; i < tbRegionCtrl.Count; i++)
+            {
+                var tbRegion = tbRegionCtrl.DataList[i];
+                var sb = new StringBuilder();
+                sb.Append(tbRegion.Id);
+                sb.Append(" ");
+                sb.Append(tbRegion.Region);
+                sb.Append(" ");
+                for (int j = 0; j < tbRegion.List_Test1.Count; j++)
+                {
+                    sb.Append(tbRegion.List_Test1[j]);
+                    sb.Append(" ");
+                }
 
+                for (int j = 0; j < tbRegion.List_Test2.Count; j++)
+                {
+                    sb.Append(tbRegion.List_Test2[j]);
+                    sb.Append(" ");
+                }
+
+                for (int j = 0; j < tbRegion.List_Test3.Count; j++)
+                {
+                    sb.Append(tbRegion.List_Test3[j]);
+                    sb.Append(" ");
+                }
+
+                for (int j = 0; j < tbRegion.List_Test4.Count; j++)
+                {
+                    sb.Append(tbRegion.List_Test4[j]);
+                    sb.Append(" ");
+                }
+
+                Log(sb.ToString());
+            }
+            */
         }
 
         private void OnClick_Btn_Start()

@@ -147,16 +147,18 @@ namespace GameData
             StringBuilder sb = new StringBuilder();
             //End.Row获得当前表格的最大行数
             //第一行标识服务端|客户端数据 不参与导出
-            for (int i = 2, row = table.Dimension.End.Row; i <= row; i++)
+            //第二行类型名 不参与导出
+            for (int i = 3, row = table.Dimension.End.Row; i <= row; i++)
             {
-                //备注行跳过
-                if (i == 5)
+                //如果首行是空行或注释行，就跳过
+                var temp = table.Cells[i, 1].Value?.ToString();
+                if (i > 5 && (temp == null || temp.StartsWith("#")))
                 {
                     continue;
                 }
-                //跳过空行和注释行
-                var temp = table.Cells[i, 1].Value?.ToString();
-                if (temp == null || temp.StartsWith("#"))
+
+                //类型名的行 和 中文名的行 和 备注的行 跳过
+                if (i == 4 || i == 5)
                 {
                     continue;
                 }
@@ -171,7 +173,7 @@ namespace GameData
                     }
 
                     //Cells是个二维数组，第一个参数是读取第几行，第二个参数是读取第几列（从1开始
-                    string value = table.Cells[i, j].Value?.ToString();
+                    string value = table.Cells[i, j].Value?.ToString().Trim();
                     //服务端数据不导出
                     if (table.Cells[1, j].Value.ToString() == "S" || table.Cells[1, j].Value.ToString() == "NO")
                     {
@@ -179,22 +181,21 @@ namespace GameData
                     }
 
                     sb.Append(value);
-                    //只要不是最后一列并且最后一列不为空 就添加逗号
+                    //只要不是最后一列并且最后一列不为空 就添加数据分隔符
                     if (j != column && table.Cells[1, j + 1].Value != null)
                     {
                         sb.Append('^');
                     }
                 }
 
-                //只要不是最后一行 就添加`符
-                if (i < row)
-                {
-                    sb.Append("`");
-                }
+                //尾部添加行的分隔符
+                sb.Append("`");
             }
+            //删除最后一个`即可
+            sb.Remove(sb.Length - 1, 1);
 
             var file = File.CreateText(_outTxtPath + $"/{table.Name}.txt");
-            file.WriteLine(sb.ToString());
+            file.WriteLine(sb.ToString().Trim());
             file.Close();
         }
 

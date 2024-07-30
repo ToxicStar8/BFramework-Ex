@@ -1,7 +1,7 @@
 /*********************************************
  * 自动生成代码，禁止手动修改文件
  * Excel表名：D_地区表.xlsx
- * 修改时间：2024/07/30 05:39:41
+ * 修改时间：2024/07/30 07:32:53
  *********************************************/
 
 using Framework;
@@ -42,12 +42,12 @@ namespace GameData
         /// </summary>
         public List<float> List_Test4 { private set; get; }
 
-        public override void OnInit(string[] group, string dataStrArr)
+        public override void OnInit(string[] nameGroupArr, string dataStrArr)
         {
             var data = dataStrArr.Split('^');
-            for (int i = 0,length = group.Length; i < length; i++)
+            for (int i = 0,length = nameGroupArr.Length; i < length; i++)
             {
-                switch (group[i])
+                switch (nameGroupArr[i])
                 {
                     case "id":
                         Id = data[i].ToInt();

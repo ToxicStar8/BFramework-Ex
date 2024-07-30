@@ -18,6 +18,6 @@ namespace Framework
     {
         public abstract int Id { protected set; get; }
         public int DataId => Id;
-        public abstract void OnInit(string[] group, string dataStrArr);
+        public abstract void OnInit(string[] nameGroupArr, string dataStrArr);
     }
 }

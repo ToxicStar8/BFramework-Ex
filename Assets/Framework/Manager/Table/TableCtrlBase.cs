@@ -69,12 +69,12 @@ namespace Framework
             //表格的AB包不需要卸载
             var textAsset = GameGod.Instance.LoadManager.LoadSync<TextAsset>(TableName);
             var allArr = textAsset.text.Split("`", System.StringSplitOptions.RemoveEmptyEntries);  //全部的文本
-            var groupArr = allArr[1].Split('^');   //变量名的组
-            //从第四行开始出数据
-            for (int i = 3, length = allArr.Length; i < length; i++)
+            var nameGroupArr = allArr[0].Split('^');   //变量名的行
+            //从第二行开始出数据
+            for (int i = 1, length = allArr.Length; i < length; i++)
             {
                 T table = new T();
-                table.OnInit(groupArr, allArr[i]);
+                table.OnInit(nameGroupArr, allArr[i]);
                 DataList.Add(table);
                 DataDic.Add(table.Id, table);
             }

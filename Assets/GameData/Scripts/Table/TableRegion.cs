@@ -1,10 +1,12 @@
 /*********************************************
  * 自动生成代码，禁止手动修改文件
- * Excel表名：D_地区表.xlsx.temp
- * 修改时间：2024/07/28 11:24:39
+ * Excel表名：D_地区表.xlsx
+ * 修改时间：2024/07/30 05:39:41
  *********************************************/
 
 using Framework;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GameData
 {
@@ -21,14 +23,24 @@ namespace GameData
         public string Region { private set; get; }
         
         /// <summary>
-        /// 毒株名
+        /// 测试1
         /// </summary>
-        public string Poison_Name { private set; get; }
+        public List<string> List_Test1 { private set; get; }
         
         /// <summary>
-        /// 毒株说明
+        /// 测试2
         /// </summary>
-        public string Poison_Desc { private set; get; }
+        public List<int> List_Test2 { private set; get; }
+        
+        /// <summary>
+        /// 测试3
+        /// </summary>
+        public List<long> List_Test3 { private set; get; }
+        
+        /// <summary>
+        /// 测试4
+        /// </summary>
+        public List<float> List_Test4 { private set; get; }
 
         public override void OnInit(string[] group, string dataStrArr)
         {
@@ -38,19 +50,27 @@ namespace GameData
                 switch (group[i])
                 {
                     case "id":
-                        Id = data[i].ToInt();;
+                        Id = data[i].ToInt();
                         break;
 
                     case "region":
-                        Region = data[i];;
+                        Region = data[i];
                         break;
 
-                    case "poison_name":
-                        Poison_Name = data[i];;
+                    case "test1":
+                        List_Test1 = data[i].Split(',').ToList();
                         break;
 
-                    case "poison_desc":
-                        Poison_Desc = data[i];;
+                    case "test2":
+                        List_Test2 = data[i].SplitToIntList(',');
+                        break;
+
+                    case "test3":
+                        List_Test3 = data[i].SplitToLongList(',');
+                        break;
+
+                    case "test4":
+                        List_Test4 = data[i].SplitToFloatList(',');
                         break;
 
                     default:

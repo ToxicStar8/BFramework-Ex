@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using OfficeOpenXml;
 using System.IO;
 using System.Globalization;
+using System.Xml.Linq;
 
 namespace ExcelTools
 {
@@ -106,10 +107,11 @@ namespace GameData
                         for (int i = 0; i < excelPackage.Workbook.Worksheets.Count; i++)
                         {
                             var table = excelPackage.Workbook.Worksheets[i + 1];
-                            Console.WriteLine("导出" + excelPackage.File.Name + "中...");
+                            var excelName = excelPackage.File.Name.Replace(".temp", "");
+                            Console.WriteLine($"导出{excelName}中...");
                             CreateTableTxt(table);
-                            CreateTableScript(table, excelPackage.File.Name);
-                            typeofStr += "typeof(" + CreateTableCtrlScript(table, excelPackage.File.Name) + "),\r\n\t\t\t";
+                            CreateTableScript(table, excelName);
+                            typeofStr += "typeof(" + CreateTableCtrlScript(table, excelName) + "),\r\n\t\t\t";
                             Console.WriteLine(table.Name + "已完成...");
 
                             isOutExcel = true;
@@ -252,17 +254,19 @@ namespace GameData
  *********************************************/
 
 using Framework;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GameData
 {
     public partial class #TableName : TableBase
     {#ValueStr
-        public override void OnInit(string[] group, string dataStrArr)
+        public override void OnInit(string[] nameGroupArr, string dataStrArr)
         {
             var data = dataStrArr.Split('^');
-            for (int i = 0,length = group.Length; i < length; i++)
+            for (int i = 0,length = nameGroupArr.Length; i < length; i++)
             {
-                switch (group[i])
+                switch (nameGroupArr[i])
                 {#CaseStr
                     default:
                         break;
@@ -286,7 +290,7 @@ namespace GameData
 
             //拿到变量名
             string outValueStr = string.Empty;
-            for (int i = 1, column = column = table.Dimension.End.Column; i <= column; i++)
+            for (int i = 1, column = table.Dimension.End.Column; i <= column; i++)
             {
                 //空数据就结束
                 if (table.Cells[1, i].Value == null)
@@ -362,6 +366,10 @@ namespace GameData
                     outValueStr = "int";
                     break;
 
+                case "long":
+                    outValueStr = "long";
+                    break;
+
                 case "float":
                     outValueStr = "float";
                     break;
@@ -370,8 +378,20 @@ namespace GameData
                     outValueStr = "string";
                     break;
 
-                case "array":
-                    outValueStr = "string";
+                case "array_string":
+                    outValueStr = "List<string>";
+                    break;
+
+                case "array_int":
+                    outValueStr = "List<int>";
+                    break;
+
+                case "array_long":
+                    outValueStr = "List<long>";
+                    break;
+
+                case "array_float":
+                    outValueStr = "List<float>";
                     break;
             }
             return outValueStr;
@@ -389,6 +409,10 @@ namespace GameData
                     outValueStr = name;
                     break;
 
+                case "long":
+                    outValueStr = name;
+                    break;
+
                 case "float":
                     outValueStr = name;
                     break;
@@ -397,8 +421,11 @@ namespace GameData
                     outValueStr = name;
                     break;
 
-                case "array":
-                    outValueStr = "Array_" + name;
+                case "array_string":
+                case "array_int":
+                case "array_long":
+                case "array_float":
+                    outValueStr = "List_" + name;
                     break;
             }
             return outValueStr;
@@ -413,19 +440,35 @@ namespace GameData
             switch (typeStr)
             {
                 case "int":
-                    outTypeStr = "data[i].ToInt();";
+                    outTypeStr = "data[i].ToInt()";
+                    break;
+
+                case "long":
+                    outTypeStr = "data[i].ToLong()";
                     break;
 
                 case "float":
-                    outTypeStr = "data[i].ToFloat();";
+                    outTypeStr = "data[i].ToFloat()";
                     break;
 
                 case "string":
-                    outTypeStr = "data[i];";
+                    outTypeStr = "data[i]";
                     break;
 
-                case "array":
-                    outTypeStr = "data[i];";
+                case "array_string":
+                    outTypeStr = "data[i].Split(',').ToList()";
+                    break;
+
+                case "array_int":
+                    outTypeStr = "data[i].SplitToIntList(',')";
+                    break;
+
+                case "array_long":
+                    outTypeStr = "data[i].SplitToLongList(',')";
+                    break;
+
+                case "array_float":
+                    outTypeStr = "data[i].SplitToFloatList(',')";
                     break;
             }
             return outTypeStr;

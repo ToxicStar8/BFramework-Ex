@@ -164,11 +164,13 @@ namespace Framework
         public static List<int> SplitToIntList(this string strValue, char c)
         {
             List<int> list = new List<int>();
-            foreach (string item in strValue.Split(c))
+            var strArr = strValue.Split(c);
+            for (int i = 0,length = strArr.Length; i < length; i++)
             {
-                if (!item.IsNullOrEmpty())
+                var str = strArr[i];
+                if (!str.IsNullOrEmpty())
                 {
-                    list.Add(int.Parse(item));
+                    list.Add(int.Parse(str));
                 }
             }
             return list;
@@ -180,11 +182,13 @@ namespace Framework
         public static List<long> SplitToLongList(this string strValue, char c)
         {
             List<long> list = new List<long>();
-            foreach (string item in strValue.Split(c))
+            var strArr = strValue.Split(c);
+            for (int i = 0, length = strArr.Length; i < length; i++)
             {
-                if (!item.IsNullOrEmpty())
+                var str = strArr[i];
+                if (!str.IsNullOrEmpty())
                 {
-                    list.Add(long.Parse(item));
+                    list.Add(long.Parse(str));
                 }
             }
             return list;
@@ -196,14 +200,13 @@ namespace Framework
         public static List<float> SplitToFloatList(this string strValue, char c)
         {
             List<float> list = new List<float>();
-            if (!strValue.IsNullOrEmpty())
+            var strArr = strValue.Split(c);
+            for (int i = 0, length = strArr.Length; i < length; i++)
             {
-                foreach (string item in strValue.Split(c))
+                var str = strArr[i];
+                if (!str.IsNullOrEmpty())
                 {
-                    if (!item.IsNullOrEmpty())
-                    {
-                        list.Add(float.Parse(item));
-                    }
+                    list.Add(float.Parse(str));
                 }
             }
             return list;
@@ -215,11 +218,13 @@ namespace Framework
         public static List<double> SplitToDoubleList(this string strValue, char c)
         {
             List<double> list = new List<double>();
-            foreach (string item in strValue.Split(c))
+            var strArr = strValue.Split(c);
+            for (int i = 0, length = strArr.Length; i < length; i++)
             {
-                if (!item.IsNullOrEmpty())
+                var str = strArr[i];
+                if (!str.IsNullOrEmpty())
                 {
-                    list.Add(double.Parse(item));
+                    list.Add(double.Parse(str));
                 }
             }
             return list;

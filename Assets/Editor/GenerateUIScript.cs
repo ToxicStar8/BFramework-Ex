@@ -479,7 +479,7 @@ namespace GameData
                 case "Inf":
                     return "InputField";
                 case "Img":
-                    return "ImageEx";
+                    return "Image";
                 case "Raw":
                     return "RawImage";
                 case "Tg":

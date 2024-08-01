@@ -32,7 +32,6 @@ namespace GameData
 
         public override void OnShow(params object[] args)
         {
-        /*
             var tbRegionCtrl = GetTableCtrl<TableRegionCtrl>();
             for (int i = 0; i < tbRegionCtrl.Count; i++)
             {
@@ -42,33 +41,42 @@ namespace GameData
                 sb.Append(" ");
                 sb.Append(tbRegion.Region);
                 sb.Append(" ");
-                for (int j = 0; j < tbRegion.List_Test1.Count; j++)
-                {
-                    sb.Append(tbRegion.List_Test1[j]);
-                    sb.Append(" ");
-                }
+                //for (int j = 0; j < tbRegion.List_Test1.Count; j++)
+                //{
+                //    sb.Append(tbRegion.List_Test1[j]);
+                //    sb.Append(" ");
+                //}
 
-                for (int j = 0; j < tbRegion.List_Test2.Count; j++)
-                {
-                    sb.Append(tbRegion.List_Test2[j]);
-                    sb.Append(" ");
-                }
+                //for (int j = 0; j < tbRegion.List_Test2.Count; j++)
+                //{
+                //    sb.Append(tbRegion.List_Test2[j]);
+                //    sb.Append(" ");
+                //}
 
-                for (int j = 0; j < tbRegion.List_Test3.Count; j++)
-                {
-                    sb.Append(tbRegion.List_Test3[j]);
-                    sb.Append(" ");
-                }
+                //for (int j = 0; j < tbRegion.List_Test3.Count; j++)
+                //{
+                //    sb.Append(tbRegion.List_Test3[j]);
+                //    sb.Append(" ");
+                //}
 
-                for (int j = 0; j < tbRegion.List_Test4.Count; j++)
+                //for (int j = 0; j < tbRegion.List_Test4.Count; j++)
+                //{
+                //    sb.Append(tbRegion.List_Test4[j]);
+                //    sb.Append(" ");
+                //}
+
+                for (int j = 0; j < tbRegion.List_Test6.Count; j++)
                 {
-                    sb.Append(tbRegion.List_Test4[j]);
+                    var data = tbRegion.List_Test6[j];
+                    for (int k = 0; k < data.Length; k++)
+                    {
+                        sb.Append(data[k]);
+                    }
                     sb.Append(" ");
                 }
 
                 Log(sb.ToString());
             }
-            */
         }
 
         private void OnClick_Btn_Start()

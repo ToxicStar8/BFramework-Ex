@@ -394,6 +394,14 @@ namespace GameData
                 case "array_float":
                     outValueStr = "List<float>";
                     break;
+
+                case "composite_string":
+                    outValueStr = "List<string[]>";
+                    break;
+
+                case "composite_int":
+                    outValueStr = "List<int[]>";
+                    break;
             }
             return outValueStr;
         }
@@ -426,6 +434,8 @@ namespace GameData
                 case "array_int":
                 case "array_long":
                 case "array_float":
+                case "composite_string":
+                case "composite_int":
                     outValueStr = "List_" + name;
                     break;
             }
@@ -471,6 +481,15 @@ namespace GameData
                 case "array_float":
                     outTypeStr = "data[i].SplitToFloatList(',')";
                     break;
+
+                case "composite_string":
+                    outTypeStr = "data[i].SplitToStringArrList('|', ',')";
+                    break;
+
+                case "composite_int":
+                    outTypeStr = "data[i].SplitToIntArrList('|', ',')";
+                    break;
+
             }
             return outTypeStr;
         }

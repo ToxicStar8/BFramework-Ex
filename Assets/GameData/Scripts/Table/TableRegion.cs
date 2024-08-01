@@ -1,7 +1,7 @@
 /*********************************************
  * 自动生成代码，禁止手动修改文件
  * Excel表名：D_地区表.xlsx
- * 修改时间：2024/07/30 07:32:53
+ * 修改时间：2024/08/01 03:28:40
  *********************************************/
 
 using Framework;
@@ -41,6 +41,16 @@ namespace GameData
         /// 测试4
         /// </summary>
         public List<float> List_Test4 { private set; get; }
+        
+        /// <summary>
+        /// 测试5
+        /// </summary>
+        public List<string[]> List_Test5 { private set; get; }
+        
+        /// <summary>
+        /// 测试6
+        /// </summary>
+        public List<int[]> List_Test6 { private set; get; }
 
         public override void OnInit(string[] nameGroupArr, string dataStrArr)
         {
@@ -71,6 +81,14 @@ namespace GameData
 
                     case "test4":
                         List_Test4 = data[i].SplitToFloatList(',');
+                        break;
+
+                    case "test5":
+                        List_Test5 = data[i].SplitToStringArrList('|', ',');
+                        break;
+
+                    case "test6":
+                        List_Test6 = data[i].SplitToIntArrList('|', ',');
                         break;
 
                     default:

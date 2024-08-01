@@ -165,7 +165,7 @@ namespace Framework
         {
             List<int> list = new List<int>();
             var strArr = strValue.Split(c);
-            for (int i = 0,length = strArr.Length; i < length; i++)
+            for (int i = 0, length = strArr.Length; i < length; i++)
             {
                 var str = strArr[i];
                 if (!str.IsNullOrEmpty())
@@ -225,6 +225,44 @@ namespace Framework
                 if (!str.IsNullOrEmpty())
                 {
                     list.Add(double.Parse(str));
+                }
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// 按字符c1 c2分割，并转化成 List<string[]>
+        /// </summary>
+        public static List<string[]> SplitToStringArrList(this string strValue, char c1, char c2)
+        {
+            List<string[]> list = new List<string[]>();
+            var compositeStrArr = strValue.Split(c1);
+            for (int i = 0, length = compositeStrArr.Length; i < length; i++)
+            {
+                var compositeStr = compositeStrArr[i];
+                if (!compositeStr.IsNullOrEmpty())
+                {
+                    var strArr = compositeStr.Split(c2);
+                    list.Add(strArr);
+                }
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// 按字符c1 c2分割，并转化成 List<int[]>
+        /// </summary>
+        public static List<int[]> SplitToIntArrList(this string strValue, char c1, char c2)
+        {
+            List<int[]> list = new List<int[]>();
+            var compositeStrArr = strValue.Split(c1);
+            for (int i = 0, length = compositeStrArr.Length; i < length; i++)
+            {
+                var compositeStr = compositeStrArr[i];
+                if (!compositeStr.IsNullOrEmpty())
+                {
+                    var intArr = compositeStr.SplitToIntArr(c2);
+                    list.Add(intArr);
                 }
             }
             return list;

@@ -28,7 +28,7 @@ namespace Framework
         public void Init(Type[] typeArr)
         {
             //初始化表格
-            for (int i = 0,length = typeArr.Length; i < length; i++)
+            for (int i = 0, length = typeArr.Length; i < length; i++)
             {
                 var tableType = typeArr[i];
                 var tableCtrl = Activator.CreateInstance(tableType) as ITableCtrlBase;
@@ -42,16 +42,16 @@ namespace Framework
         public T GetTableCtrl<T>() where T : class, ITableCtrlBase
         {
             Type type = typeof(T);
-            if(!_allTableDic.TryGetValue(type,out var tableCtrl))
+            if (!_allTableDic.TryGetValue(type, out var tableCtrl))
             {
-                GameGod.Instance.Log(E_Log.Error, type.Name ,"未进行初始化！");
+                GameGod.Instance.Log(E_Log.Error, type.Name, "未进行初始化！");
                 return null;
             }
 
             //用的时候再更新数据
             if (tableCtrl.GetCreateStatus() == 0)
             {
-                GameGod.Instance.Log(E_Log.Framework, "初始化表格",type.Name);
+                GameGod.Instance.Log(E_Log.Framework, "初始化表格", type.Name);
                 tableCtrl.OnInit();
             }
             return _allTableDic[type] as T;

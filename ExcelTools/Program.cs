@@ -204,8 +204,13 @@ namespace GameData
             //导出二进制文件
             using (var file = File.Create(_outTxtPath + $"/{table.Name}.bytes"))
             {
-                byte[] buffer = Encoding.UTF8.GetBytes(outStr);
-                file.Write(buffer,0,buffer.Length);
+                byte[] dataBuffer = Encoding.UTF8.GetBytes(outStr);
+                byte[] lengthBuffer = BitConverter.GetBytes((uint)dataBuffer.Length);
+
+                //导出二进制文件
+                file.Write(lengthBuffer, 0, lengthBuffer.Length);
+                file.Write(dataBuffer, 0, dataBuffer.Length);
+
                 file.Close();
             }
         }

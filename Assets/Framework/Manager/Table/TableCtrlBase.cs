@@ -4,10 +4,11 @@
  * 创建时间：2023/01/08 20:40:23
  *********************************************/
 using MainPackage;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
+using System.Text;
 using UnityEngine;
 
 namespace Framework
@@ -31,7 +32,7 @@ namespace Framework
         /// 数据列表
         /// </summary>
         public List<T> DataList { private set; get; } = new List<T>();
-        public Dictionary<int,T> DataDic { private set; get; } = new Dictionary<int, T>();
+        public Dictionary<int, T> DataDic { private set; get; } = new Dictionary<int, T>();
         public int Count => DataList.Count;
         public T this[int index] => GetDataByIndex(index);
 
@@ -53,7 +54,7 @@ namespace Framework
         /// </summary>
         public T GetDataById(int id)
         {
-            if(!DataDic.TryGetValue(id,out var table))
+            if (!DataDic.TryGetValue(id, out var table))
             {
                 GameGod.Instance.Log(E_Log.Error, "没有找到表数据 id", id.ToString());
             }
@@ -62,21 +63,34 @@ namespace Framework
 
         public int GetCreateStatus() => _initDataStatus;
 
+        private byte[] _arrUInt = new byte[4];
+
         public void OnInit()
         {
             _initDataStatus = 1;
 
             //表格的AB包不需要卸载
             var textAsset = GameGod.Instance.LoadManager.LoadSync<TextAsset>(TableName);
-            var allArr = textAsset.text.Split("`", System.StringSplitOptions.RemoveEmptyEntries);  //全部的文本
-            var nameGroupArr = allArr[0].Split('^');   //变量名的行
-            //从第二行开始出数据
-            for (int i = 1, length = allArr.Length; i < length; i++)
+            var bytes = textAsset.bytes;
+
+            using (MemoryStream ms = new MemoryStream(bytes))
             {
-                T table = new T();
-                table.OnInit(nameGroupArr, allArr[i]);
-                DataList.Add(table);
-                DataDic.Add(table.Id, table);
+                ms.Read(_arrUInt, 0, _arrUInt.Length);
+                var buffLength = BitConverter.ToUInt32(_arrUInt, 0);
+                var buffer = new byte[buffLength];
+                ms.Read(buffer, 0, (int)buffLength);
+
+                var text = Encoding.UTF8.GetString(buffer);
+                var allArr = text.Split("`", System.StringSplitOptions.RemoveEmptyEntries);  //全部的文本
+                var nameGroupArr = allArr[0].Split('^');   //变量名的行
+                //从第二行开始出数据
+                for (int i = 1, length = allArr.Length; i < length; i++)
+                {
+                    T table = new T();
+                    table.OnInit(nameGroupArr, allArr[i]);
+                    DataList.Add(table);
+                    DataDic.Add(table.Id, table);
+                }
             }
 
             _initDataStatus = 2;

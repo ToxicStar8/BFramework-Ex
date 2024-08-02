@@ -27,7 +27,7 @@ namespace Framework
                     GameGod.Instance.Log(E_Log.Error, "没有找到AB包！");
                     return;
                 }
-                var textAsset = abPackage.LoadAsset<TextAsset>(ConstDefine.ABInfoName + ".json");
+                var textAsset = abPackage.LoadAsset<TextAsset>(ConstDefine.ABInfoName + ".bytes");
                 //转化为ABInfo（AB包的索引
                 ABInfo = JsonMapper.ToObject<ABInfo>(textAsset.text);
                 abPackage.Unload(true);

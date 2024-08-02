@@ -194,9 +194,20 @@ namespace GameData
             //删除最后一个`即可
             sb.Remove(sb.Length - 1, 1);
 
-            var file = File.CreateText(_outTxtPath + $"/{table.Name}.txt");
-            file.WriteLine(sb.ToString().Trim());
-            file.Close();
+            var outStr = sb.ToString().Trim();
+            //导出文本
+            //using (var file = File.CreateText(_outTxtPath + $"/{table.Name}.txt"))
+            //{
+            //    file.WriteLine(outStr);
+            //    file.Close();
+            //}
+            //导出二进制文件
+            using (var file = File.Create(_outTxtPath + $"/{table.Name}.bytes"))
+            {
+                byte[] buffer = Encoding.UTF8.GetBytes(outStr);
+                file.Write(buffer,0,buffer.Length);
+                file.Close();
+            }
         }
 
         /// <summary>
@@ -232,7 +243,7 @@ namespace GameData
             tableCtrlName += "Ctrl";
             outAllStr = outAllStr.Replace("#TableCtrlName", tableCtrlName);
             outAllStr = outAllStr.Replace("#Time", DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss"));
-            outAllStr = outAllStr.Replace("#TextName", "\"" + table.Name + ".txt\"");
+            outAllStr = outAllStr.Replace("#TextName", "\"" + table.Name + ".bytes\"");
             outAllStr = outAllStr.Replace("#ExcelName", excelName);
 
             var file = File.CreateText(_outScriptPath + $"/{tableCtrlName}.cs");

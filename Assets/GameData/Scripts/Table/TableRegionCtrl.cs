@@ -1,7 +1,7 @@
 /*********************************************
  * 自动生成代码，禁止手动修改文件
  * Excel表名：D_地区表.xlsx
- * 修改时间：2024/08/01 03:28:40
+ * 修改时间：2024/08/02 09:57:20
  *********************************************/
 
 using Framework;
@@ -10,6 +10,6 @@ namespace GameData
 {
     public partial class TableRegionCtrl : TableCtrlBase<TableRegion>
     {
-        public override string TableName => "tb_region.txt";
+        public override string TableName => "tb_region.bytes";
     }
 }

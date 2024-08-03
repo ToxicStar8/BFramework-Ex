@@ -22,7 +22,7 @@ namespace GameData
             //初始化表格
             GameGod.Instance.TableManager.Init(TableTypes.TableCtrlTypeArr);
             //初始化Module
-            GameGod.Instance.ModuleManager.Init(ModuleTypes.ModuleTypeArr);
+            GameGod.Instance.ModuleManager.InitModuleType(ModuleTypes.ModuleTypeArr);
             //背景音乐
             GameGod.Instance.AudioManager.PlayBackground("RetroComedy.ogg");
             //红点树启动

@@ -19,6 +19,11 @@ namespace Framework
     public class ModuleManager : ManagerBase
     {
         /// <summary>
+        /// 全部的Module类型
+        /// </summary>
+        private Type[] _allModuleType;
+
+        /// <summary>
         /// 全部Module的字典
         /// </summary>
         private Dictionary<string, ModuleBase> _allModuleDic;
@@ -34,12 +39,23 @@ namespace Framework
             _savePath = Application.persistentDataPath + "/";
         }
 
-        public void Init(Type[] typeArr)
+        /// <summary>
+        /// 初始化存档类型
+        /// </summary>
+        public void InitModuleType(Type[] typeArr)
+        {
+            _allModuleType = typeArr;
+        }
+
+        /// <summary>
+        /// New全部的Module
+        /// </summary>
+        public void NewAllModule()
         {
             //初始化Module
-            for (int i = 0, length = typeArr.Length; i < length; i++)
+            for (int i = 0, length = _allModuleType.Length; i < length; i++)
             {
-                var moduleType = typeArr[i];
+                var moduleType = _allModuleType[i];
                 var moduleBase = Activator.CreateInstance(moduleType) as ModuleBase;
                 moduleBase.OnInit();
                 _allModuleDic[moduleType.Name] = moduleBase;
@@ -52,12 +68,37 @@ namespace Framework
         public T GetModule<T>() where T : ModuleBase
         {
             Type type = typeof(T);
+            return GetModuleBase(type) as T;
+        }
+
+        /// <summary>
+        /// 获取ModuleBase
+        /// </summary>
+        public ModuleBase GetModuleBase(Type type)
+        {
             if (!_allModuleDic.ContainsKey(type.Name))
             {
                 GameGod.Instance.Log(E_Log.Error, type.Name, "未进行初始化！");
                 return null;
             }
-            return _allModuleDic[type.Name] as T;
+            return _allModuleDic[type.Name];
+        }
+
+        /// <summary>
+        /// 获取任意的Module是否为空
+        /// </summary>
+        public bool GetAnyModulePathIsNull()
+        {
+            for (int i = 0, length = _allModuleType.Length; i < length; i++)
+            {
+                var type = _allModuleType[i];
+                bool isNull = GetModulePathIsNull(type);
+                if (isNull)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>
@@ -66,6 +107,14 @@ namespace Framework
         public bool GetModulePathIsNull<T>()
         {
             Type type = typeof(T);
+            return GetModulePathIsNull(type);
+        }
+
+        /// <summary>
+        /// 获取指定的Module是否有存档在本地
+        /// </summary>
+        private bool GetModulePathIsNull(Type type)
+        {
             var filePath = _savePath + type.Name;
             if (!File.Exists(filePath))
             {
@@ -75,16 +124,45 @@ namespace Framework
         }
 
         /// <summary>
+        /// 保存全部Module数据到本地
+        /// </summary>
+        public void SaveAllModule()
+        {
+            for (int i = 0, length = _allModuleType.Length; i < length; i++)
+            {
+                var type = _allModuleType[i];
+                SaveModule(type);
+            }
+        }
+
+        /// <summary>
         /// 保存Module数据到本地
         /// </summary>
         public void SaveModule<T>() where T : ModuleBase
         {
             Type type = typeof(T);
-            var module = GetModule<T>();
+            SaveModule(type);
+        }
+
+        private void SaveModule(Type type)
+        {
+            var module = GetModuleBase(type);
             if (module != null)
             {
                 File.WriteAllText(_savePath + type.Name, JsonMapper.ToJson(module));
                 GameGod.Instance.Log(E_Log.Framework, type.Name, "保存成功");
+            }
+        }
+
+        /// <summary>
+        /// 读取本地全部数据到Module
+        /// </summary>
+        public void LoadAllModule()
+        {
+            for (int i = 0, length = _allModuleType.Length; i < length; i++)
+            {
+                var type = _allModuleType[i];
+                LoadModule(type);
             }
         }
 
@@ -94,15 +172,24 @@ namespace Framework
         public void LoadModule<T>() where T : ModuleBase
         {
             Type type = typeof(T);
+            LoadModule(type);
+        }
+
+        /// <summary>
+        /// 读取本地数据到Module
+        /// </summary>
+        private void LoadModule(Type type)
+        {
             var filePath = _savePath + type.Name;
-            if(!File.Exists(filePath))
+            if (!File.Exists(filePath))
             {
                 GameGod.Instance.Log(E_Log.Error, type.Name, "存档不存在");
                 return;
             }
 
             var jsonData = File.ReadAllText(_savePath + type.Name);
-            var moduleBase = JsonMapper.ToObject<T>(jsonData);
+            var obj = JsonMapper.ToObject(jsonData, type);
+            var moduleBase = obj as ModuleBase;
             moduleBase.OnLoad();
             _allModuleDic[type.Name] = moduleBase;
             GameGod.Instance.Log(E_Log.Framework, type.Name, "加载成功");
@@ -121,7 +208,7 @@ namespace Framework
         }
 
         public override void OnUpdate() { }
-        public override void OnDispose() 
+        public override void OnDispose()
         {
             foreach (var item in _allModuleDic)
             {

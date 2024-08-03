@@ -15,8 +15,6 @@ namespace Framework
     /// </summary>
     public abstract class ModuleBase : GameBase
     {
-        protected Coroutine Coroutine;
-
         /// <summary>
         /// 初始化Module，只有Init时会执行，Load时不执行
         /// </summary>
@@ -85,12 +83,6 @@ namespace Framework
                 }
                 _eventList.Clear();
                 _eventList = null;
-            }
-
-            //移除协程
-            if (Coroutine != null)
-            {
-                GameGod.Instance.StopCoroutine(Coroutine);
             }
         }
     }

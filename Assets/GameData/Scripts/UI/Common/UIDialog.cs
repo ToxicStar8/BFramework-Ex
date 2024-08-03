@@ -13,7 +13,7 @@ namespace GameData
 {
     public class UIDialogData
     {
-        public string Title;
+        public string Title = "提示";
         public string Content;
         public Action ConfirmCallback;
         public Action CancelCallback;

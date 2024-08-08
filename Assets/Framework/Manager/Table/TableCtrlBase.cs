@@ -13,7 +13,7 @@ namespace Framework
     /// <summary>
     /// 表控制器基类
     /// </summary>
-    public abstract class TableCtrlBase<T> : ITableCtrlBase where T : TableBase, new()        // 先接口 再限定T，如果先限定T再写接口会判定这是T的接口
+    public abstract class TableCtrlBase<T> : GameBase, ITableCtrlBase where T : TableBase, new()        // 先接口 再限定T，如果先限定T再写接口会判定这是T的接口
     {
         /// <summary>
         /// 表名
@@ -68,7 +68,7 @@ namespace Framework
             var textAsset = GameGod.Instance.LoadManager.LoadSync<TextAsset>(TableName);
             var allArr = textAsset.text.Split("`", System.StringSplitOptions.RemoveEmptyEntries);  //全部的文本
             var nameGroupArr = allArr[0].Split('^');   //变量名的行
-            //从第二行开始出数据
+                                                       //从第二行开始出数据
             for (int i = 1, length = allArr.Length; i < length; i++)
             {
                 T table = new T();

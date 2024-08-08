@@ -3,6 +3,7 @@
  * 所有游戏对象的基类 存放通用方法
  * 创建时间：2023/01/08 20:40:23
  *********************************************/
+using Cysharp.Threading.Tasks;
 using LitJson;
 using MainPackage;
 using System;
@@ -90,9 +91,17 @@ namespace Framework
         /// <summary>
         /// 加载Sprite
         /// </summary>
-        protected virtual Sprite GetSprite(LoadHelper loadHelper, string atlasName, string spriteName)
+        protected virtual Sprite GetSpriteSync(LoadHelper loadHelper, string atlasName, string spriteName)
         {
             var sp = loadHelper.GetSpriteSync(atlasName, spriteName);
+            return sp;
+        }
+        /// <summary>
+        /// 加载Sprite
+        /// </summary>
+        protected virtual async UniTask<Sprite> GetSpriteAsync(LoadHelper loadHelper, string atlasName, string spriteName)
+        {
+            var sp = await loadHelper.GetSpriteAsync(atlasName, spriteName);
             return sp;
         }
         #endregion

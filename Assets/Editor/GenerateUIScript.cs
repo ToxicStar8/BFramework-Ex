@@ -487,7 +487,7 @@ namespace GameData
                 case "Sd":
                     return "Slider";
                 case "Tmp":
-                    return "TextMeshProUGUI";
+                    return "TmpEx";
                 case "Txt":
                     return "TextEx";
                 case "Rt":

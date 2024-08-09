@@ -94,7 +94,7 @@ namespace Framework
                 fontPath = "Assets" + fontPath.Split("Assets")[1];
                 tmp.font = UnityEditor.AssetDatabase.LoadAssetAtPath<TMPro.TMP_FontAsset>(fontPath);
             }
-            tmp.richText = false;
+            //tmp.richText = false;
             tmp.raycastTarget = false;
             tmp.text = "TmpEx...";
             tmp.color = "#323232".ToColor32();
@@ -116,7 +116,7 @@ namespace Framework
                 fontPath = "Assets" + fontPath.Split("Assets")[1];
                 tmp2.font = UnityEditor.AssetDatabase.LoadAssetAtPath<TMPro.TMP_FontAsset>(fontPath);
             }
-            tmp2.richText = false;
+            //tmp2.richText = false;
             tmp2.raycastTarget = false;
             tmp2.text = "TmpEx...";
             tmp2.color = "#323232".ToColor32();

@@ -276,6 +276,14 @@ namespace Framework
             return string.IsNullOrEmpty(strValue);
         }
 
+        /// <summary>
+        /// 是否为null或者空格
+        /// </summary>
+        public static bool IsNullOrWhiteSpace(this string strValue)
+        {
+            return string.IsNullOrWhiteSpace(strValue);
+        }
+
         public static string ToJson(this string str)
         {
             return JsonMapper.ToJson(str);

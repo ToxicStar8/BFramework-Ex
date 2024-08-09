@@ -59,34 +59,9 @@ namespace Framework
             var dirInfo = new DirectoryInfo(uiRootPath);
 
             string targetName = string.Empty;
-            //UI打开方式
-            if (go.name.StartsWith("UI"))
-            {
-                //直接就是脚本名
-                targetName = go.name.Replace("(Clone)", "") + ".cs";
-            }
 
-            //Unit打开方式
-            if (go.name.EndsWith("Unit"))
-            {
-                var goName = go.name.Replace("(Clone)", "") + ".cs";
-                //判断是否为独立Unit
-                var parentGo = go.transform.parent;
-                if (parentGo != null && !parentGo.name.StartsWith("Canvas"))
-                {
-                    while (!parentGo.name.StartsWith("UI"))
-                    {
-                        parentGo = parentGo.parent;
-                    }
-                    //UI名+下划线+Unit名
-                    targetName = parentGo.name + "_" + goName;
-                }
-                else
-                {
-                    //默认名+下划线+Unit名
-                    targetName = "Main_" + goName;
-                }
-            }
+            //直接就是脚本名
+            targetName = go.name.Replace("(Clone)", "") + ".cs";
 
             //遍历脚本文件
             foreach (var file in dirInfo.GetFileSystemInfos("*.cs", SearchOption.AllDirectories))

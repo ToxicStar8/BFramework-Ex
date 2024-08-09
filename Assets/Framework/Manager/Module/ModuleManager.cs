@@ -57,7 +57,7 @@ namespace Framework
             {
                 var moduleType = _allModuleType[i];
                 var moduleBase = Activator.CreateInstance(moduleType) as ModuleBase;
-                moduleBase.OnInit();
+                moduleBase.OnNew();
                 _allModuleDic[moduleType.Name] = moduleBase;
             }
         }
@@ -78,7 +78,7 @@ namespace Framework
         {
             if (!_allModuleDic.ContainsKey(type.Name))
             {
-                GameGod.Instance.Log(E_Log.Error, type.Name, "未进行初始化！");
+                GameGod.Instance.Log(E_Log.Error, "未初始化Module", type.Name);
                 return null;
             }
             return _allModuleDic[type.Name];
@@ -150,7 +150,7 @@ namespace Framework
             if (module != null)
             {
                 File.WriteAllText(_savePath + type.Name, JsonMapper.ToJson(module));
-                GameGod.Instance.Log(E_Log.Framework, type.Name, "保存成功");
+                GameGod.Instance.Log(E_Log.Framework, "保存Module", type.Name);
             }
         }
 
@@ -159,6 +159,9 @@ namespace Framework
         /// </summary>
         public void LoadAllModule()
         {
+            //先注销原来的，再读取新的
+            CloseAllModule();
+
             for (int i = 0, length = _allModuleType.Length; i < length; i++)
             {
                 var type = _allModuleType[i];
@@ -192,7 +195,7 @@ namespace Framework
             var moduleBase = obj as ModuleBase;
             moduleBase.OnLoad();
             _allModuleDic[type.Name] = moduleBase;
-            GameGod.Instance.Log(E_Log.Framework, type.Name, "加载成功");
+            GameGod.Instance.Log(E_Log.Framework, "加载Module", type.Name);
         }
 
         /// <summary>

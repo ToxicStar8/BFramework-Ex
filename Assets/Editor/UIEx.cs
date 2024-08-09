@@ -22,19 +22,20 @@ namespace Framework
         public static void CreateButtonEx()
         {
             var trans = Selection.activeTransform;
-            EditorApplication.ExecuteMenuItem("GameObject/UI/Legacy/Button");
+            EditorApplication.ExecuteMenuItem("GameObject/UI/Button - TextMeshPro");
             var btn = Selection.activeTransform.GetComponent<Button>();
             var go = btn.gameObject;
             DestroyImmediate(btn);
             btn = go.AddComponent<ButtonEx>();
-
-            var img = Selection.activeTransform.GetComponent<Image>();
             go.transform.SetParent(trans);
+            go.transform.SetLocalIdentity();
+
+            var img = go.GetComponent<Image>();
             DestroyImmediate(img);
             img = go.AddComponent<ImageEx>();
             btn.targetGraphic = img;
 
-            var txt = ReplaceTmp(go.GetComponentInChildren<Text>());
+            var txt = ReplaceTmp(go.GetComponentInChildren<TextMeshProUGUI>());
             txt.text = "Button";
         }
 
@@ -49,25 +50,38 @@ namespace Framework
             img = go.AddComponent<ImageEx>();
             img.raycastTarget = false;
             go.transform.SetParent(trans);
+            go.transform.SetLocalIdentity();
         }
 
-        [MenuItem("GameObject/UI/TextEx", false, 2)]
-        public static void CreateTextEx()
+        [MenuItem("GameObject/UI/TmpEx", false, 2)]
+        public static void CreateTmpEx()
         {
             var trans = Selection.activeTransform;
-            EditorApplication.ExecuteMenuItem("GameObject/UI/Legacy/Text");
-            var txt = ReplaceTmp(Selection.activeTransform.GetComponent<Text>());
-            txt.name = "Txt_";
+            EditorApplication.ExecuteMenuItem("GameObject/UI/Text - TextMeshPro");
+            var txt = ReplaceTmp(Selection.activeTransform.GetComponent<TextMeshProUGUI>());
+            txt.name = "Tmp_";
             var go = txt.gameObject;
             go.transform.SetParent(trans);
+            go.transform.SetLocalIdentity();
         }
+
+        //[MenuItem("GameObject/UI/TextEx", false, 2)]
+        //public static void CreateTextEx()
+        //{
+        //    var trans = Selection.activeTransform;
+        //    EditorApplication.ExecuteMenuItem("GameObject/UI/Legacy/Text");
+        //    var txt = ReplaceTmp(Selection.activeTransform.GetComponent<Text>());
+        //    txt.name = "Txt_";
+        //    var go = txt.gameObject;
+        //    go.transform.SetParent(trans);
+        //}
         #endregion
 
         #region Replace Text
         /// <summary>
-        /// Text替换成TextEx
+        /// Text替换成TmpEx
         /// </summary>
-        private static TextMeshProUGUI ReplaceTmp(Text txt)
+        private static TmpEx ReplaceTmp(Text txt)
         {
             var go = txt.gameObject;
             DestroyImmediate(txt);
@@ -89,28 +103,28 @@ namespace Framework
         /// <summary>
         /// Tmp替换成TmpEx
         /// </summary>
-        private static TextMeshProUGUI ReplaceTmp(TextMeshProUGUI tmp)
+        private static TmpEx ReplaceTmp(TextMeshProUGUI tmp)
         {
             var go = tmp.gameObject;
             DestroyImmediate(tmp);
-            tmp = go.AddComponent<TmpEx>();
+            TmpEx tmp2 = go.AddComponent<TmpEx>();
             var fontDirPath = Application.dataPath + "/GameData/Art/Font/";
             var fileArr = new DirectoryInfo(fontDirPath).GetFiles("*.asset", SearchOption.AllDirectories);
             if (fileArr.Length != 0)
             {
                 var fontPath = fileArr[0].FullName;
                 fontPath = "Assets" + fontPath.Split("Assets")[1];
-                tmp.font = UnityEditor.AssetDatabase.LoadAssetAtPath<TMPro.TMP_FontAsset>(fontPath);
+                tmp2.font = UnityEditor.AssetDatabase.LoadAssetAtPath<TMPro.TMP_FontAsset>(fontPath);
             }
-            tmp.richText = false;
-            tmp.raycastTarget = false;
-            tmp.text = "TmpEx...";
-            tmp.color = "#323232".ToColor32();
-            return tmp;
+            tmp2.richText = false;
+            tmp2.raycastTarget = false;
+            tmp2.text = "TmpEx...";
+            tmp2.color = "#323232".ToColor32();
+            return tmp2;
         }
 
         [MenuItem("CONTEXT/Text/替换为TmpEx")]
-        public static void TextReplaceTextEx()
+        public static void TextReplaceTmpEx()
         {
             ReplaceTmp(Selection.activeTransform.GetComponent<Text>());
         }
@@ -154,6 +168,16 @@ namespace Framework
             var go = img.gameObject;
             DestroyImmediate(img);
             var rawImg = go.AddComponent<RawImage>();
+            rawImg.raycastTarget = false;
+        }
+
+        [MenuItem("CONTEXT/RawImage/替换为Image")]
+        public static void RawImageReplaceImage()
+        {
+            var rawImg = Selection.activeTransform.GetComponent<RawImage>();
+            var go = rawImg.gameObject;
+            DestroyImmediate(rawImg);
+            var img = go.AddComponent<ImageEx>();
             rawImg.raycastTarget = false;
         }
 

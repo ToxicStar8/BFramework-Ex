@@ -17,12 +17,17 @@ namespace GameData
     /// </summary>
     public class PlayerModule : ModuleBase
     {
-        public static PlayerModule GetModule() => GameGod.Instance.ModuleManager.GetModule<PlayerModule>();
+        public string PlayerName {  get; private set; }
 
-        public override void OnInit()
+        public PlayerModule()
         {
-            //这里添加监听 todo：跟UI一样Dispose就注销监听
+            //这里添加监听，注销监听在Base自动完成
             //AddEventListener((ushort)ModuleEvent.ModuleTest, ModuleTest);
+        }
+
+        public override void OnNew()
+        {
+
         }
 
         public override void OnLoad()

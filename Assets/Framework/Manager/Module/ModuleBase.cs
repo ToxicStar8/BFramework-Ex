@@ -15,13 +15,18 @@ namespace Framework
     /// </summary>
     public abstract class ModuleBase : GameBase
     {
-        /// <summary>
-        /// 初始化Module，只有Init时会执行，Load时不执行
-        /// </summary>
-        public abstract void OnInit();
+        public ModuleBase()
+        {
+            Log(E_Log.Framework, "初始化Module", this.GetType().Name);
+        }
 
         /// <summary>
-        /// Load存档时执行，只有Load时会执行，Init时不执行
+        /// 初始化Module，只有New时会执行，Load时不执行
+        /// </summary>
+        public abstract void OnNew();
+
+        /// <summary>
+        /// Load存档时执行，只有Load时会执行，New时不执行
         /// </summary>
         public abstract void OnLoad();
 
@@ -84,6 +89,8 @@ namespace Framework
                 _eventList.Clear();
                 _eventList = null;
             }
+
+            Log(E_Log.Framework, "注销Module", this.GetType().Name);
         }
     }
 }

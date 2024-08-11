@@ -1,12 +1,13 @@
 /*********************************************
  * 自动生成代码，禁止手动修改文件
  * Excel表名：D_地区表.xlsx
- * 修改时间：2024/08/02 11:25:25
+ * 修改时间：2024/08/11 04:49:24
  *********************************************/
 
 using Framework;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace GameData
 {
@@ -51,6 +52,16 @@ namespace GameData
         /// 测试6
         /// </summary>
         public List<int[]> List_Test6 { private set; get; }
+        
+        /// <summary>
+        /// 测试7
+        /// </summary>
+        public Vector2 Test7 { private set; get; }
+        
+        /// <summary>
+        /// 测试8
+        /// </summary>
+        public Vector3 Test8 { private set; get; }
 
         public override void OnInit(string[] nameGroupArr, string dataStrArr)
         {
@@ -89,6 +100,14 @@ namespace GameData
 
                     case "test6":
                         List_Test6 = data[i].SplitToIntArrList('|', ',');
+                        break;
+
+                    case "test7":
+                        Test7 = data[i].ToVector2(Vector2.zero);
+                        break;
+
+                    case "test8":
+                        Test8 = data[i].ToVector3(Vector3.zero);
                         break;
 
                     default:

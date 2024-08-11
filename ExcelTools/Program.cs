@@ -273,6 +273,7 @@ namespace GameData
 using Framework;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace GameData
 {
@@ -395,6 +396,14 @@ namespace GameData
                     outValueStr = "string";
                     break;
 
+                case "vector2":
+                    outValueStr = "Vector2";
+                    break;
+
+                case "vector3":
+                    outValueStr = "Vector3";
+                    break;
+
                 case "array_string":
                     outValueStr = "List<string>";
                     break;
@@ -431,18 +440,11 @@ namespace GameData
             switch (valueStr)
             {
                 case "int":
-                    outValueStr = name;
-                    break;
-
                 case "long":
-                    outValueStr = name;
-                    break;
-
                 case "float":
-                    outValueStr = name;
-                    break;
-
                 case "string":
+                case "vector2":
+                case "vector3":
                     outValueStr = name;
                     break;
 
@@ -480,6 +482,14 @@ namespace GameData
 
                 case "string":
                     outTypeStr = "data[i]";
+                    break;
+
+                case "vector2":
+                    outTypeStr = "data[i].ToVector2(Vector2.zero)";
+                    break;
+
+                case "vector3":
+                    outTypeStr = "data[i].ToVector3(Vector3.zero)";
                     break;
 
                 case "array_string":

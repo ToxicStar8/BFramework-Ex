@@ -65,15 +65,24 @@ namespace GameData
                 //    sb.Append(" ");
                 //}
 
-                for (int j = 0; j < tbRegion.List_Test6.Count; j++)
-                {
-                    var data = tbRegion.List_Test6[j];
-                    for (int k = 0; k < data.Length; k++)
-                    {
-                        sb.Append(data[k]);
-                    }
-                    sb.Append(" ");
-                }
+                //for (int j = 0; j < tbRegion.List_Test6.Count; j++)
+                //{
+                //    var data = tbRegion.List_Test6[j];
+                //    for (int k = 0; k < data.Length; k++)
+                //    {
+                //        sb.Append(data[k]);
+                //    }
+                //    sb.Append(" ");
+                //}
+
+                sb.Append(tbRegion.Test7.x);
+                sb.Append(tbRegion.Test7.y);
+
+                sb.Append(" ");
+
+                sb.Append(tbRegion.Test8.x);
+                sb.Append(tbRegion.Test8.y);
+                sb.Append(tbRegion.Test8.z);
 
                 Log(sb.ToString());
             }

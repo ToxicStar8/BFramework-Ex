@@ -99,8 +99,7 @@ namespace Framework
 
         private void TryExecTimer()
         {
-            _waitStartQueue.TryDequeue(out var timerInfo);
-            if (timerInfo != null)
+            if (_waitStartQueue.TryDequeue(out var timerInfo))
             {
                 ExecTimer(timerInfo).Forget();
                 TryExecTimer();
@@ -137,7 +136,7 @@ namespace Framework
 #if !UNITY_WEBGL
             _waitStartQueue.Enqueue(timerInfo);
 #else
-            ExecTimer(timerInfo);
+            ExecTimer(timerInfo).Forget();
 #endif
         }
 

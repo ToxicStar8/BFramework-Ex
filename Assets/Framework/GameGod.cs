@@ -47,6 +47,7 @@ namespace Framework
         public FsmManager FsmManager { private set; get; }
         public ModuleManager ModuleManager { private set; get; }
         public RedPointManager RedPointManager { private set; get; }
+        public TaskManager TaskManager { private set; get; }
 
 
         private void Awake()
@@ -70,6 +71,7 @@ namespace Framework
             TimeManager = new TimerManager();
             FsmManager = new FsmManager();
             RedPointManager = new RedPointManager();
+            TaskManager = new TaskManager();
 
             LoadHelper = LoadHelper.Create();
         }
@@ -94,6 +96,7 @@ namespace Framework
             TimeManager.OnUpdate();
             FsmManager.OnUpdate();
             RedPointManager.OnUpdate();
+            TaskManager.OnUpdate();
             UpdateCallback?.Invoke();
         }
 
@@ -119,6 +122,7 @@ namespace Framework
             SocketManager.OnDispose();
             AudioManager.OnDispose();
             RedPointManager.OnDispose();
+            TaskManager.OnDispose();
         }
 
         /// <summary>

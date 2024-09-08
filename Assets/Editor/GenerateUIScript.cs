@@ -478,6 +478,8 @@ namespace GameData
                     return "ButtonEx";
                 case "Inf":
                     return "InputField";
+                case "TmpInf":
+                    return "TMP_InputField";
                 case "Img":
                     return "Image";
                 case "Raw":

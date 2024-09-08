@@ -296,5 +296,12 @@ namespace Framework
             GameGod.Instance.Log(E_Log.Warring, title, content);
         }
         #endregion
+
+        #region Task
+        protected virtual void AddTask(Action<TaskInfo> task)
+        {
+            GameGod.Instance.TaskManager.AddTask(task);
+        }
+        #endregion
     }
 }

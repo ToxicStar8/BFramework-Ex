@@ -15,7 +15,7 @@ namespace Framework
         public UniTask WaitComplete() => Utcs.Task;
 
         /// <summary>
-        /// Action中结束时必须执行这个操作
+        /// Task结束时必须执行这个操作
         /// </summary>
         public void OnComplete() => Utcs.TrySetResult();
 
@@ -51,9 +51,11 @@ namespace Framework
         {
             var taskInfo = TaskInfo.Create(task);
             TaskQueue.Enqueue(taskInfo);
+
+            TryDequeue().ToCoroutine();
         }
 
-        public override async void OnUpdate()
+        public async UniTask TryDequeue()
         {
             if (!_isRunning)
             {
@@ -66,9 +68,17 @@ namespace Framework
                     TaskInfo.Recycle(taskInfo);
 
                     _isRunning = false;
+                    await TryDequeue();
                 }
             }
         }
+
+        public void ClearAllTask()
+        {
+            TaskQueue.Clear();
+        }
+
+        public override void OnUpdate() { }
 
         public override void OnDispose()
         {

@@ -3,6 +3,7 @@
  * 脚本名：UIMainMenu.cs
  * 创建时间：2023/03/14 11:19:54
  *********************************************/
+using Cysharp.Threading.Tasks;
 using Framework;
 using MainPackage;
 using System;
@@ -86,6 +87,24 @@ namespace GameData
 
                 Log(sb.ToString());
             }
+
+            AddTask(async (task) =>
+            {
+                Log("哈哈1");
+                await UniTask.Delay(1000);
+                Log("哈哈2");
+
+                task.OnComplete();
+            });
+
+            AddTask(async (task) =>
+            {
+                Log("哈哈3");
+
+                await UniTask.CompletedTask;
+
+                task.OnComplete();
+            });
         }
 
         private void OnClick_Btn_Start()

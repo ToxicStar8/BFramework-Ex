@@ -26,8 +26,8 @@ namespace GameData
             //背景音乐
             GameGod.Instance.AudioManager.PlayBackground("RetroComedy.ogg");
             //红点树启动
-            var rootKey = GameGod.Instance.RedPointManager.RootNode.Key;
-            GameGod.Instance.RedPointManager.AddOrGetNodeByParentKey<UIMainMenu>(rootKey);
+            //var rootKey = GameGod.Instance.RedPointManager.RootNode.Key;
+            //GameGod.Instance.RedPointManager.AddOrGetNodeByParentKey<UIMainMenu>(rootKey);
             //正式启动
             GameGod.Instance.UIManager.OpenUI<UIMainMenu>(E_UILevel.Common);
         }

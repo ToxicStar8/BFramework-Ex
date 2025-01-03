@@ -106,15 +106,15 @@ namespace Framework
             }
         }
 
-        // TD 全局设置红点显示
+        //todo:全局设置红点显示
 
-        // TD 全局关闭红点显示
+        //todo:全局关闭红点显示
 
-        // TD 全局打开红点显示
+        //todo:全局打开红点显示
 
-        // TD 全局清除所有监听事件
+        //todo:全局清除所有监听事件
 
-        // TD 全局清除所有的红点数量
+        //todo:全局清除所有的红点数量
 
         public override void OnDispose()
         {

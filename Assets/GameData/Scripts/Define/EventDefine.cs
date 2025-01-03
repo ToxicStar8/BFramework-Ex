@@ -35,4 +35,12 @@ namespace GameData
     {
         ModuleTest = 20000,
     }
+
+    /// <summary>
+    /// RedPoint事件 每100一个模块
+    /// </summary>
+    public enum RedPointEvent
+    {
+        RedPointTest = 30000,
+    }
 }

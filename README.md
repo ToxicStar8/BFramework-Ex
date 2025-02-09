@@ -60,4 +60,7 @@
 使用`UGUI`实现基本的`UI`框架。</br>
 使用`UnitPool`管理`UI`自己的`Unit`。</br>
 
++ Task</br>
+使用`UniTask`实现任务队列逐步执行。</br>
+
 ## GameData

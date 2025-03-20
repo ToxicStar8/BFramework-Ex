@@ -40,7 +40,9 @@ public class ImageCustomClick : Image
             {
                 var collider = mColliders[i];
                 collider.enabled = true;
-                valid = collider.OverlapPoint(eventCamera.ScreenToWorldPoint(screenPoint));
+                //根据Unity项目不同，这里需要调整排序依据
+                var worldPoint = eventCamera.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, transform.position.z));
+                valid = collider.OverlapPoint(worldPoint);
                 collider.enabled = false;
                 if (valid)
                 {

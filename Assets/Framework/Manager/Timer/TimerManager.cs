@@ -173,6 +173,10 @@ namespace Framework
             {
                 GameGod.Instance.Log(E_Log.Warring, "定时器主动取消", timerInfo.TimerName);
             }
+            catch (Exception ex)
+            {
+                GameGod.Instance.Log(E_Log.Error, "定时器遇到意料之外的错误", ex.ToString());
+            }
             finally
             {
                 //不管是时间到了还是主动取消，都会在这里进行回收处理

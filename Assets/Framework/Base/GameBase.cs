@@ -283,13 +283,25 @@ namespace Framework
         {
             GameGod.Instance.Log(logType, title, content);
         }
+        protected virtual void Log(string content = null)
+        {
+            GameGod.Instance.Log(E_Log.Log, GetType().Name, content);
+        }
         protected virtual void Log(string title = null, string content = null)
         {
             GameGod.Instance.Log(E_Log.Log, title, content);
         }
+        protected virtual void LogError(string content = null)
+        {
+            GameGod.Instance.Log(E_Log.Error, GetType().Name, content);
+        }
         protected virtual void LogError(string title = null, string content = null)
         {
             GameGod.Instance.Log(E_Log.Error, title, content);
+        }
+        protected virtual void LogWarring(string content = null)
+        {
+            GameGod.Instance.Log(E_Log.Warring, GetType().Name, content);
         }
         protected virtual void LogWarring(string title = null, string content = null)
         {

@@ -34,7 +34,7 @@ namespace GameData
         /// </summary>
         public void RegisterUpdateCallback()
         {
-            AddEventListener((ushort)RedPointEvent.RedPointTest, Update_001);
+            GameGod.Instance.EventManager.AddEventListener((ushort)RedPointEvent.RedPointTest, Update_001);
         }
 
 
@@ -114,7 +114,7 @@ namespace GameData
                     break;
 
                 default:
-                    Log(E_Log.Error, "未知红点类型，Id=" + id.ToString());
+                    GameGod.Instance.Log(E_Log.Error, "未知红点类型，Id=" + id.ToString());
                     return -1;
             }
 

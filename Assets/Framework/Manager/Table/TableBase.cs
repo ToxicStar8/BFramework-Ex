@@ -14,7 +14,7 @@ namespace Framework
     /// <summary>
     /// 表基类
     /// </summary>
-    public abstract class TableBase : GameBase
+    public abstract class TableBase
     {
         public abstract int Id { protected set; get; }
         public int DataId => Id;

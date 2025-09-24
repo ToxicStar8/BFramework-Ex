@@ -57,6 +57,22 @@ namespace Framework
             return _allTableDic[type] as T;
         }
 
+        /// <summary>
+        /// 热重载
+        /// </summary>
+        public void HotReload()
+        {
+            foreach (var item in _allTableDic)
+            {
+                var tableCtrl = item.Value;
+                if (tableCtrl.GetCreateStatus() == 2)
+                {
+                    GameGod.Instance.Log(E_Log.Framework, "热重载表格", tableCtrl.GetType().Name);
+                    tableCtrl.OnInit();
+                }
+            }
+        }
+
         public override void OnUpdate() { }
         public override void OnDispose()
         {

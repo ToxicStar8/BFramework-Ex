@@ -5,9 +5,7 @@
  *********************************************/
 using MainPackage;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Framework
 {
@@ -16,17 +14,17 @@ namespace Framework
     /// </summary>
     public class EventManager : ManagerBase
     {
-        private Dictionary<ushort, Action<object[]>> _eventDic;
+        private Dictionary<uint, Action<object[]>> _eventDic;
 
         public override void OnInit() 
         {
-            _eventDic = new Dictionary<ushort, Action<object[]>>();
+            _eventDic = new();
         }
 
         /// <summary>
         /// 添加监听
         /// </summary>
-        public void AddEventListener(ushort eventNo, Action<object[]> callBack)
+        public void AddEventListener(uint eventNo, Action<object[]> callBack)
         {
             if (_eventDic.ContainsKey(eventNo))
             {
@@ -39,7 +37,7 @@ namespace Framework
         /// <summary>
         /// 移除监听
         /// </summary>
-        public void RemoveEventListener(ushort eventNo, Action<object[]> callBack = null)
+        public void RemoveEventListener(uint eventNo, Action<object[]> callBack = null)
         {
             if (_eventDic.ContainsKey(eventNo))
             {
@@ -50,7 +48,7 @@ namespace Framework
         /// <summary>
         /// 发送事件
         /// </summary>
-        public void SendEvent(ushort eventNo,params object[] args)
+        public void SendEvent(uint eventNo,params object[] args)
         {
             if (!_eventDic.TryGetValue(eventNo, out var callBack))
             {

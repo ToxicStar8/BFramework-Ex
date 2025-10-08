@@ -3,7 +3,7 @@
  * 数组方法扩展类
  * 创建时间：2023/12/27 11:25:23
  *********************************************/
-using LitJson;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,7 +18,7 @@ namespace Framework
     {
         public static string ToJson<T>(this T[] array)
         {
-            return JsonMapper.ToJson(array);
+            return JsonConvert.SerializeObject(array);
         }
 
         /// <summary>

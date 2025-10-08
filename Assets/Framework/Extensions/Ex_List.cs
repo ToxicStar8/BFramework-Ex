@@ -3,7 +3,7 @@
  * 列表方法扩展类
  * 创建时间：2023/01/08 20:40:23
  *********************************************/
-using LitJson;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -17,8 +17,9 @@ namespace Framework
     {
         public static string ToJson<T>(this List<T> list)
         {
-            return JsonMapper.ToJson(list);
+            return JsonConvert.SerializeObject(list);
         }
+
         /// <summary>
         /// 将List乱序排放
         /// </summary>

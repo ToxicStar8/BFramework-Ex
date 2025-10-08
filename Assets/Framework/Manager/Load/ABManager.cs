@@ -3,8 +3,8 @@
  * AB包管理器
  * 创建时间：2023/01/08 20:40:23
  *********************************************/
-using LitJson;
 using MainPackage;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Framework
@@ -29,7 +29,7 @@ namespace Framework
                 }
                 var textAsset = abPackage.LoadAsset<TextAsset>(ConstDefine.ABInfoName + ".bytes");
                 //转化为ABInfo（AB包的索引
-                ABInfo = JsonMapper.ToObject<ABInfo>(textAsset.text);
+                ABInfo = JsonConvert.DeserializeObject<ABInfo>(textAsset.text);
                 abPackage.Unload(true);
             }
         }

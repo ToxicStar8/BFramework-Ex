@@ -3,7 +3,7 @@
 // * 下载管理器
 // * 创建时间：2023/06/16 17:01:23
 // *********************************************/
-using LitJson;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -127,7 +127,7 @@ namespace MainPackage
             //将数据转化为列表
             var jsonData = _request.downloadHandler.text.ToString();
             GameEntry.Instance.Log(E_Log.Framework, jsonData);
-            ABMd5InfoList = JsonMapper.ToObject<List<ABMd5Info>>(jsonData);
+            ABMd5InfoList = JsonConvert.DeserializeObject<List<ABMd5Info>>(jsonData);
             //下载其余的AB包
             GameEntry.Instance.StartCoroutine(DownloadRely());
         }

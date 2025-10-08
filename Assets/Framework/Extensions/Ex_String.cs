@@ -3,7 +3,7 @@
  * 字符串方法扩展类
  * 创建时间：2023/01/08 20:40:23
  *********************************************/
-using LitJson;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,6 +14,11 @@ namespace Framework
     /// </summary>
     public static class Ex_String
     {
+        public static string ToJson(this string str)
+        {
+            return JsonConvert.SerializeObject(str);
+        }
+
         public static Color32 ToColor32(this string colorStr)
         {
             if (!colorStr.Contains('#'))
@@ -294,11 +299,6 @@ namespace Framework
         public static bool IsNullOrWhiteSpace(this string strValue)
         {
             return string.IsNullOrWhiteSpace(strValue);
-        }
-
-        public static string ToJson(this string str)
-        {
-            return JsonMapper.ToJson(str);
         }
     }
 }

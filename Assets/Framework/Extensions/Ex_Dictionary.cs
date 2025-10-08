@@ -3,7 +3,7 @@
  * 字典方法扩展类
  * 创建时间：2023/01/08 20:40:23
  *********************************************/
-using LitJson;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,7 +16,7 @@ namespace Framework
     {
         public static string ToJson<K, V>(this Dictionary<K,V> dic)
         {
-            return JsonMapper.ToJson(dic);
+            return JsonConvert.SerializeObject(dic);
         }
     }
 }

@@ -4,8 +4,8 @@
  * 对于网络游戏Module就是数据请求器以及数据缓存点，对于单机游戏Module就是数据的存档
  * 创建时间：2023/09/07 14:58:23
  *********************************************/
-using LitJson;
 using MainPackage;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -149,7 +149,7 @@ namespace Framework
             var module = GetModuleBase(type);
             if (module != null)
             {
-                File.WriteAllText(_savePath + type.Name, JsonMapper.ToJson(module));
+                File.WriteAllText(_savePath + type.Name, JsonConvert.SerializeObject(module));
                 GameGod.Instance.Log(E_Log.Framework, "保存Module", type.Name);
             }
         }
@@ -191,7 +191,7 @@ namespace Framework
             }
 
             var jsonData = File.ReadAllText(_savePath + type.Name);
-            var obj = JsonMapper.ToObject(jsonData, type);
+            var obj = JsonConvert.DeserializeObject(jsonData, type);
             var moduleBase = obj as ModuleBase;
             moduleBase.OnLoad();
             _allModuleDic[type.Name] = moduleBase;

@@ -3,8 +3,8 @@
  * Socket访问器
  * 创建时间：2023/01/08 20:40:23
  *********************************************/
-using LitJson;
 using MainPackage;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -50,13 +50,13 @@ namespace Framework
         /// <summary>
         /// 回调字典
         /// </summary>
-        private Dictionary<ushort, Action<JsonData>> _callbackDic;
+        private Dictionary<uint, Action<JsonData>> _callbackDic;
 
         private void Init(string url)
         {
             _url = url;
             _eventQueue = new Queue<SocketEvent>();
-            _callbackDic = new Dictionary<ushort, Action<JsonData>>();
+            _callbackDic = new Dictionary<uint, Action<JsonData>>();
 
             Socket = new WebSocket(_url);
             Socket.OnMessage += (sender, e) =>
@@ -109,8 +109,8 @@ namespace Framework
         /// </summary>
         public void SendMsg(string msg, Action<JsonData> callback)
         {
-            var jsonData = JsonMapper.ToObject(msg);
-            var proto = (ushort)jsonData["proto"].ToInt();
+            var jsonData = JsonConvert.DeserializeObject<JsonData>(msg);
+            var proto = jsonData.proto;
             _callbackDic[proto] = callback;
 
             GameGod.Instance.Log(E_Log.Proto, "WebSocket 发送消息", msg);
@@ -123,8 +123,8 @@ namespace Framework
         public void SendMsg(byte[] msg, Action<JsonData> callback)
         {
             var strMsg = Encoding.UTF8.GetString(msg);
-            var jsonData = JsonMapper.ToObject(strMsg);
-            var proto = (ushort)jsonData["proto"].ToInt();
+            var jsonData = JsonConvert.DeserializeObject<JsonData>(strMsg);
+            var proto = jsonData.proto;
             _callbackDic[proto] = callback;
 
             GameGod.Instance.Log(E_Log.Proto, "WebSocket 发送消息", msg.ToString());
@@ -201,8 +201,8 @@ namespace Framework
         {
             //根据实际项目情况修改
             var msg = evt.msg;
-            var jsonData = JsonMapper.ToObject(msg);
-            var proto = (ushort)jsonData["proto"];
+            var jsonData = JsonConvert.DeserializeObject<JsonData>(msg);
+            var proto = jsonData.proto;
             //如果有监听 就不需要分发消息
             if (_callbackDic.TryGetValue(proto, out var callback))
             {
@@ -235,5 +235,11 @@ namespace Framework
             this.msg = msg;
             this.bytes = bytes;
         }
+    }
+
+    public class JsonData
+    {
+        public uint proto;
+        public object data;
     }
 }

@@ -3,8 +3,8 @@
  * 打AB包工具
  * 创建时间：2022/12/29 15:23:46
  *********************************************/
-using LitJson;
 using MainPackage;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -162,7 +162,7 @@ namespace Framework
             //存储完毕后把这个文件也打个包 读取时首先读取这个AB包
             using (var assetInformation = File.CreateText(_jsoninformationPath))
             {
-                assetInformation.Write(JsonMapper.ToJson(abInfo));
+                assetInformation.Write(JsonConvert.SerializeObject(abInfo));
             }
         }
 
@@ -204,7 +204,7 @@ namespace Framework
             //输出资源索引信息
             using (var fileUpdateInfo = File.CreateText(ABOutPath + "/" + ConstDefine.ABMd5InfoName))
             {
-                var json = JsonMapper.ToJson(list);
+                var json = JsonConvert.SerializeObject(list);
                 fileUpdateInfo.Write(json);
             }
         }

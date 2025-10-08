@@ -392,6 +392,10 @@ namespace GameData
                     outValueStr = "float";
                     break;
 
+                case "bool":
+                    outValueStr = "bool";
+                    break;
+
                 case "string":
                     outValueStr = "string";
                     break;
@@ -442,6 +446,7 @@ namespace GameData
                 case "int":
                 case "long":
                 case "float":
+                case "bool":
                 case "string":
                 case "vector2":
                 case "vector3":
@@ -478,6 +483,10 @@ namespace GameData
 
                 case "float":
                     outTypeStr = "data[i].ToFloat()";
+                    break;
+
+                case "bool":
+                    outTypeStr = "data[i].ToBool()";
                     break;
 
                 case "string":

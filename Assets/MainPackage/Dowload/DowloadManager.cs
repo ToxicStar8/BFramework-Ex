@@ -176,7 +176,7 @@ namespace MainPackage
             {
                 //比对md5和文件大小 一模一样即无变化 不需要重新下载
                 var md5Info = ABMd5InfoList.Find(x => x.ABName == abName);
-                if (md5Info.ABMd5 == Md5Util.GetMd5ByPath(file.FullName) && md5Info.ABSize == file.Length)
+                if (md5Info.ABMd5 == MD5Util.GetMd5ByPath(file.FullName) && md5Info.ABSize == file.Length)
                 {
                     GameEntry.Instance.Log(E_Log.Framework, "已存在名为" + abName + "的文件且文件与服务器相同", "跳过");
                     LoadedABTimes++;

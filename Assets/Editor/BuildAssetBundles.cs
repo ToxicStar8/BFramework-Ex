@@ -197,7 +197,7 @@ namespace Framework
                 {
                     ABName = item.Name,
                     ABSize = File.ReadAllBytes(path).Length,
-                    ABMd5 = Md5Util.GetMd5ByPath(path),
+                    ABMd5 = MD5Util.GetMd5ByPath(path),
                 });
             }
             Debug.Log("ScriptOutPath="+ HotfixDllOutPath);

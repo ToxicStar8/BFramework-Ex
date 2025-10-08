@@ -492,6 +492,10 @@ namespace GameData
                     return "TmpEx";
                 case "Txt":
                     return "TextEx";
+                case "TmpDp":
+                    return "TMP_Dropdown";
+                case "Dp":
+                    return "Dropdown";
                 case "Rt":
                     return "RectTransform";
                 case "Unit":

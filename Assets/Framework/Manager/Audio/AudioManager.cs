@@ -16,12 +16,10 @@ namespace Framework
     /// </summary>
     public class AudioManager : ManagerBase
     {
-        //环境音
-        private AudioSource _environmentAudio;
-        //音效
-        private AudioSource _soundAudio;
         //音乐
         private AudioSource _backgroundAudio;
+        //音效
+        private AudioSource _soundAudio;
         //音频挂载的游戏对象
         private GameObject gameObject;
 
@@ -55,9 +53,6 @@ namespace Framework
             _soundAudio = gameObject.AddComponent<AudioSource>();
             _soundAudio.playOnAwake = false;
             _volumeSound = PlayerPrefs.GetFloat(ConstDefine.VolumSound, 1);
-            //环境音
-            _environmentAudio = gameObject.AddComponent<AudioSource>();
-            _environmentAudio.playOnAwake = false;
             //挂载在游戏入口下
             gameObject.SetParent(GameEntry.Instance.transform);
         }
@@ -97,7 +92,6 @@ namespace Framework
         public override void OnUpdate() { }
         public override void OnDispose() 
         {
-            _environmentAudio = null;
             _soundAudio = null;
             _backgroundAudio = null;
             UnityEngine.Object.Destroy(gameObject);

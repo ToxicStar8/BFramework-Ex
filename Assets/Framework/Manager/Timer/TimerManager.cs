@@ -214,9 +214,12 @@ namespace Framework
                 // 确保清理工作在主线程执行
                 await UniTask.SwitchToMainThread();
                 //不管是时间到了还是主动取消，都会在这里进行回收处理
-                timerInfo.EndCallback?.Invoke(timerInfo.Cts.IsCancellationRequested);
-                _timerInfoDic.Remove(timerInfo.TimerName);
-                TimerInfo.Recycle(timerInfo);
+                if(_timerInfoDic is not null)
+                {
+                    timerInfo.EndCallback?.Invoke(timerInfo.Cts.IsCancellationRequested);
+                    _timerInfoDic.Remove(timerInfo.TimerName);
+                    TimerInfo.Recycle(timerInfo);
+                }
                 GameGod.Instance.Log(E_Log.Framework, "定时器回收", timerInfo.TimerName);
             }
         }

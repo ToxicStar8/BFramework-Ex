@@ -73,6 +73,18 @@ namespace Framework
         }
 
         /// <summary>
+        /// 转换成bool或者默认值
+        /// </summary>
+        public static bool ToBool(this string strValue, bool defaultValue = false)
+        {
+            if (bool.TryParse(strValue, out bool v))
+            {
+                return v;
+            }
+            return defaultValue;
+        }
+
+        /// <summary>
         /// 转换成Vector3或者默认值  x,y,z
         /// </summary>
         /// <param name="strValue"></param>

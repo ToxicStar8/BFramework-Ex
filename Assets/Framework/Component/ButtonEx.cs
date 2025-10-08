@@ -38,6 +38,15 @@ namespace Framework
         public Action<PointerEventData> OnPointerUpCallback;
         public Action<PointerEventData> OnPointerExitCallback;
 
+        //点击缩放动效
+        private Vector3 _awakeScale;
+        public float ClickScale = 0.95f;
+
+        protected override void Start()
+        {
+            _awakeScale = rectTransform.localScale;
+        }
+
         public override void OnPointerEnter(PointerEventData eventData)
         {
             base.OnPointerEnter(eventData);
@@ -47,6 +56,7 @@ namespace Framework
         public override void OnPointerDown(PointerEventData eventData)
         {
             base.OnPointerDown(eventData);
+            image.transform.localScale = _awakeScale * ClickScale;
             OnPointerDownCallback?.Invoke(eventData);
         }
 
@@ -59,6 +69,7 @@ namespace Framework
         public override void OnPointerUp(PointerEventData eventData)
         {
             base.OnPointerUp(eventData);
+            image.transform.localScale = _awakeScale;
             OnPointerUpCallback?.Invoke(eventData);
         }
 

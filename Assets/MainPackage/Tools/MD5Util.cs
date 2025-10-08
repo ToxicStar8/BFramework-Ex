@@ -16,12 +16,12 @@ using System.Text;
 namespace MainPackage
 {
     /// <summary>
-    /// Md5工具（非安全用途，仅做一致性校验）
+    /// Md5工具
     /// </summary>
     public static class MD5Util
     {
         /// <summary>
-        /// 根据路径获得文件 Md5（大写十六进制）
+        /// 根据路径获得文件 Md5
         /// </summary>
         /// <param name="filePath">文件路径</param>
         public static string GetMd5ByPath(string filePath)
@@ -38,7 +38,7 @@ namespace MainPackage
         }
 
         /// <summary>
-        /// 根据字节数组获得 Md5（大写十六进制）
+        /// 根据字节数组获得 Md5
         /// </summary>
         public static string GetMd5ByBytes(byte[] bytes)
         {
@@ -51,7 +51,7 @@ namespace MainPackage
         }
 
         /// <summary>
-        /// 根据字符串（UTF8）获得 Md5（大写十六进制）
+        /// 根据字符串（UTF8）获得 Md5
         /// </summary>
         public static string GetMd5ByString(string text)
         {

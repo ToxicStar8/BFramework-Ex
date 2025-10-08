@@ -16,15 +16,15 @@ namespace Framework
     public abstract class GameBase
     {
         #region Event 
-        protected virtual void SendEvent(ushort eventNo, params object[] args)
+        protected virtual void SendEvent(uint eventNo, params object[] args)
         {
             GameGod.Instance.EventManager.SendEvent(eventNo, args);
         }
-        protected virtual void AddEventListener(ushort eventNo, Action<object[]> callBack)
+        protected virtual void AddEventListener(uint eventNo, Action<object[]> callBack)
         {
             GameGod.Instance.EventManager.AddEventListener(eventNo, callBack);
         }
-        protected virtual void RemoveEventListener(ushort eventNo, Action<object[]> callBack = null)
+        protected virtual void RemoveEventListener(uint eventNo, Action<object[]> callBack = null)
         {
             GameGod.Instance.EventManager.RemoveEventListener(eventNo, callBack);
         }

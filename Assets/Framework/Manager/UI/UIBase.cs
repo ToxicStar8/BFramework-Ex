@@ -94,14 +94,11 @@ namespace Framework
         #endregion
 
         #region Event
-        private List<ushort> _eventList;
+        private List<uint> _eventList;
 
-        protected override void AddEventListener(ushort eventNo, Action<object[]> callBack)
+        protected override void AddEventListener(uint eventNo, Action<object[]> callBack)
         {
-            if (_eventList == null)
-            {
-                _eventList = new List<ushort>();
-            }
+            _eventList ??= new();
             _eventList.Add(eventNo);
             base.AddEventListener(eventNo, callBack);
         }

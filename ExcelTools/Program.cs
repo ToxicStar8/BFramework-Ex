@@ -324,7 +324,7 @@ namespace GameData
 
                 //具体导出
                 var valueStr = valueTemp.Replace("#Type", GetValueType(table.Cells[2, i].Value.ToString()));
-                valueStr = valueStr.Replace("#Name", GetValueName(table.Cells[2, i].Value.ToString(), CultureInfo.CurrentCulture.TextInfo.ToTitleCase(table.Cells[3, i].Value.ToString())));
+                valueStr = valueStr.Replace("#Name",  table.Cells[3, i].Value.ToString());
                 valueStr = valueStr.Replace("#Remark", table.Cells[4, i].Value?.ToString());
                 outValueStr += valueStr;
             }
@@ -347,7 +347,7 @@ namespace GameData
                 }
 
                 var caseStr = caseTemp.Replace("#tableValueName", "\"" + table.Cells[3, i].Value.ToString() + "\"");
-                caseStr = caseStr.Replace("#Name", GetValueName(table.Cells[2, i].Value.ToString(), CultureInfo.CurrentCulture.TextInfo.ToTitleCase(table.Cells[3, i].Value.ToString())));
+                caseStr = caseStr.Replace("#Name", table.Cells[3, i].Value.ToString());
                 caseStr = caseStr.Replace("#Type", GetCaseType(table.Cells[2, i].Value.ToString()));
                 outCaseStr += caseStr;
             }
@@ -459,7 +459,8 @@ namespace GameData
                 case "array_float":
                 case "composite_string":
                 case "composite_int":
-                    outValueStr = "List_" + name;
+                    //outValueStr = "List_" + name;
+                    outValueStr = name;
                     break;
             }
             return outValueStr;

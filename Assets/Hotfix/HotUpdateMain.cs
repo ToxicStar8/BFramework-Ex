@@ -29,7 +29,7 @@ namespace GameData
             //var rootKey = GameGod.Instance.RedPointManager.RootNode.Key;
             //GameGod.Instance.RedPointManager.AddOrGetNodeByParentKey<UIMainMenu>(rootKey);
             //正式启动
-            GameGod.Instance.UIManager.OpenUI<UILogin>(E_UILevel.Common);
+            GameGod.Instance.UIManager.OpenUI<UIMainMenu>(E_UILevel.Common);
             //销毁自己
             Destroy(gameObject);
         }

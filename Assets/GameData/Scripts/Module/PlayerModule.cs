@@ -4,7 +4,7 @@
  * 创建时间：2023/04/06 11:45:09
  *********************************************/
 using Framework;
-using LitJson;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -42,7 +42,7 @@ namespace GameData
         {
             string url = Framework.ConstDefine.ServerHttp + "api/login";
             var sendMsg = new { access, password };
-            var json = JsonMapper.ToJson(sendMsg);
+            var json = JsonConvert.SerializeObject(sendMsg);
             HttpPost(url, json, jsonData =>
             {
                 callback?.Invoke();

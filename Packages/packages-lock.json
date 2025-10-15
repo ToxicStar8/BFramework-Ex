@@ -28,7 +28,7 @@
       "dependencies": {}
     },
     "com.unity.ai.navigation": {
-      "version": "1.1.5",
+      "version": "1.1.6",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -37,7 +37,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.cinemachine": {
-      "version": "2.9.5",
+      "version": "2.10.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -53,7 +53,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {
-      "version": "3.0.26",
+      "version": "3.0.36",
       "depth": 0,
       "source": "registry",
       "dependencies": {

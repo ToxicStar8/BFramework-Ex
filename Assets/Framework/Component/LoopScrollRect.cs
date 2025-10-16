@@ -496,7 +496,7 @@ namespace UnityEngine.UI
                 float recyclePos = -yViewSize - BoundSize;
                 if (viewLocalPos.y < recyclePos)
                 {
-                    Items.Remove(item);
+                    Items.RemoveAt(Items.Count - 1);
                     item.Key.SetActive(false);
                     mItemRtPool.Enqueue(item.Key);
                     hasRecycle = true;
@@ -780,10 +780,11 @@ namespace UnityEngine.UI
 
         public override void OnBeginDrag(PointerEventData eventData)
         {
+            isDraging = true; // 立即标记拖动
             base.OnBeginDrag(eventData);
             content.DOKill();
             mContentTweener = null;
-            OnDragCallback?.Invoke(eventData);
+            OnBeginDragCallback?.Invoke(eventData);
         }
 
         public override void OnEndDrag(PointerEventData eventData)

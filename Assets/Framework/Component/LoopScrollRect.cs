@@ -82,16 +82,29 @@ namespace UnityEngine.UI
         /// <summary>
         /// 显示区域大小
         /// </summary>
-        private Vector2 viewSize => new Vector2(viewport.rect.width, viewport.rect.height);
+        private Vector2 viewSize => viewport != null ? new Vector2(viewport.rect.width, viewport.rect.height) : Vector2.zero;
 
         protected override void Awake()
         {
             base.Awake();
+            // 默认获取 UI Camera（ScreenSpaceOverlay 下为 null，允许传 null）
+            if (UICamera == null)
+            {
+                var canvas = GetComponentInParent<Canvas>();
+                if (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay)
+                {
+                    UICamera = canvas.worldCamera;
+                }
+                else
+                {
+                    UICamera = null;
+                }
+            }
             onValueChanged.AddListener(FnOnScrollValueChanged);
         }
 
-        // 从上到下遍历一边对象
-        public void ForEach(Action<RectTransform,int> call)
+        // 从上到下遍历一遍对象
+        public void ForEach(Action<RectTransform, int> call)
         {
             for (int i = 0; i < Items.Count; i++)
             {
@@ -127,7 +140,7 @@ namespace UnityEngine.UI
             // 顶部回收/创建
             TopHandle();
             // 底部回收/创建
-            BottonHandle();
+            BottomHandle();
         }
 
         /// <summary>
@@ -136,9 +149,9 @@ namespace UnityEngine.UI
         /// <param name="dataCount">数据总数</param>
         /// <param name="createItemFunc">创建UI回调</param>
         /// <param name="showCallback">显示UI回调</param>
-        public void Init(int dataCount, 
-            Func<RectTransform> createItemFunc, 
-            Action<RectTransform, int> showCallback, 
+        public void Init(int dataCount,
+            Func<RectTransform> createItemFunc,
+            Action<RectTransform, int> showCallback,
             bool isShowAtTop = true,
             int startIndex = 0)             // 第一个显示的位置
         {
@@ -162,14 +175,14 @@ namespace UnityEngine.UI
                 }
                 else
                 {
-                    ShowAtBotton();
+                    ShowAtBottom();
                 }
             }
         }
 
         // 从第几个索引位置开始显示起（index从0开始）
-        // firstAnchorPos 第一个的位置坐标
-        public void ShowAtPosition(int startIndex,Vector3 firstPosition)
+        // firstPosition 第一个对象的位置坐标
+        public void ShowAtPosition(int startIndex, Vector3 firstPosition)
         {
             StopMovement();
             if (startIndex >= mDataCount)
@@ -197,11 +210,11 @@ namespace UnityEngine.UI
             FnOnScrollValueChanged();
         }
 
-        // 根据第一个对象位置重新布局(数量不变),因为是按照第一个在上的原则，所以必然是顶部布局
+        // 根据第一个对象位置重新布局(数量不变)，因为是按照第一个在上的原则，所以必然是顶部布局
         public void ResetAccordingToFirstItem()
         {
             StopMovement();
-            if(mDataCount == 0)
+            if (mDataCount == 0)
             {
                 return;
             }
@@ -228,7 +241,7 @@ namespace UnityEngine.UI
             FnOnScrollValueChanged();
         }
 
-        // 插入对象，滚动方只需要重新刷新一边数据即可
+        // 插入对象，滚动方只需要重新刷新一遍数据即可
         public void InsertItem(int count)
         {
             mDataCount = Mathf.Max(mDataCount + count, 0);
@@ -238,8 +251,9 @@ namespace UnityEngine.UI
         /// <summary>
         /// 添加底部
         /// </summary>
-        /// <param name="count"></param>
-        /// <param name="recovery">是否从底部开始显示</param>
+        /// <param name="count">新增数量</param>
+        /// <param name="recovery">是否重置到边界显示</param>
+        /// <param name="isShowAtButtom">为 true 时重置到底部显示（参数名保留兼容，实际含义为 Bottom）</param>
         public void AddAtBottom(int count, bool recovery = true, bool isShowAtButtom = true)
         {
             mDataCount += count;
@@ -247,7 +261,7 @@ namespace UnityEngine.UI
             {
                 if (isShowAtButtom)
                 {
-                    ShowAtBotton();
+                    ShowAtBottom();
                 }
                 else
                 {
@@ -270,7 +284,6 @@ namespace UnityEngine.UI
             List<KeyValuePair<RectTransform, int>> list = new List<KeyValuePair<RectTransform, int>>();
             foreach (var item in Items)
             {
-                //item.Key.AddAnchorPosY(-deltaY); 
                 list.Add(new KeyValuePair<RectTransform, int>(item.Key, item.Value + count));
             }
             Items.Clear();
@@ -344,8 +357,7 @@ namespace UnityEngine.UI
         /// <summary>
         /// 显示在底部
         /// </summary>
-        Vector3[] corners = new Vector3[4];
-        public void ShowAtBotton()
+        public void ShowAtBottom()
         {
             RecycleAll();
             float size = 0;
@@ -356,7 +368,7 @@ namespace UnityEngine.UI
                 Items.Insert(0, new KeyValuePair<RectTransform, int>(rt, index));
                 mShowCallback(rt, index);
                 size += rt.sizeDelta.y;
-                ButtonLayout();
+                BottomLayout();
                 // 显示的数量
                 if (size > viewSize.y)
                 {
@@ -368,16 +380,17 @@ namespace UnityEngine.UI
             FnOnScrollValueChanged();
         }
 
-        // 在底部部布局
-        void ButtonLayout()
+        // 在底部布局
+        private void BottomLayout()
         {
             // 创建的话，永远都是布局最后一个，如果只有一个，就放默认位置 
             if (Items.Count > 1)
             {
-                RectTransform rt1 = Items[1].Key;
-                RectTransform rt2 = Items[0].Key;
+                RectTransform rt1 = Items[1].Key;   // 已有的第一个
+                RectTransform rt2 = Items[0].Key;   // 新插入的在前
                 rt2.position = rt1.position;
-                rt2.AddAnchorPosY(rt2.sizeDelta.y);
+                // 修复：应按相邻“已有项”的高度错位（之前误用 rt2.sizeDelta.y）
+                rt2.AddAnchorPosY(rt1.sizeDelta.y);
             }
             else if (Items.Count == 1)
             {
@@ -399,7 +412,6 @@ namespace UnityEngine.UI
             {
                 if (Items.Count <= 1) break;            // 必须保留一个
 
-                float yViewSize = viewSize.y;
                 // 判断顶部回收
                 var item = Items[0];
                 // 如果顶部是第一个，并且把所有的滚动项全部显示出来的情况下，不回收第一个
@@ -448,7 +460,6 @@ namespace UnityEngine.UI
                     }
                 }
 
-                float yViewSize = viewSize.y;
                 var item = Items[0];
                 var screenPos = RectTransformUtility.WorldToScreenPoint(UICamera, item.Key.position);
                 RectTransformUtility.ScreenPointToLocalPointInRectangle(viewport, screenPos, UICamera, out Vector2 viewLocalPos);
@@ -479,7 +490,7 @@ namespace UnityEngine.UI
         /// <summary>
         /// 底部回收/创建
         /// </summary>
-        private void BottonHandle()
+        private void BottomHandle()
         {
             // 底部回收判断
             bool hasRecycle = false;            // 是否有被回收
@@ -530,7 +541,7 @@ namespace UnityEngine.UI
                         Items.Add(new KeyValuePair<RectTransform, int>(rt, index));
                         mShowCallback(rt, index);
                         rt.position = item.Key.position;
-                        //rt.AddAnchorPosY(-Items.Last().Key.sizeDelta.y);
+                        // 与上一个相邻，向下偏移上一个项的高度
                         rt.AddAnchorPosY(-item.Key.sizeDelta.y);
                     }
                     else
@@ -796,6 +807,13 @@ namespace UnityEngine.UI
             OnEndDragCallback?.Invoke(eventData);
         }
 
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            onValueChanged.RemoveListener(FnOnScrollValueChanged);
+            content?.DOKill();
+            mContentTweener = null;
+        }
 
 #if UNITY_EDITOR
         [UnityEditor.MenuItem("CONTEXT/ScrollRect/替换LoopScrollRect")]

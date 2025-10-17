@@ -19,21 +19,29 @@ namespace Framework
     public class BuildAssetBundles : Editor
     {
         /// <summary>
+        /// 项目路径
+        /// </summary>
+        public static string RootPath = Application.dataPath.Substring(0, Application.dataPath.Length - "Assets".Length);
+        /// <summary>
         /// AB包输出路径
         /// </summary>
-        public static string ABOutPath = Application.dataPath.Substring(0,Application.dataPath .Length - "Assets".Length) + "AssetBundle";
+        public static string ABOutPath = RootPath + "AssetBundle";
         /// <summary>
         /// 脚本Dll输出路径
         /// </summary>
-        public static string HotfixDllOutPath = Application.dataPath.Substring(0, Application.dataPath.Length - "Assets".Length) + "HybridCLRData/HotUpdateDlls/" + EditorUserBuildSettings.activeBuildTarget.ToString();
+        public static string HotfixDllOutPath = RootPath + "HybridCLRData/HotUpdateDlls/" + EditorUserBuildSettings.activeBuildTarget.ToString();
+        /// <summary>
+        /// 加密Dll输出路径
+        /// </summary>
+        public static string ObfuzDllOutPath = RootPath + "Library/Obfuz/" + EditorUserBuildSettings.activeBuildTarget.ToString() + "/ObfuscatedHotUpdateAssemblies";
         /// <summary>
         /// AotDll输出路径
         /// </summary>
-        public static string AotDllOutPath = Application.dataPath.Substring(0, Application.dataPath.Length - "Assets".Length) + "HybridCLRData/AssembliesPostIl2CppStrip/" + EditorUserBuildSettings.activeBuildTarget.ToString();
+        public static string AOTDllOutPath = RootPath + "HybridCLRData/AssembliesPostIl2CppStrip/" + EditorUserBuildSettings.activeBuildTarget.ToString();
         /// <summary>
         /// HotfixDll输出路径
         /// </summary>
-        public static string HotfixDllPath = Application.dataPath.Substring(0, Application.dataPath.Length - "Assets".Length) + ConstDefine.HotfixPath;
+        public static string HotfixDllPath = RootPath + ConstDefine.HotfixPath;
         //依赖信息Json的路径
         private static string _jsoninformationPath => ConstDefine.JsoninformationPath;
         private static ABConfig _abConfig => AssetDatabase.LoadAssetAtPath<ABConfig>(ConstDefine.ABConfigPath);
@@ -105,14 +113,24 @@ namespace Framework
                 Debug.LogError("DLL文件为空");
             }
 
-            //AotDll
+            //AOTDll
             foreach (var dll in AOTGenericReferences.PatchedAOTAssemblyList)
             {
-                string aotDllPath = AotDllOutPath + "/" + dll;
+                string aotDllPath = AOTDllOutPath + "/" + dll;
                 if (File.Exists(aotDllPath))
                 {
                     string targetPath = HotfixDllPath + dll + ".bytes";
                     File.Copy(aotDllPath, targetPath);
+                }
+            }
+
+            //加密Dll
+            foreach (var filePath in Directory.GetFiles(ObfuzDllOutPath))
+            {
+                if (File.Exists(filePath))
+                {
+                    string targetPath = HotfixDllPath + Path.GetFileName(filePath) + ".bytes";
+                    File.Copy(filePath, targetPath, true);
                 }
             }
 

@@ -18,9 +18,14 @@ namespace Framework
     public class BuildSpriteAtlas : Editor
     {
         /// <summary>
-        /// 图集磁盘路径
+        /// 图集的 Asset 相对路径（用于 AssetDatabase）
         /// </summary>
-        public static string SpritePath = Application.dataPath + "/GameData/Art/Sprite";
+        public static string SpriteAssetPath = "Assets/GameData/Art/Sprites";
+
+        /// <summary>
+        /// 图集的磁盘绝对路径（用于文件系统枚举）
+        /// </summary>
+        public static string SpriteDiskPath = Application.dataPath + "/GameData/Art/Sprites";
 
         /// <summary>
         /// 图片代码磁盘路径
@@ -38,69 +43,94 @@ namespace Framework
             GenerateSpriteAtlas();
             GenerateSpriteScript();
             GenerateAtlasScript();
+            // 主动打包一次（可选）
+            PackAllAtlasesInFolder(SpriteAssetPath);
+
             Debug.Log("图集代码生成完毕!");
-            //回收资源
             System.GC.Collect();
-            //刷新编辑器
             AssetDatabase.Refresh();
         }
 
         /// <summary>
-        /// 生成图片的图集
+        /// 生成图片的图集（使用 .spriteatlas，由 V2 导入器接管）
         /// </summary>
         private static void GenerateSpriteAtlas()
         {
-            var pathDir = new DirectoryInfo(SpritePath);
-            //循环目录下的文件和子目录 但是不包含子目录下的文件和子目录
+            var pathDir = new DirectoryInfo(SpriteDiskPath);
+            if (!pathDir.Exists)
+            {
+                Debug.LogWarning($"路径不存在：{SpriteDiskPath}");
+                return;
+            }
+
             foreach (var item in pathDir.GetFileSystemInfos("*.*", SearchOption.TopDirectoryOnly))
             {
-                var parentDir = item as DirectoryInfo;
-                //空值就代表它是文件
-                if (parentDir != null)
+                if (item is not DirectoryInfo parentDir) continue;
+
+                // 确保子目录存在（Assets 相对路径）
+                string childAssetFolder = $"{SpriteAssetPath}/{parentDir.Name}";
+                EnsureFolder(childAssetFolder);
+
+                string atlasName = parentDir.Name + ".spriteatlas";
+                string atlasAssetPath = $"{childAssetFolder}/{atlasName}";
+
+                // 删除旧的 atlas 资产（使用 AssetDatabase，避免 meta 残留）
+                var existAtlas = AssetDatabase.LoadAssetAtPath<SpriteAtlas>(atlasAssetPath);
+                if (existAtlas != null)
                 {
-                    var file = new FileInfo(parentDir.FullName + "/" + parentDir.Name + ".spriteatlas");
-                    if (file.Exists)
-                    {
-                        File.Delete(file.FullName);
-                    }
-
-                    var atlas = new SpriteAtlas();// 设置参数 可根据项目具体情况进行设置
-                    SpriteAtlasPackingSettings packSetting = new SpriteAtlasPackingSettings()
-                    {
-                        blockOffset = 1,
-                        enableRotation = false,
-                        enableTightPacking = false,
-                        padding = 2,
-                    };
-                    atlas.SetPackingSettings(packSetting);
-
-                    SpriteAtlasTextureSettings textureSetting = new SpriteAtlasTextureSettings()
-                    {
-                        readable = false,
-                        generateMipMaps = false,
-                        sRGB = true,
-                        filterMode = FilterMode.Bilinear,
-                    };
-                    atlas.SetTextureSettings(textureSetting);
-
-                    TextureImporterPlatformSettings platformSetting = new TextureImporterPlatformSettings()
-                    {
-                        maxTextureSize = 2048,
-                        format = TextureImporterFormat.Automatic,
-                        crunchedCompression = true,
-                        textureCompression = TextureImporterCompression.Compressed,
-                        compressionQuality = 50,
-                    };
-                    atlas.SetPlatformSettings(platformSetting);
-
-                    var assetPath = "Assets/GameData/Art/Sprite/";
-                    AssetDatabase.CreateAsset(atlas, assetPath + parentDir.Name + "/" + file.Name);
-                    // 2、添加文件夹
-                    Object obj = AssetDatabase.LoadAssetAtPath(assetPath + parentDir.Name, typeof(Object));
-                    atlas.Add(new[] { obj });
-                    AssetDatabase.SaveAssets();
+                    AssetDatabase.DeleteAsset(atlasAssetPath);
                 }
+
+                // 创建 atlas，并设置参数
+                var atlas = new SpriteAtlas();
+
+                var packSetting = new SpriteAtlasPackingSettings
+                {
+                    blockOffset = 1,
+                    enableRotation = false,
+                    enableTightPacking = false,
+                    padding = 2,
+                };
+                atlas.SetPackingSettings(packSetting);
+
+                var textureSetting = new SpriteAtlasTextureSettings
+                {
+                    readable = false,
+                    generateMipMaps = false,
+                    sRGB = true,
+                    filterMode = FilterMode.Bilinear,
+                };
+                atlas.SetTextureSettings(textureSetting);
+
+                // 可按平台分别设置（示例：通用设置）
+                var platformSetting = new TextureImporterPlatformSettings
+                {
+                    name = string.Empty, // Default
+                    maxTextureSize = 2048,
+                    format = TextureImporterFormat.Automatic,
+                    crunchedCompression = true,
+                    textureCompression = TextureImporterCompression.Compressed,
+                    compressionQuality = 50,
+                };
+                atlas.SetPlatformSettings(platformSetting);
+
+                // 创建 Asset
+                AssetDatabase.CreateAsset(atlas, atlasAssetPath);
+
+                // 添加整个子文件夹为 packable
+                Object folderObj = AssetDatabase.LoadAssetAtPath<Object>(childAssetFolder);
+                if (folderObj != null)
+                {
+                    atlas.Add(new[] { folderObj });
+                }
+
+                // 允许包含到构建（可选）
+                SpriteAtlasExtensions.SetIncludeInBuild(atlas, true);
+
+                EditorUtility.SetDirty(atlas);
+                AssetDatabase.SaveAssets();
             }
+
             Debug.Log("图集生成完毕!");
         }
 
@@ -128,46 +158,47 @@ namespace GameData
 }
 ";
             string spListStr = string.Empty;
-            var pathDir = new DirectoryInfo(SpritePath);
-            //最外层 用于生成图集名称
-            foreach (var dirInfo in pathDir.GetDirectories("*.*", SearchOption.TopDirectoryOnly))
+            var pathDir = new DirectoryInfo(SpriteDiskPath);
+            if (!pathDir.Exists)
             {
-                //第二层 生成脚本文件的地方
-                foreach (var item in dirInfo.GetFileSystemInfos("*.*", SearchOption.AllDirectories))
+                Debug.LogWarning($"路径不存在：{SpriteDiskPath}");
+            }
+            else
+            {
+                //最外层 用于生成图集名称
+                foreach (var dirInfo in pathDir.GetDirectories("*.*", SearchOption.TopDirectoryOnly))
                 {
-                    var fileInfo = item as FileInfo;
-                    if (fileInfo != null)
+                    //第二层 生成脚本文件的地方
+                    foreach (var item in dirInfo.GetFileSystemInfos("*.*", SearchOption.AllDirectories))
                     {
-                        var file = new FileInfo(fileInfo.FullName);
-                        if (file.Extension != ".meta" && file.Extension != ".spriteatlas")
+                        if (item is not FileInfo fileInfo) continue;
+
+                        var ext = fileInfo.Extension.ToLowerInvariant();
+                        // 过滤 meta 与 atlas 本体
+                        if (ext == ".meta" || ext == ".spriteatlas") continue;
+
+                        //将图片带下划线的全部转换为首字母大写并去除下划线
+                        var fnName = "Get_";
+                        var nameNoExt = Path.GetFileNameWithoutExtension(fileInfo.Name);
+                        var strArr = nameNoExt.Split('_');
+
+                        if (strArr.Length != 1)
                         {
-                            //将图片带下划线的全部转换为首字母大写并去除下划线
-                            var fnName = "Get_";
-                            var strArr = fileInfo.Name.Replace(fileInfo.Extension, "").Split('_');
-                            //如果有下划线 分割拼接
-                            if (strArr.Length != 1)
+                            for (int i = 0; i < strArr.Length; i++)
                             {
-                                for (int i = 0, length = strArr.Length; i < length; i++)
-                                {
-                                    //全部首字母大写
-                                    fnName += CultureInfo.CurrentCulture.TextInfo.ToTitleCase(strArr[i]);
-                                }
+                                fnName += CultureInfo.CurrentCulture.TextInfo.ToTitleCase(strArr[i]);
                             }
-                            //没有下划线 即使用文件名
-                            else
-                            {
-                                //首字母大写并且不修改其它字母
-                                var fileName = fileInfo.Name.Replace(fileInfo.Extension, "");
-                                fnName += CultureInfo.CurrentCulture.TextInfo.ToTitleCase(fileName.Substring(0, 1)) + fileName.Remove(0, 1);
-                            }
-                            //文本添加
-                            spListStr += $"\r\n        public static Sprite {fnName}(LoadHelper loadHelper) => loadHelper.GetSpriteSync(AtlasName.{dirInfo.Name},\"{Path.GetFileNameWithoutExtension(fileInfo.Name)}\");";
                         }
+                        else
+                        {
+                            fnName += CultureInfo.CurrentCulture.TextInfo.ToTitleCase(nameNoExt.Substring(0, 1)) + nameNoExt.Remove(0, 1);
+                        }
+
+                        spListStr += $"\r\n        public static Sprite {fnName}() => UIManager.instance.LoadSprite(AtlasName.{dirInfo.Name}, \"{nameNoExt}\");";
                     }
                 }
             }
 
-            //导出文件 替换文本
             var scripts = File.CreateText(SpriteScriptPath);
             temp = temp.Replace("#Time", System.DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
             temp = temp.Replace("#SpriteList", spListStr);
@@ -199,19 +230,63 @@ namespace GameData
 }
 ";
             string atlasNameStr = string.Empty;
-            var pathDir = new DirectoryInfo(SpritePath);
-            //最外层 用于生成图集名称
-            foreach (var dirInfo in pathDir.GetDirectories("*.*", SearchOption.TopDirectoryOnly))
+            var pathDir = new DirectoryInfo(SpriteDiskPath);
+            if (!pathDir.Exists)
             {
-                atlasNameStr += $"\r\n        public static string {dirInfo.Name} => \"{dirInfo.Name}.spriteatlas\";";
+                Debug.LogWarning($"路径不存在：{SpriteDiskPath}");
+            }
+            else
+            {
+                foreach (var dirInfo in pathDir.GetDirectories("*.*", SearchOption.TopDirectoryOnly))
+                {
+                    // 统一用 .spriteatlas
+                    atlasNameStr += $"\r\n        public static string {dirInfo.Name} => \"{dirInfo.Name}.spriteatlas\";";
+                }
             }
 
-            //导出文件 替换文本
             var scripts = File.CreateText(AtlasScriptPath);
             temp = temp.Replace("#Time", System.DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
             temp = temp.Replace("#AtlasList", atlasNameStr);
             scripts.Write(temp);
             scripts.Close();
+        }
+
+        /// <summary>
+        /// 确保 Asset 相对路径下的文件夹存在（Assets/...）
+        /// </summary>
+        private static void EnsureFolder(string assetFolder)
+        {
+            assetFolder = assetFolder.Replace("\\", "/");
+            if (AssetDatabase.IsValidFolder(assetFolder)) return;
+
+            var parent = Path.GetDirectoryName(assetFolder)?.Replace("\\", "/");
+            var name = Path.GetFileName(assetFolder);
+            if (!string.IsNullOrEmpty(parent) && !AssetDatabase.IsValidFolder(parent))
+            {
+                EnsureFolder(parent);
+            }
+            if (!AssetDatabase.IsValidFolder(assetFolder))
+            {
+                AssetDatabase.CreateFolder(parent, name);
+            }
+        }
+
+        /// <summary>
+        /// 打包指定目录下的所有 SpriteAtlas（可选）
+        /// </summary>
+        private static void PackAllAtlasesInFolder(string assetFolder)
+        {
+            var guids = AssetDatabase.FindAssets("t:SpriteAtlas", new[] { assetFolder });
+            var atlases = new SpriteAtlas[guids.Length];
+            for (int i = 0; i < guids.Length; i++)
+            {
+                var path = AssetDatabase.GUIDToAssetPath(guids[i]);
+                atlases[i] = AssetDatabase.LoadAssetAtPath<SpriteAtlas>(path);
+            }
+            if (atlases.Length > 0)
+            {
+                SpriteAtlasUtility.PackAtlases(atlases, EditorUserBuildSettings.activeBuildTarget, false);
+            }
         }
     }
 }

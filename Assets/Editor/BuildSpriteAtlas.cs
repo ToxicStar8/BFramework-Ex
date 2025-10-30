@@ -178,7 +178,7 @@ namespace GameData
                         if (ext == ".meta" || ext == ".spriteatlas") continue;
 
                         //将图片带下划线的全部转换为首字母大写并去除下划线
-                        var fnName = "Get_";
+                        var fnName = $"{dirInfo.Name}_";
                         var nameNoExt = Path.GetFileNameWithoutExtension(fileInfo.Name);
                         var strArr = nameNoExt.Split('_');
 

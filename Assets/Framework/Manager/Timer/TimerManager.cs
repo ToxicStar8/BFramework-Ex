@@ -111,7 +111,7 @@ namespace Framework
             }
             catch (OperationCanceledException)
             {
-                GameGod.Instance.Log(E_Log.Warring, "定时管理器循环取消");
+                GameGod.Instance.Log(E_Log.Warning, "定时管理器循环取消");
             }
             catch (Exception ex)
             {
@@ -203,7 +203,7 @@ namespace Framework
             }
             catch (OperationCanceledException)
             {
-                GameGod.Instance.Log(E_Log.Warring, "定时器主动取消", timerInfo.TimerName);
+                GameGod.Instance.Log(E_Log.Warning, "定时器主动取消", timerInfo.TimerName);
             }
             catch (Exception ex)
             {
@@ -261,7 +261,7 @@ namespace Framework
         {
             if (!_timerInfoDic.TryGetValue(timerName,out var timerInfo))
             {
-                GameGod.Instance.Log(E_Log.Warring, "定时器不存在", timerName);
+                GameGod.Instance.Log(E_Log.Warning, "定时器不存在", timerName);
                 return null;
             }
             return timerInfo;

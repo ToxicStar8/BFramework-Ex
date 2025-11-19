@@ -43,7 +43,7 @@ namespace Framework
         public EventManager EventManager { private set; get; }
         public TableManager TableManager { private set; get; }
         public AudioManager AudioManager { private set; get; }
-        public TimerManager TimeManager { private set; get; }
+        public TimerManager TimerManager { private set; get; }
         public FsmManager FsmManager { private set; get; }
         public ModuleManager ModuleManager { private set; get; }
         public RedPointManager RedPointManager { private set; get; }
@@ -68,7 +68,7 @@ namespace Framework
             EventManager = new EventManager();
             TableManager = new TableManager();
             AudioManager = new AudioManager();
-            TimeManager = new TimerManager();
+            TimerManager = new TimerManager();
             FsmManager = new FsmManager();
             RedPointManager = new RedPointManager();
             TaskManager = new TaskManager();
@@ -93,7 +93,7 @@ namespace Framework
             EventManager.OnUpdate();
             TableManager.OnUpdate();
             AudioManager.OnUpdate();
-            TimeManager.OnUpdate();
+            TimerManager.OnUpdate();
             FsmManager.OnUpdate();
             RedPointManager.OnUpdate();
             TaskManager.OnUpdate();
@@ -112,7 +112,7 @@ namespace Framework
             ModuleManager.OnDispose();
             ABManager.OnDispose();
             FsmManager.OnDispose();
-            TimeManager.OnDispose();
+            TimerManager.OnDispose();
             UIManager.OnDispose();
             PoolManager.OnDispose();
             LoadManager.OnDispose();

@@ -3,6 +3,7 @@
  * 事件管理器
  * 创建时间：2023/01/08 20:40:23
  *********************************************/
+
 using MainPackage;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace Framework
     /// </summary>
     public class EventManager : ManagerBase
     {
-        private Dictionary<uint, Action<object[]>> _eventDic;
+        private Dictionary<uint, List<Action<object[]>>> _eventDic;
 
         public override void OnInit() 
         {
@@ -26,22 +27,31 @@ namespace Framework
         /// </summary>
         public void AddEventListener(uint eventNo, Action<object[]> callBack)
         {
-            if (_eventDic.ContainsKey(eventNo))
+            if (!_eventDic.TryGetValue(eventNo,out var list))
             {
-                GameGod.Instance.Log(E_Log.Error, "事件重复监听",eventNo.ToString());
+                list = new List<Action<object[]>>();
+                _eventDic.Add(eventNo, list);
+            }
+
+            if (list.Contains(callBack))
+            {
+                GameGod.Instance.Log(E_Log.Error, "事件重复监听", eventNo.ToString());
                 _eventDic.Remove(eventNo);
             }
-            _eventDic.Add(eventNo, callBack);
+            list.Add(callBack);
         }
 
         /// <summary>
         /// 移除监听
         /// </summary>
-        public void RemoveEventListener(uint eventNo, Action<object[]> callBack = null)
+        public void RemoveEventListener(uint eventNo, Action<object[]> callBack)
         {
-            if (_eventDic.ContainsKey(eventNo))
+            if (_eventDic is null)
+                return;
+
+            if (_eventDic.TryGetValue(eventNo,out var list))
             {
-                _eventDic.Remove(eventNo);
+                list.Remove(callBack);
             }
         }
 
@@ -50,11 +60,16 @@ namespace Framework
         /// </summary>
         public void SendEvent(uint eventNo,params object[] args)
         {
-            if (!_eventDic.TryGetValue(eventNo, out var callBack))
+            if (!_eventDic.TryGetValue(eventNo, out var list))
             {
-                GameGod.Instance.Log(E_Log.Error, eventNo.ToString() + "事件不存在！");
+                GameGod.Instance.Log(E_Log.Warning, eventNo.ToString() + "事件不存在");
+                return;
             }
-            callBack?.Invoke(args);
+
+            foreach (var callBack in list)
+            {
+                callBack.Invoke(args);
+            }
         }
 
         public override void OnUpdate() { }

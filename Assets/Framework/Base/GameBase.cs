@@ -24,7 +24,7 @@ namespace Framework
         {
             GameGod.Instance.EventManager.AddEventListener(eventNo, callBack);
         }
-        protected virtual void RemoveEventListener(uint eventNo, Action<object[]> callBack = null)
+        protected virtual void RemoveEventListener(uint eventNo, Action<object[]> callBack)
         {
             GameGod.Instance.EventManager.RemoveEventListener(eventNo, callBack);
         }
@@ -181,28 +181,35 @@ namespace Framework
         /// </summary>
         protected virtual void AddTimer(string timeName, TimerInfo timerInfo)
         {
-            GameGod.Instance.TimeManager.AddTimer(timeName, timerInfo);
+            GameGod.Instance.TimerManager.AddTimer(timeName, timerInfo);
         }
         /// <summary>
         /// 添加一次性定时器监听，执行次数永远不能为-1，即无限，否则无限循环无法跳出
         /// </summary>
         protected virtual void AddTempTimer(TimerInfo timerInfo)
         {
-            GameGod.Instance.TimeManager.AddTempTimer(timerInfo);
+            GameGod.Instance.TimerManager.AddTempTimer(timerInfo);
         }
         /// <summary>
         /// 获取定时器信息
         /// </summary>
         protected virtual TimerInfo GetTimerInfo(string timeName)
         {
-            return GameGod.Instance.TimeManager.GetTimerInfo(timeName);
+            return GameGod.Instance.TimerManager.GetTimerInfo(timeName);
         }
         /// <summary>
         /// 移除定时器监听
         /// </summary>
-        protected virtual void RemoveTimer(string timeName, TimerInfo timerInfo = null)
+        protected virtual void RemoveTimer(string timeName)
         {
-            GameGod.Instance.TimeManager.RemoveTimer(timeName);
+            GameGod.Instance.TimerManager.RemoveTimer(timeName);
+        }
+        /// <summary>
+        /// 移除定时器监听
+        /// </summary>
+        protected virtual void RemoveTimer(TimerInfo timerInfo)
+        {
+            GameGod.Instance.TimerManager.RemoveTimer(timerInfo.TimerName);
         }
         #endregion
 
@@ -227,21 +234,21 @@ namespace Framework
         {
             GameGod.Instance.HttpManager.AddHeader(key, value);
         }
-        protected virtual HttpRoutine HttpGet(string url, Action<string> callBack = null)
+        protected virtual HttpRoutine HttpGet(string url, Action<string> jsonDataCallBack = null, Action<string> errorCallBack = null)
         {
-            return GameGod.Instance.HttpManager.Get(url, callBack);
+            return GameGod.Instance.HttpManager.Get(url, jsonDataCallBack, errorCallBack);
         }
-        protected virtual HttpRoutine HttpGetTexture(string url, Action<Texture2D> callBack = null)
+        protected virtual HttpRoutine HttpGetTexture(string url, Action<Texture2D> texture2DCallBack = null, Action<string> errorCallBack = null)
         {
-            return GameGod.Instance.HttpManager.GetTexture(url, callBack);
+            return GameGod.Instance.HttpManager.GetTexture(url, texture2DCallBack, errorCallBack);
         }
-        protected virtual HttpRoutine GetAudioClip(string url, AudioType audioType, Action<AudioClip> callBack = null)
+        protected virtual HttpRoutine GetAudioClip(string url, AudioType audioType, Action<AudioClip> audioClipCallBack = null, Action<string> errorCallBack = null)
         {
-            return GameGod.Instance.HttpManager.GetAudioClip(url, audioType, callBack);
+            return GameGod.Instance.HttpManager.GetAudioClip(url, audioType, audioClipCallBack, errorCallBack);
         }
-        protected virtual HttpRoutine HttpPost(string url, string json = null, Action<string> callBack = null)
+        protected virtual HttpRoutine HttpPost(string url, string json = null, Action<string> jsonDataCallBack = null, Action<string> errorCallBack = null)
         {
-            return GameGod.Instance.HttpManager.Post(url, json, callBack);
+            return GameGod.Instance.HttpManager.Post(url, json, jsonDataCallBack, errorCallBack);
         }
 
         protected virtual void SocketClearHeader()
@@ -278,9 +285,9 @@ namespace Framework
         #endregion
 
         #region Log
-        protected virtual void Log(E_Log logType, string title = null, string content = null)
+        protected virtual void Log(E_Log logType, string title = null, string content = null, string color = null)
         {
-            GameGod.Instance.Log(logType, title, content);
+            GameGod.Instance.Log(logType, title, content, color);
         }
         protected virtual void Log(string content = null)
         {
@@ -298,13 +305,21 @@ namespace Framework
         {
             GameGod.Instance.Log(E_Log.Error, title, content);
         }
-        protected virtual void LogWarring(string content = null)
+        protected virtual void LogWarning(string content = null)
         {
-            GameGod.Instance.Log(E_Log.Warring, GetType().Name, content);
+            GameGod.Instance.Log(E_Log.Warning, GetType().Name, content);
         }
-        protected virtual void LogWarring(string title = null, string content = null)
+        protected virtual void LogWarning(string title = null, string content = null)
         {
-            GameGod.Instance.Log(E_Log.Warring, title, content);
+            GameGod.Instance.Log(E_Log.Warning, title, content);
+        }
+        protected virtual void LogException(string content = null)
+        {
+            GameGod.Instance.Log(E_Log.Exception, GetType().Name, content);
+        }
+        protected virtual void LogException(string title = null, string content = null)
+        {
+            GameGod.Instance.Log(E_Log.Exception, title, content);
         }
         #endregion
 

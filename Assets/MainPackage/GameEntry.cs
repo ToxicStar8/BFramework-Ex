@@ -191,8 +191,11 @@ namespace MainPackage
                 case E_Log.Error:
                     Debug.LogError(string.Format(tempStr, "red", title, content));
                     break;
-                case E_Log.Warring:
+                case E_Log.Warning:
                     Debug.LogWarning(string.Format(tempStr, "yellow" , title, content));
+                    break;
+                case E_Log.Exception:
+                    Debug.LogException(new Exception(string.Format(tempStr, "red", title, content)));
                     break;
                 case E_Log.Custom:
                     Debug.Log(string.Format(tempStr, color, title, content));
@@ -222,7 +225,8 @@ namespace MainPackage
         Framework,  //框架Log
         Proto,      //联网Log
         Error,      //错误Log
-        Warring,    //警告Log
+        Warning,    //警告Log
+        Exception,  //异常Log
         Custom,     //自定义颜色Log
     }
 }

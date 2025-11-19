@@ -94,12 +94,13 @@ namespace Framework
         #endregion
 
         #region Event
-        private List<uint> _eventList;
+        //记录注册的事件，关闭时自动移除
+        private Dictionary<uint, Action<object[]>> _eventList;
 
         protected override void AddEventListener(uint eventNo, Action<object[]> callBack)
         {
             _eventList ??= new();
-            _eventList.Add(eventNo);
+            _eventList.Add(eventNo, callBack);
             base.AddEventListener(eventNo, callBack);
         }
         #endregion
@@ -163,9 +164,9 @@ namespace Framework
             //关闭前移除全部注册事件
             if (_eventList != null)
             {
-                for (int i = 0, count = _eventList.Count; i < count; i++)
+                foreach (var item in _eventList)
                 {
-                    RemoveEventListener(_eventList[i]);
+                    RemoveEventListener(item.Key, item.Value);
                 }
                 _eventList.Clear();
                 _eventList = null;

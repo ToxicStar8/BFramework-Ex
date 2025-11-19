@@ -73,7 +73,7 @@ namespace Framework
             GUILayout.EndHorizontal();
             //计时器字典
             GUI.contentColor = Color.white;
-            foreach (var item in GameGod.Instance.TimeManager.TimerInfoDic)
+            foreach (var item in GameGod.Instance.TimerManager.TimerInfoDic)
             {
                 GUILayout.BeginHorizontal("box", GUILayout.Width(400));
                 GUILayout.Label(item.Key, GUILayout.Width(400));

@@ -78,9 +78,9 @@ namespace Framework
         /// Get数据
         /// </summary>
         /// <param name="url"></param>
-        /// <param name="callBack"></param>
+        /// <param name="jsonDataCallBack"></param>
         /// <returns></returns>
-        public HttpRoutine Get(string url, Action<string> callBack = null)
+        public HttpRoutine Get(string url, Action<string> jsonDataCallBack = null, Action<string> errorCallBack = null)
         {
             if (string.IsNullOrWhiteSpace(url))
             {
@@ -91,7 +91,7 @@ namespace Framework
             var pool = GameGod.Instance.PoolManager.CreateClassObjectPool<HttpRoutine>();
             var routine = pool.CreateClassObj();
             routine.ThisPool = pool;
-            routine.Get(url, callBack);
+            routine.Get(url, jsonDataCallBack, errorCallBack);
             return routine;
         }
 
@@ -99,9 +99,9 @@ namespace Framework
         /// Get贴图
         /// </summary>
         /// <param name="url"></param>
-        /// <param name="callBack"></param>
+        /// <param name="texture2DCallBack"></param>
         /// <returns></returns>
-        public HttpRoutine GetTexture(string url, Action<Texture2D> callBack = null)
+        public HttpRoutine GetTexture(string url, Action<Texture2D> texture2DCallBack = null, Action<string> errorCallBack = null)
         {
             if (string.IsNullOrWhiteSpace(url))
             {
@@ -112,7 +112,7 @@ namespace Framework
             if (HttpTextureDic.TryGetValue(url, out var texture2D))
             {
                 GameGod.Instance.Log(E_Log.Framework, "请求的url图片已存在，直接返回图片");
-                callBack?.Invoke(texture2D);
+                texture2DCallBack?.Invoke(texture2D);
                 return null;
             }
 
@@ -127,8 +127,8 @@ namespace Framework
                     return;
                 }
                 HttpTextureDic[url] = texture2D;
-                callBack?.Invoke(texture2D);
-            });
+                texture2DCallBack?.Invoke(texture2D);
+            }, errorCallBack);
             return routine;
         }
 
@@ -137,9 +137,9 @@ namespace Framework
         /// </summary>
         /// <param name="url"></param>
         /// <param name="audioType"></param>
-        /// <param name="callBack"></param>
+        /// <param name="audioClipCallBack"></param>
         /// <returns></returns>
-        public HttpRoutine GetAudioClip(string url, AudioType audioType, Action<AudioClip> callBack = null)
+        public HttpRoutine GetAudioClip(string url, AudioType audioType, Action<AudioClip> audioClipCallBack = null, Action<string> errorCallBack = null)
         {
             if (string.IsNullOrWhiteSpace(url))
             {
@@ -150,7 +150,7 @@ namespace Framework
             if (HttpAudioClipDic.TryGetValue(url, out var audioClip))
             {
                 GameGod.Instance.Log(E_Log.Framework, "请求的url音频已存在，直接返回音频");
-                callBack?.Invoke(audioClip);
+                audioClipCallBack?.Invoke(audioClip);
                 return null;
             }
 
@@ -165,17 +165,17 @@ namespace Framework
                     return;
                 }
                 HttpAudioClipDic[url] = audioClip;
-                callBack?.Invoke(audioClip);
-            });
+                audioClipCallBack?.Invoke(audioClip);
+            }, errorCallBack);
             return routine;
         }
 
-        public HttpRoutine Post(string url, string json = null, Action<string> callBack = null)
+        public HttpRoutine Post(string url, string json = null, Action<string> jsonDataCallBack = null, Action<string> errorCallBack = null)
         {
             var pool = GameGod.Instance.PoolManager.CreateClassObjectPool<HttpRoutine>();
             var routine = pool.CreateClassObj();
             routine.ThisPool = pool;
-            routine.Post(url, json, callBack);
+            routine.Post(url, json, jsonDataCallBack,errorCallBack);
             return routine;
         }
 

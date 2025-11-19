@@ -4,7 +4,7 @@
  * 对于网络游戏Module就是数据请求器以及数据缓存点，对于单机游戏Module就是数据的存档
  * 创建时间：2023/09/07 14:58:23
  *********************************************/
-using MainPackage;
+
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -159,9 +159,6 @@ namespace Framework
         /// </summary>
         public void LoadAllModule()
         {
-            //先注销原来的，再读取新的
-            CloseAllModule();
-
             for (int i = 0, length = _allModuleType.Length; i < length; i++)
             {
                 var type = _allModuleType[i];
@@ -203,21 +200,20 @@ namespace Framework
         /// </summary>
         public void CloseAllModule()
         {
-            foreach (var item in _allModuleDic)
+            if (_allModuleDic is not null)
             {
-                item.Value.OnDispose();
+                foreach (var item in _allModuleDic)
+                {
+                    item.Value.OnDispose();
+                }
+                _allModuleDic.Clear();
             }
-            _allModuleDic.Clear();
         }
 
         public override void OnUpdate() { }
         public override void OnDispose()
         {
-            foreach (var item in _allModuleDic)
-            {
-                item.Value.OnDispose();
-            }
-            _allModuleDic.Clear();
+            CloseAllModule();
             _allModuleDic = null;
         }
     }

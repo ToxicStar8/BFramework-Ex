@@ -3,7 +3,7 @@
  * Http访问器
  * 创建时间：2023/01/08 20:40:23
  *********************************************/
-using MainPackage;
+
 using System;
 using System.Collections;
 using System.Text;
@@ -35,12 +35,17 @@ namespace Framework
         /// <summary>
         /// Http图片请求回调
         /// </summary>
-        private Action<Texture2D> _Texture2DCallBack;
+        private Action<Texture2D> _texture2DCallBack;
 
         /// <summary>
         /// Http音频请求回调
         /// </summary>
-        private Action<AudioClip> _AudioClipCallBack;
+        private Action<AudioClip> _audioClipCallBack;
+
+        /// <summary>
+        /// 请求错误回调
+        /// </summary>
+        private Action<string> _errorCallBack;
 
         /// <summary>
         /// 是否繁忙
@@ -76,7 +81,7 @@ namespace Framework
         /// <summary>
         /// 外部调用的Get 0=普通Get 1=TextureGet
         /// </summary>
-        public void Get(string url, Action<string> callBack = null)
+        public void Get(string url, Action<string> jsonDataCallBack = null, Action<string> errorCallBack = null)
         {
             if (IsBusy)
             {
@@ -87,15 +92,16 @@ namespace Framework
             IsBusy = true;
 
             _url = url;
-            _jsonDataCallBack = callBack;
-            _Texture2DCallBack = null;
-            _AudioClipCallBack = null;
+            _jsonDataCallBack = jsonDataCallBack;
+            _texture2DCallBack = null;
+            _audioClipCallBack = null;
+            _errorCallBack = errorCallBack;
             _webRequest?.Dispose();
 
             GetUrl();
         }
 
-        public void Get(string url, Action<Texture2D> callBack = null)
+        public void Get(string url, Action<Texture2D> texture2DCallBack = null, Action<string> errorCallBack = null)
         {
             if (IsBusy)
             {
@@ -107,14 +113,15 @@ namespace Framework
 
             _url = url;
             _jsonDataCallBack = null;
-            _Texture2DCallBack = callBack;
-            _AudioClipCallBack = null;
+            _texture2DCallBack = texture2DCallBack;
+            _audioClipCallBack = null;
+            _errorCallBack = errorCallBack;
             _webRequest?.Dispose();
 
             GetTexture();
         }
 
-        public void Get(string url, AudioType audioType, Action<AudioClip> callBack = null)
+        public void Get(string url, AudioType audioType, Action<AudioClip> audioClipCallBack = null, Action<string> errorCallBack = null)
         {
             if (IsBusy)
             {
@@ -126,8 +133,9 @@ namespace Framework
 
             _url = url;
             _jsonDataCallBack = null;
-            _Texture2DCallBack = null;
-            _AudioClipCallBack = callBack;
+            _texture2DCallBack = null;
+            _audioClipCallBack = audioClipCallBack;
+            _errorCallBack = errorCallBack;
             _webRequest?.Dispose();
 
             GetAudioClip(audioType);
@@ -136,7 +144,7 @@ namespace Framework
         /// <summary>
         /// 外部调用的Post
         /// </summary>
-        public void Post(string url, string json = null, Action<string> callBack = null)
+        public void Post(string url, string json = null, Action<string> jsonDataCallBack = null, Action<string> errorCallBack = null)
         {
             if (IsBusy)
             {
@@ -148,7 +156,10 @@ namespace Framework
 
             _url = url;
             _json = json;
-            _jsonDataCallBack = callBack;
+            _jsonDataCallBack = jsonDataCallBack;
+            _texture2DCallBack = null;
+            _audioClipCallBack = null;
+            _errorCallBack = errorCallBack;
             _webRequest?.Dispose();
 
             PostUrl();
@@ -237,9 +248,10 @@ namespace Framework
                 }
 
                 //打印错误
-                if (!string.IsNullOrWhiteSpace(_webRequest.error))
+                if (_errorCallBack != null)
                 {
                     GameGod.Instance.Log(E_Log.Error, _webRequest.error);
+                    _errorCallBack.Invoke(_webRequest.error);
                 }
             }
             else
@@ -252,16 +264,16 @@ namespace Framework
                     GameGod.Instance.Log(E_Log.Proto, string.Format("<color=#FFF11A>{{\"code\":{0},\"data\":{1}}}</color>", _webRequest.responseCode, downloadHandler.text));
                     _jsonDataCallBack.Invoke(downloadHandler.text);
                 }
-                else if (_Texture2DCallBack != null)
+                else if (_texture2DCallBack != null)
                 {
                     //贴图回调
-                    _Texture2DCallBack?.Invoke(DownloadHandlerTexture.GetContent(_webRequest));
+                    _texture2DCallBack?.Invoke(DownloadHandlerTexture.GetContent(_webRequest));
                     GameGod.Instance.Log(E_Log.Proto, string.Format("<color=#FFF11A>{{\"code\":{0},\"data\":\"\"}}</color>", _webRequest.responseCode));
                 }
-                else if (_AudioClipCallBack != null)
+                else if (_audioClipCallBack != null)
                 {
                     //音频回调
-                    _AudioClipCallBack?.Invoke(DownloadHandlerAudioClip.GetContent(_webRequest));
+                    _audioClipCallBack?.Invoke(DownloadHandlerAudioClip.GetContent(_webRequest));
                     GameGod.Instance.Log(E_Log.Proto, string.Format("<color=#FFF11A>{{\"code\":{0},\"data\":\"\"}}</color>", _webRequest.responseCode));
                 }
                 else
@@ -273,7 +285,9 @@ namespace Framework
             //清理状态
             IsBusy = false;
             _jsonDataCallBack = null;
-            _Texture2DCallBack = null;
+            _texture2DCallBack = null;
+            _audioClipCallBack = null;
+            _errorCallBack = null;
             _currRetry = 0;
             _url = null;
             _webRequest.Dispose();

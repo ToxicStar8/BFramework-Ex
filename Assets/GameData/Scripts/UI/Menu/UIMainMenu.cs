@@ -1,7 +1,7 @@
-﻿/*********************************************
+/*********************************************
  * 
  * 脚本名：UIMainMenu.cs
- * 创建时间：2023/03/14 11:19:54
+ * 创建时间：2026/02/19 01:50:05
  *********************************************/
 using Cysharp.Threading.Tasks;
 using Framework;
@@ -10,14 +10,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using UnityEditor;
 using UnityEngine;
 
 namespace GameData
 {
     public partial class UIMainMenu : GameUIBase
     {
-        public override void OnInit()
+        public override void OnAwake()
         {
             Btn_Start.AddListener(OnClick_Btn_Start);
             Btn_Continue.AddListener(OnClick_Btn_Continue);

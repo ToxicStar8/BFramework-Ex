@@ -14,7 +14,7 @@ namespace GameData
 {
     public partial class UIPause : GameUIBase
     {
-        public override void OnInit()
+        public override void OnAwake()
         {
             Btn_Back.AddListener(() =>
             {

@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6084383747900557898}
+  - component: {fileID: 4548264900050406172}
   m_Layer: 5
   m_Name: UITips
   m_TagString: Untagged
@@ -36,6 +37,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4548264900050406172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3470248483015728178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 042eb8150267d9b4cb44a982909fcd33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rectTransform: {fileID: 0}
+  UIName: 
+  Unit_Tips: {fileID: 7202031852229437244}
 --- !u!1 &6030142038214683729
 GameObject:
   m_ObjectHideFlags: 0
@@ -196,6 +212,7 @@ GameObject:
   - component: {fileID: 3084343758631276594}
   - component: {fileID: 8476970053661135833}
   - component: {fileID: 1171970194767201812}
+  - component: {fileID: 7202031852229437244}
   m_Layer: 5
   m_Name: Unit_Tips
   m_TagString: Untagged
@@ -262,3 +279,17 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   Offset: []
+--- !u!114 &7202031852229437244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8922650322474755979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e38d723651954241a0ac25e4f408b68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rectTransform: {fileID: 0}
+  Tmp_Tips: {fileID: 3780141486455472320}

@@ -1,28 +1,20 @@
-﻿/*********************************************
+/*********************************************
  * 自动生成代码，禁止手动修改文件
  * 脚本名：UIAddItemTips.Design.cs
- * 修改时间：2024/07/28 19:27:50
+ * 修改时间：2026/02/19 02:22:21
  *********************************************/
-
-using Framework;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Framework;
 
 namespace GameData
 {
     public partial class UIAddItemTips
     {
-        public GameObject Unit_AddItemTips;
+        public Unit_AddItemTips Unit_AddItemTips;
 
         public UnitPool<Unit_AddItemTips> Unit_AddItemTipsPool;
 
-        public override void OnCreate()
-        {
-            rectTransform = gameObject.GetComponent<RectTransform>();
-            Unit_AddItemTips = rectTransform.Find("Unit_AddItemTips").gameObject;
-			Unit_AddItemTipsPool = new UnitPool<Unit_AddItemTips>(this,Unit_AddItemTips);
-			
-        }
     }
 }

@@ -28,7 +28,7 @@ namespace GameData
     {
         private UISelectData _data;
 
-        public override void OnInit()
+        public override void OnAwake()
         {
             Btn_Mask.AddListener(OnClick_Btn_Mask);
             Btn_A.AddListener(OnClick_Btn_A);

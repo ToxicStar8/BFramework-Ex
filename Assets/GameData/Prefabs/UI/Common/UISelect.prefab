@@ -91,6 +91,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+  ClickScale: 0.95
 --- !u!114 &2123363851781830348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,6 +214,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+  ClickScale: 0.95
 --- !u!114 &2144113757850704605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -410,6 +412,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+  ClickScale: 0.95
 --- !u!114 &4934407436796820431
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -800,6 +803,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+  ClickScale: 0.95
 --- !u!114 &7285561376965468541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -974,6 +978,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4600337412744757598}
+  - component: {fileID: 3671220467217805630}
   m_Layer: 5
   m_Name: UISelect
   m_TagString: Untagged
@@ -1004,6 +1009,31 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &3671220467217805630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6597616032392615718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9430af38e9a1c6242927dc87127a38d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rectTransform: {fileID: 0}
+  UIName: 
+  Btn_Mask: {fileID: 8418288493887757187}
+  Tmp_Title: {fileID: 4408103707514598220}
+  Rt_Group: {fileID: 2469346377639794195}
+  Btn_A: {fileID: 8217219918231247919}
+  Tmp_A: {fileID: 1723214774759851138}
+  Btn_B: {fileID: 1346958498796832377}
+  Tmp_B: {fileID: 3283281110931096246}
+  Btn_C: {fileID: 4481479096558723236}
+  Tmp_C: {fileID: 2149528619716566984}
+  Btn_D: {fileID: 5143575589226188351}
+  Tmp_D: {fileID: 4463776585460464093}
 --- !u!1 &7165185591531785411
 GameObject:
   m_ObjectHideFlags: 0
@@ -1427,6 +1457,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+  ClickScale: 0.95
 --- !u!114 &1209491379787850385
 MonoBehaviour:
   m_ObjectHideFlags: 0

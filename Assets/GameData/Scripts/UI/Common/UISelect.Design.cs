@@ -1,10 +1,10 @@
-﻿/*********************************************
+/*********************************************
  * 自动生成代码，禁止手动修改文件
  * 脚本名：UISelect.Design.cs
- * 修改时间：2024/07/28 19:33:13
+ * 修改时间：2026/02/19 02:35:05
  *********************************************/
-
 using Framework;
+using MainPackage;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -35,21 +35,5 @@ namespace GameData
 
         public TextMeshProUGUI Tmp_D;
 
-        public override void OnCreate()
-        {
-            rectTransform = gameObject.GetComponent<RectTransform>();
-            Btn_Mask = rectTransform.Find("Btn_Mask").GetComponent<ButtonEx>();
-			Tmp_Title = rectTransform.Find("Tmp_Title").GetComponent<TextMeshProUGUI>();
-			Rt_Group = rectTransform.Find("Rt_Group").GetComponent<RectTransform>();
-			Btn_A = rectTransform.Find("Rt_Group/Btn_A").GetComponent<ButtonEx>();
-			Tmp_A = rectTransform.Find("Rt_Group/Btn_A/Tmp_A").GetComponent<TextMeshProUGUI>();
-			Btn_B = rectTransform.Find("Rt_Group/Btn_B").GetComponent<ButtonEx>();
-			Tmp_B = rectTransform.Find("Rt_Group/Btn_B/Tmp_B").GetComponent<TextMeshProUGUI>();
-			Btn_C = rectTransform.Find("Rt_Group/Btn_C").GetComponent<ButtonEx>();
-			Tmp_C = rectTransform.Find("Rt_Group/Btn_C/Tmp_C").GetComponent<TextMeshProUGUI>();
-			Btn_D = rectTransform.Find("Rt_Group/Btn_D").GetComponent<ButtonEx>();
-			Tmp_D = rectTransform.Find("Rt_Group/Btn_D/Tmp_D").GetComponent<TextMeshProUGUI>();
-			
-        }
     }
 }

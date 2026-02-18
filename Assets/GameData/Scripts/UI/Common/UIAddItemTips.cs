@@ -1,7 +1,7 @@
 /*********************************************
  * 
  * 脚本名：UIAddItemTips.cs
- * 创建时间：2023/01/30 15:16:49
+ * 创建时间：2026/02/19 02:19:35
  *********************************************/
 using DG.Tweening;
 using Framework;
@@ -24,9 +24,13 @@ namespace GameData
 
         private Queue<AddItemTipsData> _tipsQueue;
 
-        public override void OnInit()
+        public override void OnAwake()
         {
+            rectTransform = GetComponent<RectTransform>();
+
             _tipsQueue = new Queue<AddItemTipsData>();
+
+            Unit_AddItemTipsPool = new(Unit_AddItemTips, LoadHelper, rectTransform);
         }
 
         public override void OnShow(params object[] args)
@@ -53,11 +57,10 @@ namespace GameData
                 return;
             }
 
-            var unit = Unit_AddItemTipsPool.CreateUnit(rectTransform);
             var tipsData = _tipsQueue.Dequeue();
+            var unit = Unit_AddItemTipsPool.CreateUnit(tipsData.Parent);
             //显示
             unit.OnShow(/*tipsData.TbProp,*/ tipsData.ItemCount);
-            unit.rectTransform.SetParent(tipsData.Parent);
             unit.rectTransform.DOKill();
             unit.rectTransform.localPosition = Vector3.zero;
             unit.rectTransform.DOLocalMoveY(50, 0.3f).onComplete = () =>
@@ -66,6 +69,9 @@ namespace GameData
             };
         }
 
-        protected override void OnBeforeDestroy() { }
+        protected override void OnBeforeDestroy()
+        {
+
+        }
     }
 }

@@ -13,16 +13,12 @@ namespace Framework
     /// <summary>
     /// PanelUnit基类
     /// </summary>
-    public abstract class UnitBase : GameBase
+    public abstract class UnitBase : GameBaseMono
     {
-        /// <summary>
-        /// Unit游戏对象
-        /// </summary>
-        public GameObject gameObject;
-
         /// <summary>
         /// Unit游戏节点
         /// </summary>
+        [HideInInspector]
         public RectTransform rectTransform;
 
         /// <summary>
@@ -30,24 +26,8 @@ namespace Framework
         /// </summary>
         public LoadHelper LoadHelper;
 
-        /// <summary>
-        /// UI根节点
-        /// </summary>
-        public UIBase UIParent;
-
-        /// <summary>
-        /// Unit根节点 与UIParent相斥 二选一
-        /// </summary>
-        public UnitBase UnitParent;
-
-        /// <summary>
-        /// 加载组件
-        /// </summary>
-        public abstract void OnCreate();
-
-        /// <summary>
-        /// 初始化
-        /// </summary>
-        public abstract void OnInit();
+        public abstract void OnAwake();
+        public abstract void OnRecycle();
+        public abstract void OnBeforeDestroy();
     }
 }

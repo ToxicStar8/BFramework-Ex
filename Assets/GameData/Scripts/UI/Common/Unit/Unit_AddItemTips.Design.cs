@@ -1,13 +1,12 @@
-﻿/*********************************************
+/*********************************************
  * 自动生成代码，禁止手动修改文件
  * 脚本名：Unit_AddItemTips.cs
- * 修改时间：2024/07/28 19:27:50
+ * 修改时间：2026/02/19 02:29:25
  *********************************************/
-
-using Framework;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Framework;
 
 namespace GameData
 {
@@ -15,14 +14,7 @@ namespace GameData
     {
         public TextMeshProUGUI Tmp_Tips;
 
-        public ImageEx Img_Item;
+        public Image Img_Item;
 
-        public override void OnCreate()
-        {
-            rectTransform = gameObject.GetComponent<RectTransform>();
-            Tmp_Tips = rectTransform.Find("Tmp_Tips").GetComponent<TextMeshProUGUI>();
-			Img_Item = rectTransform.Find("Tmp_Tips/Img_Item").GetComponent<ImageEx>();
-			
-        }
     }
 }

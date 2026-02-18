@@ -46,13 +46,11 @@ namespace Framework
                 return;
             }
 
-            uiBase = new T();
             var uiTrans = GameGod.Instance.GetUILevelTrans(uiLevel);
-            uiBase.uiName = uiName;
+            uiBase = GameGod.Instance.LoadHelper.CreateGameObjectSync(uiName + ".prefab", uiTrans).GetComponent<T>();
+            uiBase.UIName = uiName;
             uiBase.LoadHelper = LoadHelper.Create();
-            uiBase.gameObject =  uiBase.LoadHelper.CreateGameObjectSync(uiName + ".prefab", uiTrans);
-            uiBase.OnCreate();
-            uiBase.OnInit();
+            uiBase.OnAwake();
             uiBase.OnShow(args);
             _uiBaseDic[uiName] = uiBase;
         }

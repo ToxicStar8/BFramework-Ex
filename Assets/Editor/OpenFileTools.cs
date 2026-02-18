@@ -48,7 +48,7 @@ namespace Framework
             p.Close();
         }
 
-        [MenuItem("GameObject/打开UI代码", false, 10001)]
+        [MenuItem("GameObject/打开UI代码", false, 99999)]
         public static void OpenUIScript()
         {
             //选择的对象

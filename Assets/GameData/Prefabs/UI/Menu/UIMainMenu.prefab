@@ -121,6 +121,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+  ClickScale: 0.95
 --- !u!1 &3470248483015728178
 GameObject:
   m_ObjectHideFlags: 0
@@ -130,6 +131,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6084383747900557898}
+  - component: {fileID: 1778644051398978139}
   m_Layer: 5
   m_Name: UIMainMenu
   m_TagString: Untagged
@@ -160,6 +162,26 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1778644051398978139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3470248483015728178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb22f7612e8acc74898da6153c9eb845, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rectTransform: {fileID: 0}
+  UIName: 
+  Btn_Start: {fileID: 6241704456669603677}
+  Tmp_Start: {fileID: 6381575233404065783}
+  Btn_Continue: {fileID: 3909364571198170632}
+  Tmp_Continue: {fileID: 2978204390557710508}
+  Btn_Exit: {fileID: 4797794576999223039}
+  Tmp_Exit: {fileID: 638865215157440260}
 --- !u!1 &4062746273716734723
 GameObject:
   m_ObjectHideFlags: 0
@@ -755,6 +777,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+  ClickScale: 0.95
 --- !u!1 &6611465362462778115
 GameObject:
   m_ObjectHideFlags: 0
@@ -876,3 +899,4 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+  ClickScale: 0.95

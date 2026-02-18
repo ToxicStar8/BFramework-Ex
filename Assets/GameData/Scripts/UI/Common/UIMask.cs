@@ -14,7 +14,7 @@ namespace GameData
 {
     public partial class UIMask : GameUIBase
     {
-        public override void OnInit()
+        public override void OnAwake()
         {
             AddEventListener(UIEvent.OnCloseUIMask, OnCloseUIMask);
         }

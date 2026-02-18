@@ -27,7 +27,7 @@ namespace GameData
     {
         private UIDialogData _uiDialogData;
 
-        public override void OnInit()
+        public override void OnAwake()
         {
             Btn_Mask.AddListener(CloseSelf);
             Btn_Confirm.AddListener(OnClick_Btn_Confirm);

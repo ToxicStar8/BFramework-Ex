@@ -21,22 +21,7 @@ namespace Framework
         private RectTransform _rootRect;
 
         /// <summary>
-        /// 游戏对象模板
-        /// </summary>
-        private GameObject gameObject;
-
-        /// <summary>
-        /// UI根节点
-        /// </summary>
-        private UIBase _uiParent;
-
-        /// <summary>
-        /// Unit根节点 与UIParent相斥 二选一
-        /// </summary>
-        private UnitBase _unitParent;
-
-        /// <summary>
-        /// 自己的模板对象
+        /// 自己作为模板
         /// </summary>
         private T _unitBase;
 
@@ -65,28 +50,13 @@ namespace Framework
         /// <param name="uiBase">父UI节点</param>
         /// <param name="go">需要克隆的对象</param>
         /// <param name="isShowGo">是否显示原游戏对象</param>
-        public UnitPool(UIBase uiBase, GameObject go, bool isShowGo = false)
+        public UnitPool(T go, LoadHelper loadHelper, RectTransform rootRect, bool isShowGo = false)
         {
-            _uiParent = uiBase;
-            LoadHelper = uiBase.LoadHelper;
-            _rootRect = uiBase.rectTransform;
-            gameObject = go;
-            gameObject.SetActive(isShowGo);
-        }
-
-        /// <summary>
-        /// 初始化Unit池
-        /// </summary>
-        /// <param name="unitBase">父Unit节点</param>
-        /// <param name="go">需要克隆的对象</param>
-        /// <param name="isShowGo">是否显示原游戏对象</param>
-        public UnitPool(UnitBase unitBase, GameObject go, bool isShowGo = false)
-        {
-            _unitParent = unitBase;
-            LoadHelper = unitBase.LoadHelper;
-            _rootRect = unitBase.rectTransform;
-            gameObject = go;
-            gameObject.SetActive(isShowGo);
+            LoadHelper = loadHelper;
+            _rootRect = rootRect;
+            _unitBase = go;
+            _unitBase.SetActive(isShowGo);
+            GameGod.Instance.Log(E_Log.Log, "创建对象池", UnitName);
         }
 
         /// <summary>
@@ -98,16 +68,9 @@ namespace Framework
             if (PoolQueue.Count == 0)
             {
                 //GameEntry.Instance.Log(E_Log.Framework, "不存在" + UnitName + "对象", "创建");
-                unitBase = new T();
-                //初始化
-                if (_uiParent != null)
-                    unitBase.UIParent = _uiParent;
-                else if (_unitParent != null)
-                    unitBase.UnitParent = _unitParent;
-                unitBase.gameObject = Object.Instantiate(gameObject, parent);
+                unitBase = Object.Instantiate(_unitBase, parent).GetComponent<T>();
                 unitBase.LoadHelper = LoadHelper;
-                unitBase.OnCreate();
-                unitBase.OnInit();
+                unitBase.OnAwake();
             }
             else
             {
@@ -116,9 +79,9 @@ namespace Framework
                 unitBase.gameObject.SetParent(parent);
             }
             PoolList.Add(unitBase);
-            unitBase.rectTransform.localPosition = gameObject.transform.localPosition;
-            unitBase.rectTransform.localRotation = gameObject.transform.localRotation;
-            unitBase.rectTransform.localScale = gameObject.transform.localScale;
+            unitBase.rectTransform.localPosition = _unitBase.transform.localPosition;
+            unitBase.rectTransform.localRotation = _unitBase.transform.localRotation;
+            unitBase.rectTransform.localScale = _unitBase.transform.localScale;
             unitBase.gameObject.SetActive(true);
             return unitBase;
         }
@@ -156,6 +119,7 @@ namespace Framework
         /// </summary>
         public void Recycle(T obj)
         {
+            obj.OnRecycle();
             obj.gameObject.SetParent(_rootRect);
             obj.gameObject.SetActive(false);
             PoolQueue.Enqueue(obj);
@@ -170,6 +134,7 @@ namespace Framework
             for (int i = 0; i < PoolList.Count; i++)
             {
                 var obj = PoolList[i];
+                obj.OnRecycle();
                 obj.gameObject.SetParent(_rootRect);
                 obj.gameObject.SetActive(false);
                 PoolQueue.Enqueue(obj);
@@ -182,6 +147,7 @@ namespace Framework
         /// </summary>
         public void Relase(T obj)
         {
+            obj.OnBeforeDestroy();
             obj.gameObject.Destroy();
             PoolList.Remove(obj);
             obj = null;
@@ -195,6 +161,7 @@ namespace Framework
             for (int i = 0; i < PoolList.Count; i++)
             {
                 var obj = PoolList[i];
+                obj.OnBeforeDestroy();
                 obj.gameObject.Destroy();
                 obj = null;
             }
@@ -210,11 +177,8 @@ namespace Framework
             if (_unitBase == null)
             {
                 GameGod.Instance.Log(E_Log.Framework, "Panel" + UnitName, "创建");
-                _unitBase = new T();
-                _unitBase.gameObject = gameObject;
                 _unitBase.LoadHelper = LoadHelper;
-                _unitBase.OnCreate();
-                _unitBase.OnInit();
+                _unitBase.OnAwake();
             }
             _unitBase.gameObject.SetActive(true);
             return _unitBase;
@@ -230,19 +194,6 @@ namespace Framework
                 CreateBase();
             }
             return _unitBase;
-        }
-
-        /// <summary>
-        /// 隐藏Panel
-        /// </summary>
-        public void HideUnitBase()
-        {
-            if (_unitBase == null)
-            {
-                GameGod.Instance.Log(E_Log.Error, UnitName, "的Panel不存在！");
-                return;
-            }
-            _unitBase.gameObject.SetActive(false);
         }
     }
 }

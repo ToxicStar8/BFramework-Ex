@@ -1,13 +1,12 @@
-﻿/*********************************************
+/*********************************************
  * 自动生成代码，禁止手动修改文件
  * 脚本名：UIMainMenu.Design.cs
- * 修改时间：2024/07/28 19:47:26
+ * 修改时间：2026/02/19 02:30:03
  *********************************************/
-
-using Framework;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Framework;
 
 namespace GameData
 {
@@ -25,16 +24,5 @@ namespace GameData
 
         public TextMeshProUGUI Tmp_Exit;
 
-        public override void OnCreate()
-        {
-            rectTransform = gameObject.GetComponent<RectTransform>();
-            Btn_Start = rectTransform.Find("Btn_Start").GetComponent<ButtonEx>();
-			Tmp_Start = rectTransform.Find("Btn_Start/Tmp_Start").GetComponent<TextMeshProUGUI>();
-			Btn_Continue = rectTransform.Find("Btn_Continue").GetComponent<ButtonEx>();
-			Tmp_Continue = rectTransform.Find("Btn_Continue/Tmp_Continue").GetComponent<TextMeshProUGUI>();
-			Btn_Exit = rectTransform.Find("Btn_Exit").GetComponent<ButtonEx>();
-			Tmp_Exit = rectTransform.Find("Btn_Exit/Tmp_Exit").GetComponent<TextMeshProUGUI>();
-			
-        }
     }
 }

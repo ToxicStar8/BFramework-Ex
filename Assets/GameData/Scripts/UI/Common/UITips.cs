@@ -1,14 +1,13 @@
-﻿/*********************************************
+/*********************************************
  * 
  * 脚本名：UITips.cs
- * 创建时间：2023/01/06 13:57:39
+ * 创建时间：2026/02/19 02:31:45
  *********************************************/
 using DG.Tweening;
 using Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace GameData
@@ -25,9 +24,13 @@ namespace GameData
         private Queue<TipsData> _tipsQueue;
         private bool _isShowing = false;
 
-        public override void OnInit()
+        public override void OnAwake()
         {
+            rectTransform = GetComponent<RectTransform>();
+
             _tipsQueue = new Queue<TipsData>();
+
+            Unit_TipsPool = new(Unit_Tips, LoadHelper, rectTransform);
         }
 
         public override void OnShow(params object[] args)

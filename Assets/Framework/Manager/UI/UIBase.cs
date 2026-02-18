@@ -14,22 +14,19 @@ namespace Framework
     /// <summary>
     /// UI基类
     /// </summary>
-    public abstract class UIBase : GameBase
+    public abstract class UIBase : GameBaseMono
     {
-        /// <summary>
-        /// UI游戏对象
-        /// </summary>
-        public GameObject gameObject;
-
         /// <summary>
         /// UI游戏节点
         /// </summary>
+        [HideInInspector]
         public RectTransform rectTransform;
 
         /// <summary>
         /// UI名字
         /// </summary>
-        public string uiName;
+        [HideInInspector]
+        public string UIName;
 
         /// <summary>
         /// 加载器
@@ -40,17 +37,6 @@ namespace Framework
         /// 协程
         /// </summary>
         protected Coroutine Coroutine;
-
-        /// <summary>
-        /// 创建单独的UnitPool
-        /// </summary>
-        protected UnitPool<T> CreateSinglePool<T>()where T : UnitBase,new()
-        {
-            var objName = typeof(T).Name.Split('_')[1] + ".prefab";
-            var obj = LoadHelper.LoadSync<GameObject>(objName);
-            var pool = new UnitPool<T>(this, obj, obj.activeSelf);
-            return pool;
-        }
 
         /// <summary>
         /// 获取UI节点
@@ -66,7 +52,7 @@ namespace Framework
         /// </summary>
         public void CloseSelf()
         {
-            CloseUI(uiName);
+            CloseUI(UIName);
         }
 
         /// <summary>
@@ -74,7 +60,7 @@ namespace Framework
         /// </summary>
         public void HideSelf()
         {
-            HideUI(uiName);
+            HideUI(UIName);
         }
         #endregion
 
@@ -124,14 +110,9 @@ namespace Framework
         #endregion
 
         /// <summary>
-        /// 加载组件
-        /// </summary>
-        public abstract void OnCreate();
-
-        /// <summary>
         /// 初始化
         /// </summary>
-        public abstract void OnInit();
+        public abstract void OnAwake();
 
         /// <summary>
         /// 每次打开时调用

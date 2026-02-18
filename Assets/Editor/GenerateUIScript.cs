@@ -153,7 +153,7 @@ namespace GameData
                 temp = temp.Replace("#ButtonBindFunc", btnBindFunc);
                 temp = temp.Replace("#ButtonOnClick", btnOnClickStr);
                 //导出文件
-                File.WriteAllText(path + go.name + ".cs", temp, Encoding.UTF8);
+                File.WriteAllText(path + go.name + ".cs", temp, new UTF8Encoding(false));
             }
         }
 
@@ -203,7 +203,7 @@ namespace GameData
             {
                 return;
             }
-            File.WriteAllText(savePath, temp, Encoding.UTF8);
+            File.WriteAllText(savePath, temp, new UTF8Encoding(false));
         }
 
         /// <summary>
@@ -312,7 +312,7 @@ namespace GameData
                 temp = temp.Replace("#UnitName", go.name);
                 temp = temp.Replace("#Time", System.DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
                 //导出文件
-                File.WriteAllText(savePath, temp, Encoding.UTF8);
+                File.WriteAllText(savePath, temp, new UTF8Encoding(false));
             }
         }
 
@@ -368,7 +368,7 @@ namespace GameData
             {
                 return;
             }
-            File.WriteAllText(savePath, temp, Encoding.UTF8);
+            File.WriteAllText(savePath, temp, new UTF8Encoding(false));
         }
 
         /// <summary>

@@ -116,16 +116,26 @@ namespace Framework
 
         //todo:全局清除所有的红点数量
 
+        public void ClearRedPointData()
+        {
+            if (_redPointDic != null)
+                _redPointDic.Clear();
+
+            if (_redActions != null)
+            {
+                var list = _redActions.Keys.ToList();
+                for (int i = 0; i < list.Count; i++)
+                {
+                    _redActions[list[i]] = default;
+                }
+                _redActions.Clear();
+            }
+        }
+
         public override void OnDispose()
         {
-            _redPointDic.Clear();
-
-            var list = _redActions.Keys.ToList();
-            for (int i = 0; i < list.Count; i++)
-            {
-                _redActions[list[i]] = default;
-            }
-            _redActions.Clear();
+            ClearRedPointData();
+            _redPointDic = default;
             _redActions = default;
         }
     }

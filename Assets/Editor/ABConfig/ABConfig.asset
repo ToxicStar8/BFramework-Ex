@@ -25,6 +25,8 @@ MonoBehaviour:
   - Assets/GameData/Prefabs/UI
   - Assets/GameData/Scene
   TrueABList:
+  - path: Assets/Editor/ABConfig/ABInformation
+    abName: abinformation
   - path: Assets/Hotfix
     abName: hotfix
   - path: Assets/GameData/Art/Font
@@ -41,3 +43,5 @@ MonoBehaviour:
     abName: uicommon
   - path: Assets/GameData/Prefabs/UI/Menu
     abName: uimenu
+  - path: Assets/GameData/Prefabs/UI/RedPoint
+    abName: uiredpoint

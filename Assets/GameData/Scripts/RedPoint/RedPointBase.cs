@@ -12,95 +12,95 @@ namespace GameData
     /// <summary>
     /// 红点基类
     /// </summary>
-    public class RedPointBase : GameBaseMono
+    public abstract class RedPointBase : GameBaseMono
     {
         //唯一标识符参数，用于区分Id多红点的情况
         [SerializeField]
         public string Key;
 
-        //需要监听的红点Ids，在预制体上加
         [SerializeField]
-        protected List<int> _redPointIds;
+        protected List<int> RedPointIds;
 
         // 当前红点数量
-        protected Dictionary<int, int> _redPointNumDic;
+        protected Dictionary<int, int> RedNumDict;
 
         /// <summary>
         /// 当前红点数量
         /// </summary>
-        protected int _curNum;
+        protected int CurNum;
 
         public bool IsInit { get; private set; }
 
         private void Awake()
         {
-            _redPointNumDic = new Dictionary<int, int>();
+            this.RedNumDict = new Dictionary<int, int>();
         }
 
         private void Start()
         {
             //先放到一个很远的地方，初始化完毕后再设回来
-            var curPos = transform.localPosition;
-            transform.localPosition = Vector3.one * 9999;
+            //var curPos = transform.localPosition;
+            //transform.localPosition = new Vector3(9999, 9999, 9999);
 
-            Debug.Log("这里初始化红点");
+            //Debug.Log("这里初始化红点");
+
             //添加所有需要监听的事件
-            for (int i = 0; i < _redPointIds.Count; i++)
+            for (int i = 0; i < this.RedPointIds.Count; i++)
             {
-                var id = _redPointIds[i];
+                var id = this.RedPointIds[i];
                 //添加所有需要监听的事件
-                GameGod.Instance.RedPointManager.AddRedCallBack(id, UpdateRedPoint);
-                //计算好的数量，存下来使用 
+                GameGod.Instance.RedPointManager.AddRedCallBack(id, this.UpdateRed);
+                //计算好的 存下来使用 
                 var num1 = RedPointHelper.Instance.GetNumById(id, Key);
                 if (num1 > 0)
                 {
-                    _curNum++;
+                    this.CurNum++;
                 }
-                _redPointNumDic.Add(id, num1);
+                this.RedNumDict.Add(id, num1);
             }
-            ShowOrHideRed();
+            this.ShowOrHideRed();
 
             IsInit = true;
-            transform.localPosition = curPos;
+            //transform.localPosition = curPos;
         }
 
         /// <summary>
         /// 更新事件
         /// </summary>
-        private void UpdateRedPoint(int id, string key, int num)
+        private void UpdateRed(int id, string key, int num)
         {
             if (key == Key)
             {
-                CalucateRedPoint(id, num);
-                ShowOrHideRed();
+                this.CalucateRed(id, num);
+                this.ShowOrHideRed();
             }
         }
 
         /// <summary>
         /// 重新计算红点
         /// </summary>
-        private void CalucateRedPoint(int id, int num1)
+        private void CalucateRed(int id, int num1)
         {
             // TD 显示
-            if (_redPointNumDic.TryGetValue(id, out int value))
+            if (this.RedNumDict.TryGetValue(id, out int value))
             {
                 if (num1 > 0 && value == 0)
                 {
                     value = 1;
-                    _curNum++;
+                    this.CurNum++;
                 }
                 else if (num1 == 0 && value == 1)
                 {
-                    _redPointNumDic.Remove(id);
-                    _curNum--;
+                    this.RedNumDict.Remove(id);
+                    this.CurNum--;
                 }
             }
             else
             {
                 if (num1 > 0)
                 {
-                    _redPointNumDic.Add(id, 1);
-                    _curNum++;
+                    this.RedNumDict.Add(id, 1);
+                    this.CurNum++;
                 }
             }
         }
@@ -110,37 +110,44 @@ namespace GameData
         /// </summary>
         protected virtual void ShowOrHideRed()
         {
-            gameObject.SetActive(_curNum > 0);
+            this.SetActive(this.CurNum > 0);
+            if (CurNum > 0)
+                OnStartShowRed();
+            else
+                OnStopShowRed();
         }
+        public virtual void OnStartShowRed() { }
+        public virtual void OnStopShowRed() { }
 
         public bool IsShow()
         {
             bool isShow = false;
-            foreach (var item in _redPointNumDic)
+            foreach (var item in this.RedNumDict)
             {
                 isShow = item.Value > 0;
                 if (isShow)
-                {
                     break;
-                }
             }
             return isShow;
         }
 
         private void OnDisable()
         {
-            _curNum = 0;
-            _redPointNumDic.Clear();
+            this.CurNum = 0;
+            this.RedNumDict.Clear();
         }
 
         private void OnDestroy()
         {
             //移除所有监听
-            for (int i = 0; i < _redPointIds.Count; i++)
+            for (int i = 0; i < this.RedPointIds.Count; i++)
             {
-                var id = _redPointIds[i];
-                GameGod.Instance.RedPointManager?.RemoveRedCallBack(id, UpdateRedPoint);
+                var id = this.RedPointIds[i];
+                GameGod.Instance.RedPointManager?.RemoveRedCallBack(id, this.UpdateRed);
             }
+
+            this.RedNumDict.Clear();
+            this.RedPointIds.Clear();
         }
     }
 }

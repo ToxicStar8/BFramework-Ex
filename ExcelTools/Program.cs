@@ -2,114 +2,48 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using OfficeOpenXml;
 using System.IO;
 using System.Globalization;
+using System.Xml.Linq;
 
 namespace ExcelTools
 {
     public static class Program
     {
-        private static Action<string> _logger = Console.WriteLine;
         private static string _toolsPath;       //工具路径
         private static string _excelPath;       //表格路径
         private static string _outTxtPath;      //导出Txt文件路径
         private static string _outScriptPath;   //导出代码文件路径
-        private static string _gameDataPath;    //导出根目录
 
         public static void Main(string[] args)
         {
-            ExportWithConfig();
-            Console.ReadKey();
-        }
+            _toolsPath = Directory.GetCurrentDirectory();
+            //_toolsPath = "D:/Unity/CultivationRoguelike2D/ExcelTools";
+            _excelPath = _toolsPath.Substring(0, _toolsPath.Length - "ExcelTools".Length);
+            //_excelPath = _toolsPath.Substring(0, _toolsPath.Length - "ExcelTools".Length) + "/Table";
+            _outScriptPath = _excelPath + "/ExcelTools/GameData/Scripts/Table";
+            _outTxtPath = _excelPath + "/ExcelTools/GameData/Table";
 
-        /// <summary>
-        /// 控制台模式：读取config后导出并拷贝到目标工程
-        /// </summary>
-        public static void ExportWithConfig(Action<string> logger = null)
-        {
-            SetLogger(logger);
-            var toolsPath = Directory.GetCurrentDirectory();
-            var excelPath = toolsPath.Substring(0, toolsPath.Length - "ExcelTools".Length);
-            var gameDataPath = Path.Combine(toolsPath, "GameData");
-            var outScriptPath = Path.Combine(gameDataPath, "Scripts", "Table");
-            var outTxtPath = Path.Combine(gameDataPath, "Table");
+            CreateAllTable(() => {
+                var config = File.OpenText(_toolsPath + "/config.txt");     //配置文件
+                var src = config.ReadLine();
 
-            InitializePaths(toolsPath, excelPath, gameDataPath, outScriptPath, outTxtPath);
-            CreateAllTable(() =>
-            {
-                var configPath = Path.Combine(_toolsPath, "config.txt");
-                using (var config = File.OpenText(configPath))
-                {
-                    var src = config.ReadLine();
-                    if (string.IsNullOrWhiteSpace(src))
-                    {
-                        Log("config.txt 目标路径为空，已跳过拷贝。");
-                        return;
-                    }
+                var tablePath = _toolsPath + "/GameData/Scripts/Table";     //导出的表代码
+                var gameTablePath = src + "/Scripts/Table";   //游戏的表代码
+                Directory.Delete(gameTablePath, true);            //先删才能移
+                Directory.Move(tablePath, gameTablePath);   //移动
 
-                    var tablePath = Path.Combine(_gameDataPath, "Scripts", "Table");
-                    var gameTablePath = Path.Combine(src, "Scripts", "Table");
-                    SafeReplaceDirectory(tablePath, gameTablePath);
+                var txtPath = _toolsPath + "/GameData/Table";     //导出的表数据
+                var gameTxtPath = src + "/Table";   //游戏的表数据
+                Directory.Delete(gameTxtPath, true);            //先删才能移
+                Directory.Move(txtPath, gameTxtPath);   //移动
 
-                    var txtPath = Path.Combine(_gameDataPath, "Table");
-                    var gameTxtPath = Path.Combine(src, "Table");
-                    SafeReplaceDirectory(txtPath, gameTxtPath);
-                }
-
-                Log("全部导出完成！");
+                config.Close();
+                Console.WriteLine("全部导出完成！");
             });
-        }
-
-        /// <summary>
-        /// Unity调用模式：由外部传入路径，不依赖当前工作目录
-        /// </summary>
-        public static void ExportForUnity(string toolsPath, string excelPath, string outScriptPath, string outTxtPath, Action<string> logger = null)
-        {
-            SetLogger(logger);
-            var gameDataPath = Directory.GetParent(outTxtPath).FullName;
-            InitializePaths(toolsPath, excelPath, gameDataPath, outScriptPath, outTxtPath);
-            CreateAllTable(() => Log("全部导出完成！"));
-        }
-
-        private static void InitializePaths(string toolsPath, string excelPath, string gameDataPath, string outScriptPath, string outTxtPath)
-        {
-            _toolsPath = toolsPath;
-            _excelPath = excelPath;
-            _gameDataPath = gameDataPath;
-            _outScriptPath = outScriptPath;
-            _outTxtPath = outTxtPath;
-        }
-
-        private static void SetLogger(Action<string> logger)
-        {
-            _logger = logger ?? Console.WriteLine;
-        }
-
-        private static void Log(string message)
-        {
-            _logger?.Invoke(message);
-        }
-
-        private static void SafeReplaceDirectory(string sourcePath, string targetPath)
-        {
-            if (!Directory.Exists(sourcePath))
-            {
-                return;
-            }
-
-            var targetParent = Directory.GetParent(targetPath);
-            if (targetParent != null && !targetParent.Exists)
-            {
-                targetParent.Create();
-            }
-
-            if (Directory.Exists(targetPath))
-            {
-                Directory.Delete(targetPath, true);
-            }
-
-            Directory.Move(sourcePath, targetPath);
+            Console.ReadKey();
         }
 
         /// <summary>
@@ -138,15 +72,15 @@ namespace GameData
     }
 }";
             //先删除目录文件夹（清空数据） 再创建数据目录
-            var gdPath = _gameDataPath;
+            var gdPath = _toolsPath + "/GameData";
             if (Directory.Exists(gdPath))
             {
                 Directory.Delete(gdPath, true);
             }
             Directory.CreateDirectory(gdPath);
-            Directory.CreateDirectory(Path.Combine(gdPath, "Scripts"));
-            Directory.CreateDirectory(_outScriptPath);
-            Directory.CreateDirectory(_outTxtPath);
+            Directory.CreateDirectory(gdPath + "/Scripts");
+            Directory.CreateDirectory(gdPath + "/Scripts/Table");
+            Directory.CreateDirectory(gdPath + "/Table");
 
             bool isOutExcel = false;
             //遍历全部表
@@ -159,11 +93,11 @@ namespace GameData
                 {
                     var newPath = fileInfo.FullName + ".temp";
                     //如果有 先删除
-                    if (File.Exists(newPath))
+                    if (Directory.Exists(newPath))
                     {
-                        File.Delete(newPath);
+                        Directory.Delete(newPath, true);
                     }
-                    File.Copy(fileInfo.FullName, newPath, true);
+                    File.Copy(fileInfo.FullName, newPath);
                     var newFileInfo = new FileInfo(newPath);
 
                     //通过读取到的文件信息，打开Excel
@@ -174,11 +108,11 @@ namespace GameData
                         {
                             var table = excelPackage.Workbook.Worksheets[i + 1];
                             var excelName = excelPackage.File.Name.Replace(".temp", "");
-                            Log($"导出{excelName}中...");
+                            Console.WriteLine($"导出{excelName}中...");
                             CreateTableTxt(table);
                             CreateTableScript(table, excelName);
                             typeofStr += "typeof(" + CreateTableCtrlScript(table, excelName) + "),\r\n\t\t\t";
-                            Log(table.Name + "已完成...");
+                            Console.WriteLine(table.Name + "已完成...");
 
                             isOutExcel = true;
                         }
@@ -190,7 +124,7 @@ namespace GameData
 
             if (!isOutExcel)
             {
-                Log("无需转换！");
+                Console.WriteLine("无需转换！");
                 return;
             }
 
@@ -258,10 +192,7 @@ namespace GameData
                 sb.Append("`");
             }
             //删除最后一个`即可
-            if (sb.Length > 0)
-            {
-                sb.Remove(sb.Length - 1, 1);
-            }
+            sb.Remove(sb.Length - 1, 1);
 
             var outStr = sb.ToString().Trim();
             //导出文本
@@ -435,7 +366,7 @@ namespace GameData
             outAllStr = outAllStr.Replace("#ValueStr", outValueStr);
             outAllStr = outAllStr.Replace("#CaseStr", outCaseStr);
 
-            Log(_outScriptPath + $"/{tableName}.cs");
+            Console.WriteLine(_outScriptPath + $"/{tableName}.cs");
             var file = File.CreateText(_outScriptPath + $"/{tableName}.cs");
             file.WriteLine(outAllStr.ToString());
             file.Close();

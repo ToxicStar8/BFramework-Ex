@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using UnityEditor;
+using UnityEditor.Callbacks;
 using UnityEngine;
 
 namespace Framework
@@ -32,6 +33,11 @@ namespace Framework
         /// 是否连带生成Unit
         /// </summary>
         public static bool IsGenerateUnit;
+
+        private const string PendingAutoBindKey = "GenerateUIScript.PendingAutoBind";
+        private const string PendingAutoBindInstanceIdKey = "GenerateUIScript.PendingAutoBind.InstanceId";
+        private const string PendingAutoBindRetryKey = "GenerateUIScript.PendingAutoBind.Retry";
+        private const int MaxAutoBindRetry = 120;
 
         [MenuItem("GameObject/生成UI代码", false, 10000)]
         public static void GenerateUIAndDesign()
@@ -142,12 +148,10 @@ namespace Framework
 
             try
             {
-                //绑定组件代码
-                BindUIComponent();
-
+                QueueAutoBind(go);
                 BindDataDic.Clear();
 
-                Debug.Log(go.name + "生成完毕！如没有绑定成功，请再生成一次！");
+                Debug.Log(go.name + "代码生成完成，编译后将自动绑定");
                 //回收资源
                 System.GC.Collect();
 
@@ -158,6 +162,95 @@ namespace Framework
             {
                 Debug.LogError(e);
             }
+        }
+
+        [DidReloadScripts]
+        private static void OnScriptsReloaded()
+        {
+            TryAutoBindPending();
+        }
+
+        private static void QueueAutoBind(GameObject go)
+        {
+            SessionState.SetBool(PendingAutoBindKey, true);
+            SessionState.SetInt(PendingAutoBindInstanceIdKey, go.GetInstanceID());
+            SessionState.SetInt(PendingAutoBindRetryKey, 0);
+
+            EditorApplication.delayCall -= TryAutoBindPending;
+            EditorApplication.delayCall += TryAutoBindPending;
+        }
+
+        private static void TryAutoBindPending()
+        {
+            if (!SessionState.GetBool(PendingAutoBindKey, false))
+            {
+                return;
+            }
+
+            if (EditorApplication.isCompiling || EditorApplication.isUpdating)
+            {
+                EditorApplication.delayCall -= TryAutoBindPending;
+                EditorApplication.delayCall += TryAutoBindPending;
+                return;
+            }
+
+            var instanceId = SessionState.GetInt(PendingAutoBindInstanceIdKey, 0);
+            var rootGo = EditorUtility.InstanceIDToObject(instanceId) as GameObject;
+            if (rootGo == null)
+            {
+                ClearAutoBindState();
+                Debug.LogError("自动绑定失败：未找到目标对象，请重新生成一次");
+                return;
+            }
+
+            BindDataDic.Clear();
+            CollectBindDataRecursively(rootGo);
+
+            var bindSucceed = BindUIComponent();
+            if (bindSucceed)
+            {
+                BindDataDic.Clear();
+                ClearAutoBindState();
+                Debug.Log(rootGo.name + "自动绑定完成");
+                return;
+            }
+
+            var retry = SessionState.GetInt(PendingAutoBindRetryKey, 0) + 1;
+            SessionState.SetInt(PendingAutoBindRetryKey, retry);
+            if (retry >= MaxAutoBindRetry)
+            {
+                ClearAutoBindState();
+                Debug.LogError("自动绑定超时，请检查脚本编译错误后再生成一次");
+                return;
+            }
+
+            EditorApplication.delayCall -= TryAutoBindPending;
+            EditorApplication.delayCall += TryAutoBindPending;
+        }
+
+        private static void CollectBindDataRecursively(GameObject go)
+        {
+            FindAllComponent(go);
+            if (!BindDataDic.TryGetValue(go, out var list))
+            {
+                return;
+            }
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                var bind = list[i];
+                if (bind != null && bind.Type == "Unit" && bind.Rect != null)
+                {
+                    CollectBindDataRecursively(bind.Rect.gameObject);
+                }
+            }
+        }
+
+        private static void ClearAutoBindState()
+        {
+            SessionState.SetBool(PendingAutoBindKey, false);
+            SessionState.SetInt(PendingAutoBindInstanceIdKey, 0);
+            SessionState.SetInt(PendingAutoBindRetryKey, 0);
         }
 
         private static void CreateUIScript(GameObject go, string path)
@@ -176,7 +269,7 @@ using UnityEngine;
 
 namespace GameData
 {
-    public partial class #UIName : GameUIBase
+    public partial class #UIName : UIBase
     {
         public override void OnAwake()
         {
@@ -504,8 +597,9 @@ namespace GameData
         /// <summary>
         /// 将生成好的Mono绑定组件
         /// </summary>
-        private static void BindUIComponent()
+        private static bool BindUIComponent()
         {
+            var allBound = true;
             foreach (var item in BindDataDic)
             {
                 var go = item.Key;
@@ -517,6 +611,11 @@ namespace GameData
                 //反射拿到类
                 var bindTypeStr = $"GameData.{go.name}";
                 Type uiBindType = assembly.GetType(bindTypeStr);
+                if (uiBindType == null)
+                {
+                    allBound = false;
+                    continue;
+                }
                 //添加绑定关系的组件
                 var uiBind = go.GetComponent(uiBindType);
                 uiBind ??= go.AddComponent(uiBindType);
@@ -600,6 +699,7 @@ namespace GameData
                     }
                     catch (Exception e)
                     {
+                        allBound = false;
                         Debug.LogError($"<color=#FF7070>Name={bind.Rect.name} Type={bind.Type}</color>\n===> {e} prefab: {go.name}");
                     }
                 }
@@ -608,6 +708,8 @@ namespace GameData
                 EditorUtility.SetDirty(uiBind);
 
             }
+
+            return allBound;
         }
 
         private static Type ResolveTypeByName(string typeName)

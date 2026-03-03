@@ -12,11 +12,11 @@ using UnityEngine;
 
 namespace GameData
 {
-    public partial class UIMask : GameUIBase
+    public partial class UIMask : UIBase
     {
         public override void OnAwake()
         {
-            AddEventListener(UIEvent.OnCloseUIMask, OnCloseUIMask);
+            AddEventListener((uint)UIEvent.OnCloseUIMask, OnCloseUIMask);
         }
 
         private void OnCloseUIMask(object[] obj)

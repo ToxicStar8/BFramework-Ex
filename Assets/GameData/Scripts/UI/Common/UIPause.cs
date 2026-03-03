@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace GameData
 {
-    public partial class UIPause : GameUIBase
+    public partial class UIPause : UIBase
     {
         public override void OnAwake()
         {

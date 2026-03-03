@@ -24,7 +24,7 @@ namespace GameData
         public Action DCallback;
     }
 
-    public partial class UISelect : GameUIBase
+    public partial class UISelect : UIBase
     {
         private UISelectData _data;
 

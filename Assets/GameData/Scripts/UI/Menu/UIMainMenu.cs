@@ -14,7 +14,7 @@ using UnityEngine;
 
 namespace GameData
 {
-    public partial class UIMainMenu : GameUIBase
+    public partial class UIMainMenu : UIBase
     {
         public override void OnAwake()
         {
@@ -22,10 +22,10 @@ namespace GameData
             Btn_Continue.AddListener(OnClick_Btn_Continue);
             Btn_Exit.AddListener(OnClick_Btn_Exit);
 
-            RegisterUpdate(Update);
+            RegisterUpdate(OnUpdate);
         }
 
-        private void Update()
+        private void OnUpdate()
         {
 
         }

@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace GameData
 {
-    public partial class UIAddItemTips : GameUIBase
+    public partial class UIAddItemTips : UIBase
     {
         private class AddItemTipsData
         {

@@ -23,7 +23,7 @@ namespace GameData
         public bool IsShowCancel = true;
     }
 
-    public partial class UIDialog : GameUIBase
+    public partial class UIDialog : UIBase
     {
         private UIDialogData _uiDialogData;
 

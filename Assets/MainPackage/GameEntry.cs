@@ -188,6 +188,9 @@ namespace MainPackage
                 case E_Log.Proto:
                     Debug.Log(string.Format(tempStr, "#00ffff", title, content));
                     break;
+                case E_Log.Audio:
+                    Debug.Log(string.Format(tempStr, "#9fff85", title, content));
+                    break;
                 case E_Log.Error:
                     Debug.LogError(string.Format(tempStr, "red", title, content));
                     break;
@@ -224,6 +227,7 @@ namespace MainPackage
         Log,        //普通Log
         Framework,  //框架Log
         Proto,      //联网Log
+        Audio,      //音频Log
         Error,      //错误Log
         Warning,    //警告Log
         Exception,  //异常Log

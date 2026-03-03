@@ -41,11 +41,6 @@ namespace Framework
         }
 
         /// <summary>
-        /// 图集名列表
-        /// </summary>
-        private List<string> _atlasNameList;
-
-        /// <summary>
         /// 资源名列表
         /// </summary>
         private List<string> _objNameList;
@@ -55,10 +50,7 @@ namespace Framework
         /// </summary>
         public Sprite GetSpriteSync(string atlasName, string spriteName)
         {
-            if (_atlasNameList == null)
-            {
-                _atlasNameList = new List<string>();
-            }
+            _objNameList ??= new List<string>();
             //真正加载Sp的地方
             var sp = GameGod.Instance.LoadManager.GetSprite(atlasName, spriteName);
             if (sp == null)
@@ -67,9 +59,13 @@ namespace Framework
                 return null;
             }
             //追加到记录列表里
-            if (!_atlasNameList.Contains(atlasName))
+            if (!_objNameList.Contains(atlasName))
             {
-                _atlasNameList.Add(atlasName);
+                _objNameList.Add(atlasName);
+            }
+            if (!_objNameList.Contains(spriteName))
+            {
+                _objNameList.Add(spriteName);
             }
             return sp;
         }
@@ -98,10 +94,7 @@ namespace Framework
         /// </summary>
         public Object LoadSync(string objName)
         {
-            if (_objNameList == null)
-            {
-                _objNameList = new List<string>();
-            }
+            _objNameList ??= new List<string>();
             //真正加载资源的地方
             var obj = GameGod.Instance.LoadManager.LoadSync(objName);
             if (obj == null)
@@ -201,7 +194,6 @@ namespace Framework
         /// </summary>
         public void UnloadAll()
         {
-            UnloadAllSprite();
             UnloadAllObject();
         }
 
@@ -223,26 +215,6 @@ namespace Framework
                 GameGod.Instance.Log(E_Log.Framework, "Unload Object", objName);
             }
             _objNameList.Clear();
-        }
-
-        /// <summary>
-        /// 卸载全部Sprite
-        /// </summary>
-        private void UnloadAllSprite()
-        {
-            if (_atlasNameList == null)
-            {
-                return;
-            }
-
-            //关闭前移除全部Sprite
-            for (int i = 0, count = _atlasNameList.Count; i < count; i++)
-            {
-                string spriteName = _atlasNameList[i];
-                GameGod.Instance.LoadManager.UnloadAsset(spriteName);
-                GameGod.Instance.Log(E_Log.Framework, "Unload Atlas", spriteName);
-            }
-            _atlasNameList.Clear();
         }
     }
 }

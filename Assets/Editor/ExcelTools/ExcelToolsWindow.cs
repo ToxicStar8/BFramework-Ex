@@ -59,11 +59,13 @@ namespace Framework
         private const string PrefKeyExcelPath = "ExcelTools_ExcelPath";
         private const string PrefKeyOutScriptPath = "ExcelTools_OutScriptPath";
         private const string PrefKeyOutTxtPath = "ExcelTools_OutTxtPath";
+        private const string SessionKeyLogs = "ExcelTools_Logs";
 
         [MenuItem("BFramework/Excel导表工具", false, 200)]
         private static void OpenWindow()
         {
             var win = GetWindow<ExcelToolsWindow>("Excel导表工具");
+            win.ClearLog();
             win.minSize = new Vector2(500, 400);
             win.Show();
         }
@@ -73,9 +75,16 @@ namespace Framework
             // 读取上次保存的路径，若无则使用默认值
             var projectRoot = Directory.GetParent(Application.dataPath).FullName;
 
-            _excelPath = EditorPrefs.GetString(PrefKeyExcelPath, Path.Combine(projectRoot,"Table"));
-            _outScriptPath = EditorPrefs.GetString(PrefKeyOutScriptPath, Path.Combine(Application.dataPath, "GameData", "Scripts", "Table"));
-            _outTxtPath = EditorPrefs.GetString(PrefKeyOutTxtPath, Path.Combine(Application.dataPath, "GameData", "Table"));
+            _excelPath = EditorPrefs.GetString(PrefKeyExcelPath, Path.Combine(projectRoot,"Table").Replace("\\", "/"));
+            _outScriptPath = EditorPrefs.GetString(PrefKeyOutScriptPath, Path.Combine(Application.dataPath, "GameData", "Scripts", "Table").Replace("\\", "/"));
+            _outTxtPath = EditorPrefs.GetString(PrefKeyOutTxtPath, Path.Combine(Application.dataPath, "GameData", "Table").Replace("\\", "/"));
+
+            var savedLogs = SessionState.GetString(SessionKeyLogs, string.Empty);
+            _logs.Clear();
+            if (!string.IsNullOrEmpty(savedLogs))
+            {
+                _logs.AddRange(savedLogs.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries));
+            }
         }
 
         private void OnGUI()
@@ -117,7 +126,7 @@ namespace Framework
                 EditorGUILayout.LabelField("日志输出", EditorStyles.boldLabel);
                 if (GUILayout.Button("清空", GUILayout.Width(50)))
                 {
-                    _logs.Clear();
+                    ClearLog();
                 }
                 EditorGUILayout.EndHorizontal();
 
@@ -158,9 +167,21 @@ namespace Framework
         private void Log(string message)
         {
             _logs.Add($"[{DateTime.Now:HH:mm:ss}] {message}");
+            SaveLogsToSession();
             // 自动滚动到底部
             _logScrollPos.y = float.MaxValue;
             Repaint();
+        }
+
+        private void SaveLogsToSession()
+        {
+            SessionState.SetString(SessionKeyLogs, string.Join("\n", _logs));
+        }
+
+        private void ClearLog()
+        {
+            _logs.Clear();
+            SaveLogsToSession();
         }
 
         #region 导出逻辑

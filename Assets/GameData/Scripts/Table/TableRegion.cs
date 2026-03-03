@@ -63,7 +63,7 @@ namespace GameData
         /// </summary>
         public Vector3 Test8 { private set; get; }
 
-        public override void OnInit(string[] nameGroupArr, string dataStrArr)
+        public override void OnAwake(string[] nameGroupArr, string dataStrArr)
         {
             var data = dataStrArr.Split('^');
             for (int i = 0,length = nameGroupArr.Length; i < length; i++)

@@ -30,7 +30,7 @@ namespace GameData
 
     public class Fsm1 : FsmState<TestFsm>
     {
-        public override void OnInit()
+        public override void OnAwake()
         {
             Debug.Log("初始化Fsm1");
         }
@@ -54,7 +54,7 @@ namespace GameData
 
     public class Fsm2 : FsmState<TestFsm>
     {
-        public override void OnInit()
+        public override void OnAwake()
         {
             Debug.Log("初始化Fsm2");
         }

@@ -60,7 +60,7 @@ namespace Framework
 
         public int GetCreateStatus() => _initDataStatus;
 
-        public void OnInit()
+        public void OnAwake()
         {
             _initDataStatus = 1;
 
@@ -73,7 +73,7 @@ namespace Framework
             for (int i = 1, length = allArr.Length; i < length; i++)
             {
                 T table = new T();
-                table.OnInit(nameGroupArr, allArr[i]);
+                table.OnAwake(nameGroupArr, allArr[i]);
                 DataList.Add(table);
                 DataDic.Add(table.Id, table);
             }

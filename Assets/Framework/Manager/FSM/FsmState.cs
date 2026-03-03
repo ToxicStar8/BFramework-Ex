@@ -21,7 +21,7 @@ namespace Framework
         /// </summary>
         public Fsm<T> CurrFsm;
 
-        public abstract void OnInit();
+        public abstract void OnAwake();
         /// <summary>
         /// ½øÈë×´Ì¬
         /// </summary>

@@ -52,7 +52,7 @@ namespace Framework
             if (tableCtrl.GetCreateStatus() == 0)
             {
                 GameGod.Instance.Log(E_Log.Framework, "初始化表格", type.Name);
-                tableCtrl.OnInit();
+                tableCtrl.OnAwake();
             }
             return _allTableDic[type] as T;
         }
@@ -68,7 +68,7 @@ namespace Framework
                 if (tableCtrl.GetCreateStatus() == 2)
                 {
                     GameGod.Instance.Log(E_Log.Framework, "热重载表格", tableCtrl.GetType().Name);
-                    tableCtrl.OnInit();
+                    tableCtrl.OnAwake();
                 }
             }
         }

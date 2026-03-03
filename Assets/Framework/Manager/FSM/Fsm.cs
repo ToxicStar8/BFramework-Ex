@@ -50,7 +50,7 @@ namespace Framework
 			{
 				FsmState<T> state = states[i];
 				state.CurrFsm = this;
-				state.OnInit();
+				state.OnAwake();
 				_stateDic[(sbyte)i] = state;
 			}
 

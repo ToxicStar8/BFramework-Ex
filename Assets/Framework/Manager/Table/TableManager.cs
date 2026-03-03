@@ -20,7 +20,7 @@ namespace Framework
     {
         private Dictionary<Type, ITableCtrlBase> _allTableDic;
 
-        public override void OnInit()
+        public override void OnAwake()
         {
             _allTableDic = new Dictionary<Type, ITableCtrlBase>();
         }

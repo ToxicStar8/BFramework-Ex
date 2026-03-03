@@ -42,7 +42,7 @@ namespace Framework
             PlayerPrefs.SetFloat(ConstDefine.VolumSound, _volumeSound);
         }
 
-        public override void OnInit()
+        public override void OnAwake()
         {
             gameObject = new GameObject("[Audio]");
             //音乐
@@ -63,6 +63,8 @@ namespace Framework
         /// <param name="audioName">带格式全名</param>
         public void PlayBackground(string audioName)
         {
+            GameEntry.Instance.Log(E_Log.Audio, "播放音乐", audioName);
+
             var audio = GameGod.Instance.LoadManager.LoadSync<AudioClip>(audioName);
             //声音
             _backgroundAudio.volume = _volumeBackground;
@@ -85,6 +87,8 @@ namespace Framework
         /// </summary>
         public void PlaySound(string audioName)
         {
+            GameEntry.Instance.Log(E_Log.Audio, "播放音效", audioName);
+
             var audio = GameGod.Instance.LoadManager.LoadSync<AudioClip>(audioName);
             _soundAudio.PlayOneShot(audio);
         }

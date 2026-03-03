@@ -21,7 +21,7 @@ namespace Framework
         //Token 适配不同的后端要求 例：Token、Authorization等
         public Dictionary<string, string> SocketHeaderDic { get; private set; }
 
-        public override void OnInit()
+        public override void OnAwake()
         {
             SocketHeaderDic = new Dictionary<string, string>();
         }

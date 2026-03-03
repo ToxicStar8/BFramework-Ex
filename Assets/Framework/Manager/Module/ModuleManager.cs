@@ -34,7 +34,7 @@ namespace Framework
         /// </summary>
         private string _savePath;
 
-        public override void OnInit()
+        public override void OnAwake()
         {
             _allModuleDic = new Dictionary<string, ModuleBase>();
             _savePath = Application.persistentDataPath + "/";

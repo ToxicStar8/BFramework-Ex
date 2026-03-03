@@ -34,7 +34,7 @@ namespace Framework
         public Dictionary<string, int[]> InspectorDic = new Dictionary<string, int[]>();
 #endif
 
-        public override void OnInit()
+        public override void OnAwake()
         {
             GameObjectPoolDic = new Dictionary<string, GameObjectPool>();
             ClassObjectPoolDic = new Dictionary<string, object>();

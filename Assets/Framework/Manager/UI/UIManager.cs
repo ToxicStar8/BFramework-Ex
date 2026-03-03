@@ -19,7 +19,7 @@ namespace Framework
         /// </summary>
         private Dictionary<string, UIBase> _uiBaseDic;
 
-        public override void OnInit()
+        public override void OnAwake()
         {
             _uiBaseDic = new Dictionary<string, UIBase>();
         }

@@ -34,7 +34,7 @@ namespace Framework
         /// </summary>
         private Dictionary<string, Object> _objLoadDic;
 
-        public override void OnInit()
+        public override void OnAwake()
         {
             _loadedABPackageDic = new Dictionary<string, LoadABInfo>();
             _objLoadDic = new Dictionary<string, Object>();

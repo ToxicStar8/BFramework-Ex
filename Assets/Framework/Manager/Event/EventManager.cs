@@ -17,7 +17,7 @@ namespace Framework
     {
         private Dictionary<uint, List<Action<object[]>>> _eventDic;
 
-        public override void OnInit() 
+        public override void OnAwake() 
         {
             _eventDic = new();
         }

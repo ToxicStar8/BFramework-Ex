@@ -42,7 +42,7 @@ namespace Framework
         private bool _isRunning;
         public Queue<TaskInfo> TaskQueue { get; private set; }
 
-        public override void OnInit()
+        public override void OnAwake()
         {
             TaskQueue = new();
         }

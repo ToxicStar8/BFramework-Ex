@@ -26,7 +26,7 @@ namespace Framework
 		/// </summary>
 		private int _tempFsmIndex = 0;
 
-		public override void OnInit()
+		public override void OnAwake()
 		{
 			_fsmDic = new Dictionary<int, FsmBase>();
 		}

@@ -71,7 +71,7 @@ namespace Framework
         /// </summary>
         private int _tempIndex;
 
-        public override void OnInit()
+        public override void OnAwake()
         {
             _timerInfoDic = new Dictionary<string, TimerInfo>();
         }

@@ -46,7 +46,7 @@ namespace Framework
         /// </summary>
         public Dictionary<string, AudioClip> HttpAudioClipDic { get; private set; }
 
-        public override void OnInit()
+        public override void OnAwake()
         {
             Retry = 0;
             RetryInterval = 0;

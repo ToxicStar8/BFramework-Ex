@@ -23,7 +23,7 @@ namespace GameData
     /// </summary>
     public class RedPointHelper : InstanceBase<RedPointHelper>
     {
-        public void OnInit()
+        public void OnAwake()
         {
             //启动时将红点刷新事件注册到游戏中，不再调整
             RegisterUpdateCallback();

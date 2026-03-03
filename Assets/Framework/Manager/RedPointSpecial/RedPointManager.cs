@@ -28,7 +28,7 @@ namespace Framework
         /// </summary>
         private Dictionary<int, Action<int, string, int>> _redActions { set; get; }
 
-        public override void OnInit()
+        public override void OnAwake()
         {
             _redPointDic = new();
             _redActions = new();

@@ -1,7 +1,7 @@
 /*********************************************
  * 自动生成代码，禁止手动修改文件
  * Excel表名：D_地区表.xlsx
- * 修改时间：2024/08/11 04:49:24
+ * 修改时间：2026/03/03 05:44:57
  *********************************************/
 
 using Framework;
@@ -26,32 +26,32 @@ namespace GameData
         /// <summary>
         /// 测试1
         /// </summary>
-        public List<string> List_Test1 { private set; get; }
+        public List<string> Test1 { private set; get; }
         
         /// <summary>
         /// 测试2
         /// </summary>
-        public List<int> List_Test2 { private set; get; }
+        public List<int> Test2 { private set; get; }
         
         /// <summary>
         /// 测试3
         /// </summary>
-        public List<long> List_Test3 { private set; get; }
+        public List<long> Test3 { private set; get; }
         
         /// <summary>
         /// 测试4
         /// </summary>
-        public List<float> List_Test4 { private set; get; }
+        public List<float> Test4 { private set; get; }
         
         /// <summary>
         /// 测试5
         /// </summary>
-        public List<string[]> List_Test5 { private set; get; }
+        public List<string[]> Test5 { private set; get; }
         
         /// <summary>
         /// 测试6
         /// </summary>
-        public List<int[]> List_Test6 { private set; get; }
+        public List<int[]> Test6 { private set; get; }
         
         /// <summary>
         /// 测试7
@@ -70,43 +70,43 @@ namespace GameData
             {
                 switch (nameGroupArr[i])
                 {
-                    case "id":
+                    case "Id":
                         Id = data[i].ToInt();
                         break;
 
-                    case "region":
+                    case "Region":
                         Region = data[i];
                         break;
 
-                    case "test1":
-                        List_Test1 = data[i].Split(',').ToList();
+                    case "Test1":
+                        Test1 = data[i].Split(',').ToList();
                         break;
 
-                    case "test2":
-                        List_Test2 = data[i].SplitToIntList(',');
+                    case "Test2":
+                        Test2 = data[i].SplitToIntList(',');
                         break;
 
-                    case "test3":
-                        List_Test3 = data[i].SplitToLongList(',');
+                    case "Test3":
+                        Test3 = data[i].SplitToLongList(',');
                         break;
 
-                    case "test4":
-                        List_Test4 = data[i].SplitToFloatList(',');
+                    case "Test4":
+                        Test4 = data[i].SplitToFloatList(',');
                         break;
 
-                    case "test5":
-                        List_Test5 = data[i].SplitToStringArrList('|', ',');
+                    case "Test5":
+                        Test5 = data[i].SplitToStringArrList('|', ',');
                         break;
 
-                    case "test6":
-                        List_Test6 = data[i].SplitToIntArrList('|', ',');
+                    case "Test6":
+                        Test6 = data[i].SplitToIntArrList('|', ',');
                         break;
 
-                    case "test7":
+                    case "Test7":
                         Test7 = data[i].ToVector2(Vector2.zero);
                         break;
 
-                    case "test8":
+                    case "Test8":
                         Test8 = data[i].ToVector3(Vector3.zero);
                         break;
 

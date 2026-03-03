@@ -177,13 +177,17 @@ namespace Framework
         /// </summary>
         public Sprite GetSprite(string atlasName, string spriteName)
         {
-            Sprite sp = null;
-            SpriteAtlas atlas = LoadSync<SpriteAtlas>(atlasName);
-            if (atlas != null)
+            if (_objLoadDic.TryGetValue(spriteName, out var spriteObj))
             {
-                sp = atlas.GetSprite(spriteName);
+                return spriteObj as Sprite;
             }
-            return sp;
+            else
+            {
+                var atlas = LoadSync<SpriteAtlas>(atlasName);
+                var sprite = atlas.GetSprite(spriteName);
+                _objLoadDic[spriteName] = sprite;
+                return sprite;
+            }
         }
 
         /// <summary>

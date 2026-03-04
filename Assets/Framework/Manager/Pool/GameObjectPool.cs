@@ -108,7 +108,7 @@ namespace Framework
             RelaseAll();
             ObjLinkedList = null;
 
-            for (int i = 0; i < ObjQueue.Count; i++)
+            while (ObjQueue.Count > 0)
             {
                 var go = ObjQueue.Dequeue();
                 go.Destroy();

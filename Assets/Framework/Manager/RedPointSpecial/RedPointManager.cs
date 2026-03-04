@@ -59,10 +59,10 @@ namespace Framework
         /// </summary>
         public void RemoveRedCallBack(int id, Action<int, string, int> callback)
         {
-            if (_redActions != default && _redActions.ContainsKey(id))
+            if (_redActions != null && _redActions.ContainsKey(id))
             {
                 _redActions[id] -= callback;
-                if (_redActions[id] == default)
+                if (_redActions[id] == null)
                 {
                     _redActions.Remove(id);
                 }
@@ -126,7 +126,7 @@ namespace Framework
                 var list = _redActions.Keys.ToList();
                 for (int i = 0; i < list.Count; i++)
                 {
-                    _redActions[list[i]] = default;
+                    _redActions[list[i]] = null;
                 }
                 _redActions.Clear();
             }
@@ -135,8 +135,8 @@ namespace Framework
         public override void OnDispose()
         {
             ClearRedPointData();
-            _redPointDic = default;
-            _redActions = default;
+            _redPointDic = null;
+            _redActions = null;
         }
     }
 }

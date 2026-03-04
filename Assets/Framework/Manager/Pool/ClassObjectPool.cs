@@ -115,7 +115,7 @@ namespace Framework
             RelaseAll();
             ClassLinkedList = null;
 
-            for (int i = 0; i < ClassQueue.Count; i++)
+            while (ClassQueue.Count > 0)
             {
                 var obj = ClassQueue.Dequeue();
                 obj = null;

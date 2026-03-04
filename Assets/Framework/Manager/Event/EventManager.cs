@@ -36,7 +36,7 @@ namespace Framework
             if (list.Contains(callBack))
             {
                 GameManager.Instance.Log(E_Log.Error, "事件重复监听", eventNo.ToString());
-                _eventDic.Remove(eventNo);
+                list.Remove(callBack);
             }
             list.Add(callBack);
         }

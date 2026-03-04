@@ -21,8 +21,8 @@ namespace Framework
         public const string ABInfoName = "abInformation";                   //AB包索引信息名（资源名以及AB包的依赖信息，一表搞定）
         public const string ABMd5InfoName = "fileUpdateInfo.json";          //AB包MD5信息名（用于比对需要更新的AB包，同DowloadManager的ABMd5InfoName）
         public const string HotfixDllName = "Assembly-CSharp.dll";          //热更的DLL名（同GameEntry的HotfixDllName没有bytes后缀）
-        public const string VolumBackground = "VolumBackground";            //背景音乐音量
-        public const string VolumSound = "VolumSound";                      //音效音量
+        public const string VolumeBackground = "VolumeBackground";          //背景音乐音量
+        public const string VolumeSound = "VolumeSound";                    //音效音量
         public const string HotfixPath = "Assets/Hotfix/";                  //DLL文件位置
         public const string ABConfigPath = "Assets/Editor/ABConfig/ABConfig.asset";                 //ABConfig配置文件位置
         public const string JsoninformationDirPath = "Assets/Editor/ABConfig/ABInformation/";     //依赖信息Json文件夹的路径

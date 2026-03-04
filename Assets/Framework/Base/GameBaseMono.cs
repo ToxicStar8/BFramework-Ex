@@ -219,9 +219,9 @@ namespace Framework
             var fsm = GameManager.Instance.FsmManager.CreateFsm<T>(owner, states);
             return fsm;
         }
-        protected void RelaseFsm(int fsmId)
+        protected void ReleaseFsm(int fsmId)
         {
-            GameManager.Instance.FsmManager.RelaseFsm(fsmId);
+            GameManager.Instance.FsmManager.ReleaseFsm(fsmId);
         }
         #endregion
 

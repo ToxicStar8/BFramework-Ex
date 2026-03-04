@@ -85,7 +85,7 @@ namespace Framework
         /// <summary>
         /// 销毁对象
         /// </summary>
-        public void Relase(GameObject go)
+        public void Release(GameObject go)
         {
             ObjLinkedList.Remove(go);
             go.Destroy();
@@ -94,18 +94,18 @@ namespace Framework
         /// <summary>
         /// 销毁全部对象
         /// </summary>
-        public void RelaseAll()
+        public void ReleaseAll()
         {
             for (var curNode = ObjLinkedList.First; curNode != null; curNode = curNode.Next)
             {
-                Relase(curNode.Value);
+                Release(curNode.Value);
             }
             ObjLinkedList.Clear();
         }
 
         public void OnDispose()
         {
-            RelaseAll();
+            ReleaseAll();
             ObjLinkedList = null;
 
             while (ObjQueue.Count > 0)

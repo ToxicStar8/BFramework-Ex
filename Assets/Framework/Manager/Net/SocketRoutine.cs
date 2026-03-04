@@ -20,7 +20,7 @@ namespace Framework
         /// <summary>
         /// Socket管理器
         /// </summary>
-        public SocketManager SoctetMgr => GameManager.Instance.SocketManager;
+        public SocketManager SocketMgr => GameManager.Instance.SocketManager;
 
         /// <summary>
         /// 客户端Socket

@@ -30,7 +30,7 @@ namespace Framework
         {
             _volumeBackground = volume;
             _backgroundAudio.volume = _volumeBackground;
-            PlayerPrefs.SetFloat(ConstDefine.VolumBackground, _volumeBackground);
+            PlayerPrefs.SetFloat(ConstDefine.VolumeBackground, _volumeBackground);
         }
         //音效音量
         private float _volumeSound;
@@ -39,7 +39,7 @@ namespace Framework
         { 
             _volumeSound = volume;
             _soundAudio.volume = _volumeSound;
-            PlayerPrefs.SetFloat(ConstDefine.VolumSound, _volumeSound);
+            PlayerPrefs.SetFloat(ConstDefine.VolumeSound, _volumeSound);
         }
 
         public override void OnAwake()
@@ -48,11 +48,11 @@ namespace Framework
             //音乐
             _backgroundAudio = gameObject.AddComponent<AudioSource>();
             _backgroundAudio.loop = true;
-            _volumeBackground = PlayerPrefs.GetFloat(ConstDefine.VolumBackground, 1);
+            _volumeBackground = PlayerPrefs.GetFloat(ConstDefine.VolumeBackground, 1);
             //音效
             _soundAudio = gameObject.AddComponent<AudioSource>();
             _soundAudio.playOnAwake = false;
-            _volumeSound = PlayerPrefs.GetFloat(ConstDefine.VolumSound, 1);
+            _volumeSound = PlayerPrefs.GetFloat(ConstDefine.VolumeSound, 1);
             //挂载在游戏入口下
             gameObject.SetParent(GameEntry.Instance.transform);
         }

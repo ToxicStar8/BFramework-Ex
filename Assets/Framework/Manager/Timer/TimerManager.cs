@@ -20,17 +20,17 @@ namespace Framework
         public Action ExecCallback;         //执行回调
         public Action<bool> EndCallback;    //结束回调
         public int AllCount;                //执行次数
-        public int InviteTime;              //执行间隔时间，毫秒
+        public int IntervalTime;              //执行间隔时间，毫秒
         public bool IsExecImmed;            //是否立即执行
         public CancellationTokenSource Cts; //取消用唯一Key
         //定时器管理器里赋值
         public string TimerName;            //定时器名
 
-        public static TimerInfo Create(int allCount, int inviteTime, bool isExecImmed, Action execCallback = null, Action<bool> endCallback = null)
+        public static TimerInfo Create(int allCount, int intervalTime, bool isExecImmed, Action execCallback = null, Action<bool> endCallback = null)
         {
             var timerInfo = GameManager.Instance.PoolManager.CreateClassObj<TimerInfo>();
             timerInfo.AllCount = allCount;
-            timerInfo.InviteTime = inviteTime;
+            timerInfo.IntervalTime = intervalTime;
             timerInfo.IsExecImmed = isExecImmed;
             timerInfo.ExecCallback = execCallback;
             timerInfo.EndCallback = endCallback;
@@ -117,7 +117,7 @@ namespace Framework
                     //计算偏差值，初始化时值相同偏差为0
                     long startTime = TimeUtil.GetNowTimeMilliseconds();
                     //下次延迟时间 = 原来延迟的时间 - 上次偏移的时间        //例：inviteTime = 1000 - 1 = 999
-                    int inviteTime = (int)(timerInfo.InviteTime - offsetTime);
+                    int inviteTime = (int)(timerInfo.IntervalTime - offsetTime);
 
                     // 确保延迟时间不为负数
                     if (inviteTime <= 0) inviteTime = 1;

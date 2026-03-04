@@ -84,7 +84,7 @@ namespace Framework
         /// <summary>
         /// 销毁对象
         /// </summary>
-        public void Relase(T obj)
+        public void Release(T obj)
         {
             ClassLinkedList.Remove(obj);
             obj = null;
@@ -97,7 +97,7 @@ namespace Framework
         /// <summary>
         /// 只销毁已创建出来的对象
         /// </summary>
-        public void RelaseAll()
+        public void ReleaseAll()
         {
             for (var curNode = ClassLinkedList.First; curNode != null; curNode = curNode.Next)
             {
@@ -112,7 +112,7 @@ namespace Framework
 
         public void OnDispose()
         {
-            RelaseAll();
+            ReleaseAll();
             ClassLinkedList = null;
 
             while (ClassQueue.Count > 0)

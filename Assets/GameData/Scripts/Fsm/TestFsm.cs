@@ -24,7 +24,7 @@ namespace GameData
 
             Debug.Log("fsm.CurrStateType=" + fsm.CurrStateType);
 
-            GameManager.Instance.FsmManager.RelaseFsm(fsm.FsmId);
+            GameManager.Instance.FsmManager.ReleaseFsm(fsm.FsmId);
         }
     }
 

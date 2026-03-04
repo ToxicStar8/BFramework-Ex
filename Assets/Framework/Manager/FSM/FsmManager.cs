@@ -50,7 +50,7 @@ namespace Framework
 		/// 销毁状态机
 		/// </summary>
 		/// <param name="fsmId">状态机编号</param>
-		public void RelaseFsm(int fsmId)
+		public void ReleaseFsm(int fsmId)
 		{
 			if (_fsmDic.TryGetValue(fsmId, out var fsm))
 			{

@@ -145,7 +145,7 @@ namespace Framework
         /// <summary>
         /// 销毁对象
         /// </summary>
-        public void Relase(T obj)
+        public void Release(T obj)
         {
             obj.OnBeforeDestroy();
             obj.gameObject.Destroy();
@@ -156,7 +156,7 @@ namespace Framework
         /// <summary>
         /// 只销毁已创建出来的对象
         /// </summary>
-        public void RelaseAll()
+        public void ReleaseAll()
         {
             for (int i = 0; i < PoolList.Count; i++)
             {

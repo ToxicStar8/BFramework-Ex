@@ -221,7 +221,7 @@ namespace Framework
         }
         protected void RelaseFsm(int fsmId)
         {
-            GameManager.Instance.FsmManager.RelaseFsm(fsmId);
+            GameManager.Instance.FsmManager.ReleaseFsm(fsmId);
         }
         #endregion
 

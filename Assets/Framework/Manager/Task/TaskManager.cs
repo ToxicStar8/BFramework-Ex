@@ -21,7 +21,7 @@ namespace Framework
 
         public static TaskInfo Create(Action<TaskInfo> task)
         {
-            var taskInfo = GameGod.Instance.PoolManager.CreateClassObj<TaskInfo>();
+            var taskInfo = GameManager.Instance.PoolManager.CreateClassObj<TaskInfo>();
             taskInfo.Task = task;
             taskInfo.Utcs = new UniTaskCompletionSource();
             return taskInfo;
@@ -30,7 +30,7 @@ namespace Framework
         {
             taskInfo.Task = null;
             taskInfo.Utcs = null;
-            GameGod.Instance.PoolManager.RecycleClassObj(taskInfo);
+            GameManager.Instance.PoolManager.RecycleClassObj(taskInfo);
         }
     }
 

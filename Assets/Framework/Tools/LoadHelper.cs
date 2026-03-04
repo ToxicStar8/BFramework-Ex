@@ -26,7 +26,7 @@ namespace Framework
         /// </summary>
         public static LoadHelper Create()
         {
-            var pool = GameGod.Instance.PoolManager.CreateClassObjectPool<LoadHelper>();
+            var pool = GameManager.Instance.PoolManager.CreateClassObjectPool<LoadHelper>();
             return pool.CreateClassObj();
         }
         
@@ -35,7 +35,7 @@ namespace Framework
         /// </summary>
         public static void Recycle(LoadHelper loadHelper)
         {
-            var pool = GameGod.Instance.PoolManager.CreateClassObjectPool<LoadHelper>();
+            var pool = GameManager.Instance.PoolManager.CreateClassObjectPool<LoadHelper>();
             loadHelper.UnloadAll();
             pool.Recycle(loadHelper);
         }
@@ -52,10 +52,10 @@ namespace Framework
         {
             _objNameList ??= new List<string>();
             //真正加载Sp的地方
-            var sp = GameGod.Instance.LoadManager.GetSprite(atlasName, spriteName);
+            var sp = GameManager.Instance.LoadManager.GetSprite(atlasName, spriteName);
             if (sp == null)
             {
-                GameGod.Instance.Log(E_Log.Error, "图片资源为空", spriteName);
+                GameManager.Instance.Log(E_Log.Error, "图片资源为空", spriteName);
                 return null;
             }
             //追加到记录列表里
@@ -96,10 +96,10 @@ namespace Framework
         {
             _objNameList ??= new List<string>();
             //真正加载资源的地方
-            var obj = GameGod.Instance.LoadManager.LoadSync(objName);
+            var obj = GameManager.Instance.LoadManager.LoadSync(objName);
             if (obj == null)
             {
-                GameGod.Instance.Log(E_Log.Error, "加载资源为空", objName);
+                GameManager.Instance.Log(E_Log.Error, "加载资源为空", objName);
                 return null;
             }
             //记录名字即可
@@ -143,7 +143,7 @@ namespace Framework
 #if UNITY_EDITOR
             else
             {
-                string path = GameGod.Instance.LoadManager.GetObjAssetPath(sceneName + ".unity");
+                string path = GameManager.Instance.LoadManager.GetObjAssetPath(sceneName + ".unity");
                 var parameters = new LoadSceneParameters(LoadSceneMode.Single);
                 UnityEditor.SceneManagement.EditorSceneManager.LoadSceneInPlayMode(path, parameters);
             }
@@ -164,7 +164,7 @@ namespace Framework
 #if UNITY_EDITOR
             else
             {
-                string path = GameGod.Instance.LoadManager.GetObjAssetPath(sceneName + ".unity");
+                string path = GameManager.Instance.LoadManager.GetObjAssetPath(sceneName + ".unity");
                 var parameters = new LoadSceneParameters(LoadSceneMode.Single);
                 await UnityEditor.SceneManagement.EditorSceneManager.LoadSceneAsyncInPlayMode(path, parameters);
             }
@@ -211,8 +211,8 @@ namespace Framework
             for (int i = 0, count = _objNameList.Count; i < count; i++)
             {
                 string objName = _objNameList[i];
-                GameGod.Instance.LoadManager.UnloadAsset(objName);
-                GameGod.Instance.Log(E_Log.Framework, "Unload Object", objName);
+                GameManager.Instance.LoadManager.UnloadAsset(objName);
+                GameManager.Instance.Log(E_Log.Framework, "Unload Object", objName);
             }
             _objNameList.Clear();
         }

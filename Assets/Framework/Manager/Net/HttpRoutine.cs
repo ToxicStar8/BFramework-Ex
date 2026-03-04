@@ -26,7 +26,7 @@ namespace Framework
         /// <summary>
         /// Http管理器
         /// </summary>
-        private HttpManager HttpMgr => GameGod.Instance.HttpManager;
+        private HttpManager HttpMgr => GameManager.Instance.HttpManager;
 
         /// <summary>
         /// Http文本请求回调
@@ -86,7 +86,7 @@ namespace Framework
         {
             if (IsBusy)
             {
-                GameGod.Instance.Log(E_Log.Error, "网络锁");
+                GameManager.Instance.Log(E_Log.Error, "网络锁");
                 return;
             }
 
@@ -106,7 +106,7 @@ namespace Framework
         {
             if (IsBusy)
             {
-                GameGod.Instance.Log(E_Log.Error, "网络锁");
+                GameManager.Instance.Log(E_Log.Error, "网络锁");
                 return;
             }
 
@@ -126,7 +126,7 @@ namespace Framework
         {
             if (IsBusy)
             {
-                GameGod.Instance.Log(E_Log.Error, "网络锁");
+                GameManager.Instance.Log(E_Log.Error, "网络锁");
                 return;
             }
 
@@ -149,7 +149,7 @@ namespace Framework
         {
             if (IsBusy)
             {
-                GameGod.Instance.Log(E_Log.Error, "网络锁");
+                GameManager.Instance.Log(E_Log.Error, "网络锁");
                 return;
             }
 
@@ -168,23 +168,23 @@ namespace Framework
 
         private void GetUrl()
         {
-            GameGod.Instance.Log(E_Log.Proto, string.Format("Get===>{0}\n\r重试===>{1}", _url, _currRetry));
+            GameManager.Instance.Log(E_Log.Proto, string.Format("Get===>{0}\n\r重试===>{1}", _url, _currRetry));
             _webRequest = UnityWebRequest.Get(_url);
-            GameGod.Instance.StartCoroutine(SendRequest());
+            GameManager.Instance.StartCoroutine(SendRequest());
         }
 
         private void GetTexture()
         {
-            GameGod.Instance.Log(E_Log.Proto, string.Format("Get===>{0}\n\r重试===>{1}", _url, _currRetry));
+            GameManager.Instance.Log(E_Log.Proto, string.Format("Get===>{0}\n\r重试===>{1}", _url, _currRetry));
             _webRequest = UnityWebRequestTexture.GetTexture(_url);
-            GameGod.Instance.StartCoroutine(SendRequest());
+            GameManager.Instance.StartCoroutine(SendRequest());
         }
 
         private void GetAudioClip(AudioType audioType)
         {
-            GameGod.Instance.Log(E_Log.Proto, string.Format("Get===>{0}\n\r重试===>{1}", _url, _currRetry));
+            GameManager.Instance.Log(E_Log.Proto, string.Format("Get===>{0}\n\r重试===>{1}", _url, _currRetry));
             _webRequest = UnityWebRequestMultimedia.GetAudioClip(_url, audioType);
-            GameGod.Instance.StartCoroutine(SendRequest());
+            GameManager.Instance.StartCoroutine(SendRequest());
         }
 
         private void PostUrl()
@@ -214,8 +214,8 @@ namespace Framework
             _webRequest.downloadHandler = new DownloadHandlerBuffer();
             _webRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(_json));
             _webRequest.SetRequestHeader("Content-Type", "application/json");
-            GameGod.Instance.Log(E_Log.Proto, string.Format("Post===>{0}\n\r重试===>{1}", _url + _json, _currRetry));
-            GameGod.Instance.StartCoroutine(SendRequest());
+            GameManager.Instance.Log(E_Log.Proto, string.Format("Post===>{0}\n\r重试===>{1}", _url + _json, _currRetry));
+            GameManager.Instance.StartCoroutine(SendRequest());
         }
 
         private IEnumerator SendRequest()
@@ -251,7 +251,7 @@ namespace Framework
                 //打印错误
                 if (_errorCallBack != null)
                 {
-                    GameGod.Instance.Log(E_Log.Error, _webRequest.error);
+                    GameManager.Instance.Log(E_Log.Error, _webRequest.error);
                     _errorCallBack.Invoke(_webRequest.error);
                 }
             }
@@ -262,25 +262,25 @@ namespace Framework
                 if(_jsonDataCallBack != null)
                 {
                     //数据回调
-                    GameGod.Instance.Log(E_Log.Proto, string.Format("<color=#FFF11A>{{\"code\":{0},\"data\":{1}}}</color>", _webRequest.responseCode, downloadHandler.text));
+                    GameManager.Instance.Log(E_Log.Proto, string.Format("<color=#FFF11A>{{\"code\":{0},\"data\":{1}}}</color>", _webRequest.responseCode, downloadHandler.text));
                     _jsonDataCallBack.Invoke(downloadHandler.text);
                 }
                 else if (_texture2DCallBack != null)
                 {
                     //贴图回调
                     _texture2DCallBack?.Invoke(DownloadHandlerTexture.GetContent(_webRequest));
-                    GameGod.Instance.Log(E_Log.Proto, string.Format("<color=#FFF11A>{{\"code\":{0},\"data\":\"\"}}</color>", _webRequest.responseCode));
+                    GameManager.Instance.Log(E_Log.Proto, string.Format("<color=#FFF11A>{{\"code\":{0},\"data\":\"\"}}</color>", _webRequest.responseCode));
                 }
                 else if (_audioClipCallBack != null)
                 {
                     //音频回调
                     _audioClipCallBack?.Invoke(DownloadHandlerAudioClip.GetContent(_webRequest));
-                    GameGod.Instance.Log(E_Log.Proto, string.Format("<color=#FFF11A>{{\"code\":{0},\"data\":\"\"}}</color>", _webRequest.responseCode));
+                    GameManager.Instance.Log(E_Log.Proto, string.Format("<color=#FFF11A>{{\"code\":{0},\"data\":\"\"}}</color>", _webRequest.responseCode));
                 }
                 else
                 {
                     //空回调，直接打印内容
-                    GameGod.Instance.Log(E_Log.Proto, string.Format("<color=#FFF11A>{{\"code\":{0},\"data\":{1}}}</color>", _webRequest.responseCode, downloadHandler.text));
+                    GameManager.Instance.Log(E_Log.Proto, string.Format("<color=#FFF11A>{{\"code\":{0},\"data\":{1}}}</color>", _webRequest.responseCode, downloadHandler.text));
                 }
             }
             //清理状态

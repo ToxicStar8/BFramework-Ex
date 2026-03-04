@@ -17,7 +17,7 @@ namespace Framework
     {
         public ManagerBase()
         {
-            GameGod.Instance.Log(E_Log.Framework, "初始化管理器", GetType().Name);
+            GameManager.Instance.Log(E_Log.Framework, "初始化管理器", GetType().Name);
             OnAwake();
         }
 

@@ -17,19 +17,19 @@ namespace GameData
         void Start()
         {
             //初始化游戏总控制器
-            GameEntry.Instance.gameObject.AddComponent<GameGod>();
-            GameGod.Instance.Log(E_Log.Framework, "热更代码", "启动成功");
+            GameEntry.Instance.gameObject.AddComponent<GameManager>();
+            GameManager.Instance.Log(E_Log.Framework, "热更代码", "启动成功");
             //初始化表格
-            GameGod.Instance.TableManager.Init(TableTypes.TableCtrlTypeArr);
+            GameManager.Instance.TableManager.Init(TableTypes.TableCtrlTypeArr);
             //初始化Module
-            GameGod.Instance.ModuleManager.InitModuleType(ModuleTypes.ModuleTypeArr);
+            GameManager.Instance.ModuleManager.InitModuleType(ModuleTypes.ModuleTypeArr);
             //背景音乐
-            GameGod.Instance.AudioManager.PlayBackground("RetroComedy.ogg");
+            GameManager.Instance.AudioManager.PlayBackground("RetroComedy.ogg");
             //红点树启动
             //var rootKey = GameGod.Instance.RedPointManager.RootNode.Key;
             //GameGod.Instance.RedPointManager.AddOrGetNodeByParentKey<UIMainMenu>(rootKey);
             //正式启动
-            GameGod.Instance.UIManager.OpenUI<UIMainMenu>(E_UILevel.Common);
+            GameManager.Instance.UIManager.OpenUI<UIMainMenu>(E_UILevel.Common);
             //销毁自己
             Destroy(gameObject);
         }

@@ -35,7 +35,7 @@ namespace Framework
 
             if (list.Contains(callBack))
             {
-                GameGod.Instance.Log(E_Log.Error, "事件重复监听", eventNo.ToString());
+                GameManager.Instance.Log(E_Log.Error, "事件重复监听", eventNo.ToString());
                 _eventDic.Remove(eventNo);
             }
             list.Add(callBack);
@@ -62,7 +62,7 @@ namespace Framework
         {
             if (!_eventDic.TryGetValue(eventNo, out var list))
             {
-                GameGod.Instance.Log(E_Log.Warning, eventNo.ToString() + "事件不存在");
+                GameManager.Instance.Log(E_Log.Warning, eventNo.ToString() + "事件不存在");
                 return;
             }
 

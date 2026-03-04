@@ -50,7 +50,7 @@ namespace Framework
         public void ClearHeader()
         {
             SocketHeaderDic.Clear();
-            GameGod.Instance.Log(E_Log.Framework, "清空浏览器标头");
+            GameManager.Instance.Log(E_Log.Framework, "清空浏览器标头");
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Framework
         public void AddHeader(string key, string value)
         {
             SocketHeaderDic.Add(key, value);
-            GameGod.Instance.Log(E_Log.Framework, "添加浏览器标头" + key, value);
+            GameManager.Instance.Log(E_Log.Framework, "添加浏览器标头" + key, value);
         }
 
         /// <summary>

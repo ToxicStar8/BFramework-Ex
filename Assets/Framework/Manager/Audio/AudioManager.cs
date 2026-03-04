@@ -65,7 +65,7 @@ namespace Framework
         {
             GameEntry.Instance.Log(E_Log.Audio, "播放音乐", audioName);
 
-            var audio = GameGod.Instance.LoadManager.LoadSync<AudioClip>(audioName);
+            var audio = GameManager.Instance.LoadManager.LoadSync<AudioClip>(audioName);
             //声音
             _backgroundAudio.volume = _volumeBackground;
             //如果在播放 先停止
@@ -89,7 +89,7 @@ namespace Framework
         {
             GameEntry.Instance.Log(E_Log.Audio, "播放音效", audioName);
 
-            var audio = GameGod.Instance.LoadManager.LoadSync<AudioClip>(audioName);
+            var audio = GameManager.Instance.LoadManager.LoadSync<AudioClip>(audioName);
             _soundAudio.PlayOneShot(audio);
         }
 

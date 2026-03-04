@@ -18,15 +18,15 @@ namespace Framework
         #region Event 
         protected virtual void SendEvent(uint eventNo, params object[] args)
         {
-            GameGod.Instance.EventManager.SendEvent(eventNo, args);
+            GameManager.Instance.EventManager.SendEvent(eventNo, args);
         }
         protected virtual void AddEventListener(uint eventNo, Action<object[]> callBack)
         {
-            GameGod.Instance.EventManager.AddEventListener(eventNo, callBack);
+            GameManager.Instance.EventManager.AddEventListener(eventNo, callBack);
         }
         protected virtual void RemoveEventListener(uint eventNo, Action<object[]> callBack)
         {
-            GameGod.Instance.EventManager.RemoveEventListener(eventNo, callBack);
+            GameManager.Instance.EventManager.RemoveEventListener(eventNo, callBack);
         }
         #endregion
 
@@ -36,21 +36,21 @@ namespace Framework
         /// </summary>
         protected virtual ClassObjectPool<T> CreateClassPool<T>() where T : class, new()
         {
-            return GameGod.Instance.PoolManager.CreateClassObjectPool<T>();
+            return GameManager.Instance.PoolManager.CreateClassObjectPool<T>();
         }
         /// <summary>
         /// 在对象池中创建类对象
         /// </summary>
         protected virtual T CreateClassObj<T>() where T : class, new()
         {
-            return GameGod.Instance.PoolManager.CreateClassObj<T>();
+            return GameManager.Instance.PoolManager.CreateClassObj<T>();
         }
         /// <summary>
         /// 回收类到池中
         /// </summary>
         protected virtual void RecycleClassObj<T>(T obj) where T : class, new()
         {
-            GameGod.Instance.PoolManager.RecycleClassObj<T>(obj);
+            GameManager.Instance.PoolManager.RecycleClassObj<T>(obj);
         }
 
         /// <summary>
@@ -58,21 +58,21 @@ namespace Framework
         /// </summary>
         protected virtual GameObjectPool CreateGameObjectPool(string objName)
         {
-            return GameGod.Instance.PoolManager.CreateGameObjectPool(objName);
+            return GameManager.Instance.PoolManager.CreateGameObjectPool(objName);
         }
         /// <summary>
         /// 在对象池中创建游戏对象
         /// </summary>
         protected virtual GameObject CreateGameObject(string objName, Transform trans = null)
         {
-            return GameGod.Instance.PoolManager.CreateGameObject(objName, trans);
+            return GameManager.Instance.PoolManager.CreateGameObject(objName, trans);
         }
         /// <summary>
         /// 回收游戏对象到池中
         /// </summary>
         protected virtual void RecycleGameObject(GameObject go)
         {
-            GameGod.Instance.PoolManager.RecycleGameObject(go);
+            GameManager.Instance.PoolManager.RecycleGameObject(go);
         }
         #endregion
 
@@ -82,7 +82,7 @@ namespace Framework
         /// </summary>
         protected virtual T GetTableCtrl<T>() where T : class, ITableCtrlBase
         {
-            return GameGod.Instance.TableManager.GetTableCtrl<T>();
+            return GameManager.Instance.TableManager.GetTableCtrl<T>();
         }
         #endregion
 
@@ -111,7 +111,7 @@ namespace Framework
         /// </summary>
         protected virtual void OpenUI<T>(E_UILevel uiLevel = E_UILevel.Common, params object[] args) where T : UIBase, new()
         {
-            GameGod.Instance.UIManager.OpenUI<T>(uiLevel, args);
+            GameManager.Instance.UIManager.OpenUI<T>(uiLevel, args);
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace Framework
         /// </summary>
         protected virtual UIBase GetUI<T>() where T : UIBase, new()
         {
-            return GameGod.Instance.UIManager.GetUI<T>();
+            return GameManager.Instance.UIManager.GetUI<T>();
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace Framework
         /// </summary>
         protected virtual void HideUI<T>() where T : UIBase, new()
         {
-            GameGod.Instance.UIManager.HideUI<T>();
+            GameManager.Instance.UIManager.HideUI<T>();
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace Framework
         /// </summary>
         protected virtual void HideUI(string uiName)
         {
-            GameGod.Instance.UIManager.HideUI(uiName);
+            GameManager.Instance.UIManager.HideUI(uiName);
         }
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace Framework
         /// </summary>
         protected virtual void CloseUI<T>() where T : UIBase, new()
         {
-            GameGod.Instance.UIManager.CloseUI<T>();
+            GameManager.Instance.UIManager.CloseUI<T>();
         }
 
         /// <summary>
@@ -151,7 +151,7 @@ namespace Framework
         /// </summary>
         protected virtual void CloseUI(string uiName)
         {
-            GameGod.Instance.UIManager.CloseUI(uiName);
+            GameManager.Instance.UIManager.CloseUI(uiName);
         }
 
         /// <summary>
@@ -159,19 +159,19 @@ namespace Framework
         /// </summary>
         protected virtual void CloseAll()
         {
-            GameGod.Instance.UIManager.CloseAll();
+            GameManager.Instance.UIManager.CloseAll();
         }
         #endregion
 
         #region Audio
         protected virtual void PlayBGM(string audioName)
         {
-            GameGod.Instance.AudioManager.PlayBackground(audioName);
+            GameManager.Instance.AudioManager.PlayBackground(audioName);
         }
 
         protected virtual void PlaySound(string audioName)
         {
-            GameGod.Instance.AudioManager.PlaySound(audioName);
+            GameManager.Instance.AudioManager.PlaySound(audioName);
         }
         #endregion
 
@@ -181,152 +181,152 @@ namespace Framework
         /// </summary>
         protected virtual void AddTimer(string timeName, TimerInfo timerInfo)
         {
-            GameGod.Instance.TimerManager.AddTimer(timeName, timerInfo);
+            GameManager.Instance.TimerManager.AddTimer(timeName, timerInfo);
         }
         /// <summary>
         /// 添加一次性定时器监听，执行次数永远不能为-1，即无限，否则无限循环无法跳出
         /// </summary>
         protected virtual void AddTempTimer(TimerInfo timerInfo)
         {
-            GameGod.Instance.TimerManager.AddTempTimer(timerInfo);
+            GameManager.Instance.TimerManager.AddTempTimer(timerInfo);
         }
         /// <summary>
         /// 获取定时器信息
         /// </summary>
         protected virtual TimerInfo GetTimerInfo(string timeName)
         {
-            return GameGod.Instance.TimerManager.GetTimerInfo(timeName);
+            return GameManager.Instance.TimerManager.GetTimerInfo(timeName);
         }
         /// <summary>
         /// 移除定时器监听
         /// </summary>
         protected virtual void RemoveTimer(string timeName)
         {
-            GameGod.Instance.TimerManager.RemoveTimer(timeName);
+            GameManager.Instance.TimerManager.RemoveTimer(timeName);
         }
         /// <summary>
         /// 移除定时器监听
         /// </summary>
         protected virtual void RemoveTimer(TimerInfo timerInfo)
         {
-            GameGod.Instance.TimerManager.RemoveTimer(timerInfo.TimerName);
+            GameManager.Instance.TimerManager.RemoveTimer(timerInfo.TimerName);
         }
         #endregion
 
         #region Fsm
         protected Fsm<T> CreateFsm<T>(T owner, FsmState<T>[] states) where T : class
         {
-            var fsm = GameGod.Instance.FsmManager.CreateFsm<T>(owner, states);
+            var fsm = GameManager.Instance.FsmManager.CreateFsm<T>(owner, states);
             return fsm;
         }
         protected void RelaseFsm(int fsmId)
         {
-            GameGod.Instance.FsmManager.RelaseFsm(fsmId);
+            GameManager.Instance.FsmManager.RelaseFsm(fsmId);
         }
         #endregion
 
         #region Net
         protected virtual void HttpClearHeader()
         {
-            GameGod.Instance.HttpManager.ClearHeader();
+            GameManager.Instance.HttpManager.ClearHeader();
         }
         protected virtual void HttpAddHeader(string key, string value)
         {
-            GameGod.Instance.HttpManager.AddHeader(key, value);
+            GameManager.Instance.HttpManager.AddHeader(key, value);
         }
         protected virtual HttpRoutine HttpGet(string url, Action<string> jsonDataCallBack = null, Action<string> errorCallBack = null)
         {
-            return GameGod.Instance.HttpManager.Get(url, jsonDataCallBack, errorCallBack);
+            return GameManager.Instance.HttpManager.Get(url, jsonDataCallBack, errorCallBack);
         }
         protected virtual HttpRoutine HttpGetTexture(string url, Action<Texture2D> texture2DCallBack = null, Action<string> errorCallBack = null)
         {
-            return GameGod.Instance.HttpManager.GetTexture(url, texture2DCallBack, errorCallBack);
+            return GameManager.Instance.HttpManager.GetTexture(url, texture2DCallBack, errorCallBack);
         }
         protected virtual HttpRoutine GetAudioClip(string url, AudioType audioType, Action<AudioClip> audioClipCallBack = null, Action<string> errorCallBack = null)
         {
-            return GameGod.Instance.HttpManager.GetAudioClip(url, audioType, audioClipCallBack, errorCallBack);
+            return GameManager.Instance.HttpManager.GetAudioClip(url, audioType, audioClipCallBack, errorCallBack);
         }
         protected virtual HttpRoutine HttpPost(string url, string json = null, Action<string> jsonDataCallBack = null, Action<string> errorCallBack = null)
         {
-            return GameGod.Instance.HttpManager.Post(url, json, jsonDataCallBack, errorCallBack);
+            return GameManager.Instance.HttpManager.Post(url, json, jsonDataCallBack, errorCallBack);
         }
 
         protected virtual void SocketClearHeader()
         {
-            GameGod.Instance.SocketManager.ClearHeader();
+            GameManager.Instance.SocketManager.ClearHeader();
         }
         protected virtual void SocketAddHeader(string key, string value)
         {
-            GameGod.Instance.SocketManager.AddHeader(key, value);
+            GameManager.Instance.SocketManager.AddHeader(key, value);
         }
         protected virtual void SocketConnect(string wsUrl, Action openCallBack = null, Action closeCallBack = null)
         {
-            GameGod.Instance.SocketManager.Connect(wsUrl, openCallBack, closeCallBack);
+            GameManager.Instance.SocketManager.Connect(wsUrl, openCallBack, closeCallBack);
         }
         protected virtual void SocketSendMsg(string msg, Action<JsonData> callback)
         {
-            GameGod.Instance.SocketManager.SendMsg(msg, callback);
+            GameManager.Instance.SocketManager.SendMsg(msg, callback);
         }
         protected virtual void SocketSendMsg(byte[] msg, Action<JsonData> callback)
         {
-            GameGod.Instance.SocketManager.SendMsg(msg, callback);
+            GameManager.Instance.SocketManager.SendMsg(msg, callback);
         }
         protected virtual void SocketClose()
         {
-            GameGod.Instance.SocketManager.CloseSocket();
+            GameManager.Instance.SocketManager.CloseSocket();
         }
         #endregion
 
         #region Module
         protected virtual T GetModule<T>() where T : ModuleBase
         {
-            return GameGod.Instance.ModuleManager.GetModule<T>();
+            return GameManager.Instance.ModuleManager.GetModule<T>();
         }
         #endregion
 
         #region Log
         protected virtual void Log(E_Log logType, string title = null, string content = null, string color = null)
         {
-            GameGod.Instance.Log(logType, title, content, color);
+            GameManager.Instance.Log(logType, title, content, color);
         }
         protected virtual void Log(string content = null)
         {
-            GameGod.Instance.Log(E_Log.Log, GetType().Name, content);
+            GameManager.Instance.Log(E_Log.Log, GetType().Name, content);
         }
         protected virtual void Log(string title = null, string content = null)
         {
-            GameGod.Instance.Log(E_Log.Log, title, content);
+            GameManager.Instance.Log(E_Log.Log, title, content);
         }
         protected virtual void LogError(string content = null)
         {
-            GameGod.Instance.Log(E_Log.Error, GetType().Name, content);
+            GameManager.Instance.Log(E_Log.Error, GetType().Name, content);
         }
         protected virtual void LogError(string title = null, string content = null)
         {
-            GameGod.Instance.Log(E_Log.Error, title, content);
+            GameManager.Instance.Log(E_Log.Error, title, content);
         }
         protected virtual void LogWarning(string content = null)
         {
-            GameGod.Instance.Log(E_Log.Warning, GetType().Name, content);
+            GameManager.Instance.Log(E_Log.Warning, GetType().Name, content);
         }
         protected virtual void LogWarning(string title = null, string content = null)
         {
-            GameGod.Instance.Log(E_Log.Warning, title, content);
+            GameManager.Instance.Log(E_Log.Warning, title, content);
         }
         protected virtual void LogException(string content = null)
         {
-            GameGod.Instance.Log(E_Log.Exception, GetType().Name, content);
+            GameManager.Instance.Log(E_Log.Exception, GetType().Name, content);
         }
         protected virtual void LogException(string title = null, string content = null)
         {
-            GameGod.Instance.Log(E_Log.Exception, title, content);
+            GameManager.Instance.Log(E_Log.Exception, title, content);
         }
         #endregion
 
         #region Task
         protected virtual void AddTask(Action<TaskInfo> task)
         {
-            GameGod.Instance.TaskManager.AddTask(task);
+            GameManager.Instance.TaskManager.AddTask(task);
         }
         #endregion
     }

@@ -12,7 +12,7 @@ namespace Framework
     /// <summary>
     /// GameGod检查器扩展
     /// </summary>
-    [CustomEditor(typeof(GameGod))]
+    [CustomEditor(typeof(GameManager))]
     public class GameGodInspectorEx : Editor
     {
         public override void OnInspectorGUI()
@@ -20,7 +20,7 @@ namespace Framework
             base.OnInspectorGUI();
 
             GUILayout.Space(10);
-            if (!Application.isPlaying || GameGod.Instance == null || GameGod.Instance.PoolManager == null)
+            if (!Application.isPlaying || GameManager.Instance == null || GameManager.Instance.PoolManager == null)
             {
                 GUI.contentColor = Color.red;
                 GUILayout.Label("仅在运行下显示池对象概况");
@@ -37,7 +37,7 @@ namespace Framework
             GUILayout.EndHorizontal();
             //类对象池
             GUI.contentColor = Color.white;
-            foreach (var item in GameGod.Instance.PoolManager.InspectorDic)
+            foreach (var item in GameManager.Instance.PoolManager.InspectorDic)
             {
                 //key=name value=type
                 GUILayout.BeginHorizontal("box", GUILayout.Width(400));
@@ -55,7 +55,7 @@ namespace Framework
             GUILayout.EndHorizontal();
             //游戏对象池
             GUI.contentColor = Color.white;
-            foreach (var item in GameGod.Instance.PoolManager.GameObjectPoolDic)
+            foreach (var item in GameManager.Instance.PoolManager.GameObjectPoolDic)
             {
                 GUILayout.BeginHorizontal("box", GUILayout.Width(400));
                 GUILayout.Label(item.Key, GUILayout.Width(200));
@@ -73,7 +73,7 @@ namespace Framework
             GUILayout.EndHorizontal();
             //计时器字典
             GUI.contentColor = Color.white;
-            foreach (var item in GameGod.Instance.TimerManager.TimerInfoDic)
+            foreach (var item in GameManager.Instance.TimerManager.TimerInfoDic)
             {
                 GUILayout.BeginHorizontal("box", GUILayout.Width(400));
                 GUILayout.Label(item.Key, GUILayout.Width(400));

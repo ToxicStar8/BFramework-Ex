@@ -1,13 +1,15 @@
 /*********************************************
  * 
  * 脚本名：UIMainMenu.cs
- * 创建时间：2026/03/03 18:49:58
+ * 创建时间：2026/02/19 01:50:05
  *********************************************/
+using Cysharp.Threading.Tasks;
 using Framework;
 using MainPackage;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 namespace GameData
@@ -16,36 +18,112 @@ namespace GameData
     {
         public override void OnAwake()
         {
-            rectTransform = GetComponent<RectTransform>();
-
             Btn_Start.AddListener(OnClick_Btn_Start);
             Btn_Continue.AddListener(OnClick_Btn_Continue);
             Btn_Exit.AddListener(OnClick_Btn_Exit);
+
+            RegisterUpdate(OnUpdate);
+        }
+
+        private void OnUpdate()
+        {
+
         }
 
         public override void OnShow(params object[] args)
         {
-            
+            var tbRegionCtrl = GetTableCtrl<TableRegionCtrl>();
+            for (int i = 0; i < tbRegionCtrl.Count; i++)
+            {
+                var tbRegion = tbRegionCtrl.DataList[i];
+                var sb = new StringBuilder();
+                sb.Append(tbRegion.Id);
+                sb.Append(" ");
+                sb.Append(tbRegion.Region);
+                sb.Append(" ");
+                //for (int j = 0; j < tbRegion.List_Test1.Count; j++)
+                //{
+                //    sb.Append(tbRegion.List_Test1[j]);
+                //    sb.Append(" ");
+                //}
+
+                //for (int j = 0; j < tbRegion.List_Test2.Count; j++)
+                //{
+                //    sb.Append(tbRegion.List_Test2[j]);
+                //    sb.Append(" ");
+                //}
+
+                //for (int j = 0; j < tbRegion.List_Test3.Count; j++)
+                //{
+                //    sb.Append(tbRegion.List_Test3[j]);
+                //    sb.Append(" ");
+                //}
+
+                //for (int j = 0; j < tbRegion.List_Test4.Count; j++)
+                //{
+                //    sb.Append(tbRegion.List_Test4[j]);
+                //    sb.Append(" ");
+                //}
+
+                //for (int j = 0; j < tbRegion.List_Test6.Count; j++)
+                //{
+                //    var data = tbRegion.List_Test6[j];
+                //    for (int k = 0; k < data.Length; k++)
+                //    {
+                //        sb.Append(data[k]);
+                //    }
+                //    sb.Append(" ");
+                //}
+
+                sb.Append(tbRegion.Test7.x);
+                sb.Append(tbRegion.Test7.y);
+
+                sb.Append(" ");
+
+                sb.Append(tbRegion.Test8.x);
+                sb.Append(tbRegion.Test8.y);
+                sb.Append(tbRegion.Test8.z);
+
+                Log(sb.ToString());
+            }
+
+            AddTask(async (task) =>
+            {
+                Log("哈哈1");
+                await UniTask.Delay(1000);
+                Log("哈哈2");
+
+                task.OnComplete();
+            });
+
+            AddTask(async (task) =>
+            {
+                Log("哈哈3");
+
+                await UniTask.CompletedTask;
+
+                task.OnComplete();
+            });
         }
 
         private void OnClick_Btn_Start()
         {
-            Log("点击了Btn_Start");
+            Log(E_Log.Log, "开始游戏");
+            GameManager.Instance.ModuleManager.NewAllModule();
+            GameManager.Instance.ModuleManager.SaveAllModule();
         }
 
         private void OnClick_Btn_Continue()
         {
-            Log("点击了Btn_Continue");
+            Log(E_Log.Log, "继续游戏");
+            GameManager.Instance.ModuleManager.LoadAllModule();
         }
 
         private void OnClick_Btn_Exit()
         {
-            Log("点击了Btn_Exit");
+            Application.Quit();
         }
 
-        protected override void OnBeforeDestroy()
-        {
-            
-        }
+        protected override void OnBeforeDestroy() { }
     }
 }

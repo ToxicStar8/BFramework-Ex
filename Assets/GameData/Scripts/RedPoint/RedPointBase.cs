@@ -49,7 +49,7 @@ namespace GameData
             {
                 var id = this.RedPointIds[i];
                 //添加所有需要监听的事件
-                GameGod.Instance.RedPointManager.AddRedCallBack(id, this.UpdateRed);
+                GameManager.Instance.RedPointManager.AddRedCallBack(id, this.UpdateRed);
                 //计算好的 存下来使用 
                 var num1 = RedPointHelper.Instance.GetNumById(id, Key);
                 if (num1 > 0)
@@ -143,7 +143,7 @@ namespace GameData
             for (int i = 0; i < this.RedPointIds.Count; i++)
             {
                 var id = this.RedPointIds[i];
-                GameGod.Instance.RedPointManager?.RemoveRedCallBack(id, this.UpdateRed);
+                GameManager.Instance.RedPointManager?.RemoveRedCallBack(id, this.UpdateRed);
             }
 
             this.RedNumDict.Clear();

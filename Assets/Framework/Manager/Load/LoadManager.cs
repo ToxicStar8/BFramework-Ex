@@ -54,7 +54,7 @@ namespace Framework
                         var path = fileInfo.FullName.Substring(removeLength);
                         if (_allObjDirectoryDic.ContainsKey(fileInfo.Name))
                         {
-                            GameGod.Instance.Log(E_Log.Error, fileInfo.Name, "名字重复");
+                            GameManager.Instance.Log(E_Log.Error, fileInfo.Name, "名字重复");
                             continue;
                         }
                         _allObjDirectoryDic.Add(fileInfo.Name, path);
@@ -85,7 +85,7 @@ namespace Framework
 #if UNITY_EDITOR
                     if (!_allObjDirectoryDic.TryGetValue(objName, out var path))
                     {
-                        GameGod.Instance.Log(E_Log.Warning, "找不到资源", objName);
+                        GameManager.Instance.Log(E_Log.Warning, "找不到资源", objName);
                         return null;
                     }
 
@@ -95,9 +95,9 @@ namespace Framework
                 else
                 {
                     //获得AB包名
-                    if (!GameGod.Instance.ABManager.ABInfo.ABFileDic.TryGetValue(objName, out var abName))
+                    if (!GameManager.Instance.ABManager.ABInfo.ABFileDic.TryGetValue(objName, out var abName))
                     {
-                        GameGod.Instance.Log(E_Log.Error, "找不到资源", objName);
+                        GameManager.Instance.Log(E_Log.Error, "找不到资源", objName);
                         return null;
                     }
 
@@ -113,7 +113,7 @@ namespace Framework
                      * 问题：写起来麻烦
                      */
                     //寻找到AB包的依赖信息
-                    var abRelyOnInfo = GameGod.Instance.ABManager.ABInfo.ABRelyInfoList.Find(x => x.ABName == abName);
+                    var abRelyOnInfo = GameManager.Instance.ABManager.ABInfo.ABRelyInfoList.Find(x => x.ABName == abName);
                     for (int i = 0, count = abRelyOnInfo.ABRelyOnNameList.Count; i < count; i++)
                     {
                         var relyName = abRelyOnInfo.ABRelyOnNameList[i];
@@ -165,7 +165,7 @@ namespace Framework
         {
             if (!_allObjDirectoryDic.TryGetValue(objName, out var path))
             {
-                GameGod.Instance.Log(E_Log.Error, "找不到资源", objName);
+                GameManager.Instance.Log(E_Log.Error, "找不到资源", objName);
                 return null;
             }
             return path;
@@ -235,10 +235,10 @@ namespace Framework
                 if (!GameEntry.Instance.IsEditorMode || GameEntry.Instance.IsRunABPackage)
                 {
                     //卸载AB包
-                    if (GameGod.Instance.ABManager.ABInfo.ABFileDic.TryGetValue(objName, out var abName))
+                    if (GameManager.Instance.ABManager.ABInfo.ABFileDic.TryGetValue(objName, out var abName))
                     {
                         //先卸载依赖的AB包
-                        var abRelyOnInfo = GameGod.Instance.ABManager.ABInfo.ABRelyInfoList.Find(x => x.ABName == abName);
+                        var abRelyOnInfo = GameManager.Instance.ABManager.ABInfo.ABRelyInfoList.Find(x => x.ABName == abName);
                         for (int i = 0, count = abRelyOnInfo.ABRelyOnNameList.Count; i < count; i++)
                         {
                             var relyName = abRelyOnInfo.ABRelyOnNameList[i];
@@ -259,7 +259,7 @@ namespace Framework
         {
             var abInfo = _loadedABPackageDic[abName];
             abInfo.Times--;
-            GameGod.Instance.Log(E_Log.Framework, abName + "的计数", abInfo.Times.ToString());
+            GameManager.Instance.Log(E_Log.Framework, abName + "的计数", abInfo.Times.ToString());
             //如果引用等于0 直接卸载
             if (abInfo.Times == 0)
             {

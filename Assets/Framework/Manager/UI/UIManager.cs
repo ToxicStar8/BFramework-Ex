@@ -46,8 +46,8 @@ namespace Framework
                 return;
             }
 
-            var uiTrans = GameGod.Instance.GetUILevelTrans(uiLevel);
-            uiBase = GameGod.Instance.LoadHelper.CreateGameObjectSync(uiName + ".prefab", uiTrans).GetComponent<T>();
+            var uiTrans = GameManager.Instance.GetUILevelTrans(uiLevel);
+            uiBase = GameManager.Instance.LoadHelper.CreateGameObjectSync(uiName + ".prefab", uiTrans).GetComponent<T>();
             uiBase.UIName = uiName;
             uiBase.LoadHelper = LoadHelper.Create();
             uiBase.OnAwake();
@@ -130,7 +130,7 @@ namespace Framework
             {
                 item.Value.OnDispose();
                 Object.Destroy(item.Value.gameObject);
-                GameGod.Instance.LoadManager.UnloadAsset(item.Key + ".prefab");
+                GameManager.Instance.LoadManager.UnloadAsset(item.Key + ".prefab");
             }
             _uiBaseDic.Clear();
         }

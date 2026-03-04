@@ -45,7 +45,7 @@ namespace Framework
             ClassLinkedList.AddLast(t);
 #if UNITY_EDITOR
             //更新类数量
-            GameGod.Instance.PoolManager.CreateClassObjectPool<T>();
+            GameManager.Instance.PoolManager.CreateClassObjectPool<T>();
 #endif
             return t;
         }
@@ -60,7 +60,7 @@ namespace Framework
             ClassQueue.Enqueue(obj);
 #if UNITY_EDITOR
             //更新类数量
-            GameGod.Instance.PoolManager.CreateClassObjectPool<T>();
+            GameManager.Instance.PoolManager.CreateClassObjectPool<T>();
 #endif
         }
 
@@ -77,7 +77,7 @@ namespace Framework
             ClassLinkedList.Clear();
 #if UNITY_EDITOR
             //更新类数量
-            GameGod.Instance.PoolManager.CreateClassObjectPool<T>();
+            GameManager.Instance.PoolManager.CreateClassObjectPool<T>();
 #endif
         }
 
@@ -90,7 +90,7 @@ namespace Framework
             obj = null;
 #if UNITY_EDITOR
             //更新类数量
-            GameGod.Instance.PoolManager.CreateClassObjectPool<T>();
+            GameManager.Instance.PoolManager.CreateClassObjectPool<T>();
 #endif
         }
 
@@ -106,7 +106,7 @@ namespace Framework
             ClassLinkedList.Clear();
 #if UNITY_EDITOR
             //更新类数量
-            GameGod.Instance.PoolManager.CreateClassObjectPool<T>();
+            GameManager.Instance.PoolManager.CreateClassObjectPool<T>();
 #endif
         }
 

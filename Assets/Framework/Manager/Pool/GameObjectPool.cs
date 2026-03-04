@@ -40,7 +40,7 @@ namespace Framework
             if (ObjQueue.Count == 0)
             {
                 //GameEntry.Instance.Log(E_Log.Framework, "不存在" + ObjName + "对象","创建");
-                var obj = GameGod.Instance.LoadManager.LoadSync<GameObject>(ObjName);
+                var obj = GameManager.Instance.LoadManager.LoadSync<GameObject>(ObjName);
                 go = Object.Instantiate(obj, trans);
             }
             else
@@ -116,7 +116,7 @@ namespace Framework
             ObjQueue = null;
 
             //只在关闭池的时候卸载一次
-            GameGod.Instance.LoadManager.UnloadAsset(ObjName);
+            GameManager.Instance.LoadManager.UnloadAsset(ObjName);
         }
     }
 }

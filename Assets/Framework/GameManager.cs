@@ -16,7 +16,7 @@ namespace Framework
     /// <summary>
     /// 游戏框架总控制器
     /// </summary>
-    public class GameGod : MonoBehaviour
+    public class GameManager : MonoBehaviour
     {
         /// <summary>
         /// Update回调
@@ -33,7 +33,7 @@ namespace Framework
         /// </summary>
         public LoadHelper LoadHelper { private set; get; }
 
-        public static GameGod Instance { private set; get; }
+        public static GameManager Instance { private set; get; }
         public PoolManager PoolManager { private set; get; }
         public HttpManager HttpManager { private set; get; }
         public SocketManager SocketManager { private set; get; }

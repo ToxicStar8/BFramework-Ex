@@ -49,12 +49,12 @@ namespace Framework
         {
             if (_update != null)
             {
-                GameGod.Instance.Log(E_Log.Error, GetType().Name , "Update重复注册！");
+                GameManager.Instance.Log(E_Log.Error, GetType().Name , "Update重复注册！");
                 return;
             }
 
             _update = updateCallback;
-            GameGod.Instance.UpdateCallback += _update;
+            GameManager.Instance.UpdateCallback += _update;
         }
         #endregion
 
@@ -74,7 +74,7 @@ namespace Framework
             //关闭前移除全部Update回调
             if (_update != null)
             {
-                GameGod.Instance.UpdateCallback -= _update;
+                GameManager.Instance.UpdateCallback -= _update;
                 _update = null;
             }
 

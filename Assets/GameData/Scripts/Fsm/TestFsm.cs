@@ -12,7 +12,7 @@ namespace GameData
         public void Start()
         {
             var fsmArr = new FsmState<TestFsm>[2] { new Fsm1(), new Fsm2() };
-            var fsm = GameGod.Instance.FsmManager.CreateFsm(this, fsmArr);
+            var fsm = GameManager.Instance.FsmManager.CreateFsm(this, fsmArr);
 
             Debug.Log("fsm.CurrStateType=" + fsm.CurrStateType);
 
@@ -24,7 +24,7 @@ namespace GameData
 
             Debug.Log("fsm.CurrStateType=" + fsm.CurrStateType);
 
-            GameGod.Instance.FsmManager.RelaseFsm(fsm.FsmId);
+            GameManager.Instance.FsmManager.RelaseFsm(fsm.FsmId);
         }
     }
 

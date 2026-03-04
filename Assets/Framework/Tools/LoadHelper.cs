@@ -43,14 +43,14 @@ namespace Framework
         /// <summary>
         /// 资源名列表
         /// </summary>
-        private List<string> _objNameList;
+        private HashSet<string> _objNameHashSet;
 
         /// <summary>
         /// 同步加载Sprite
         /// </summary>
         public Sprite GetSpriteSync(string atlasName, string spriteName)
         {
-            _objNameList ??= new List<string>();
+            _objNameHashSet ??= new();
             //真正加载Sp的地方
             var sp = GameManager.Instance.LoadManager.GetSprite(atlasName, spriteName);
             if (sp == null)
@@ -59,13 +59,13 @@ namespace Framework
                 return null;
             }
             //追加到记录列表里
-            if (!_objNameList.Contains(atlasName))
+            if (!_objNameHashSet.Contains(atlasName))
             {
-                _objNameList.Add(atlasName);
+                _objNameHashSet.Add(atlasName);
             }
-            if (!_objNameList.Contains(spriteName))
+            if (!_objNameHashSet.Contains(spriteName))
             {
-                _objNameList.Add(spriteName);
+                _objNameHashSet.Add(spriteName);
             }
             return sp;
         }
@@ -94,7 +94,7 @@ namespace Framework
         /// </summary>
         public Object LoadSync(string objName)
         {
-            _objNameList ??= new List<string>();
+            _objNameHashSet ??= new();
             //真正加载资源的地方
             var obj = GameManager.Instance.LoadManager.LoadSync(objName);
             if (obj == null)
@@ -103,9 +103,9 @@ namespace Framework
                 return null;
             }
             //记录名字即可
-            if (!_objNameList.Contains(objName))
+            if (!_objNameHashSet.Contains(objName))
             {
-                _objNameList.Add(objName);
+                _objNameHashSet.Add(objName);
             }
             return obj;
         }
@@ -202,19 +202,18 @@ namespace Framework
         /// </summary>
         private void UnloadAllObject()
         {
-            if (_objNameList == null)
+            if (_objNameHashSet == null)
             {
                 return;
             }
 
             //关闭前移除全部Obj
-            for (int i = 0, count = _objNameList.Count; i < count; i++)
+            foreach (var objName in _objNameHashSet)
             {
-                string objName = _objNameList[i];
                 GameManager.Instance.LoadManager.UnloadAsset(objName);
                 GameManager.Instance.Log(E_Log.Framework, "Unload Object", objName);
             }
-            _objNameList.Clear();
+            _objNameHashSet.Clear();
         }
     }
 }

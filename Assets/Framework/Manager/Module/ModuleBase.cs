@@ -16,6 +16,11 @@ namespace Framework
     /// </summary>
     public abstract class ModuleBase : GameBase
     {
+        /// <summary>
+        /// 自动清理器
+        /// </summary>
+        protected readonly AutoCleanup Cleanup = new();
+
         public ModuleBase()
         {
             Log(E_Log.Framework, "初始化Module", this.GetType().Name);
@@ -32,29 +37,17 @@ namespace Framework
         public abstract void OnLoad();
 
         #region Event
-        //记录注册的事件，关闭时自动移除
-        private Dictionary<uint, Action<object[]>> _eventList;
-
         protected override void AddEventListener(uint eventNo, Action<object[]> callBack)
         {
-            _eventList ??= new();
-            _eventList.Add(eventNo, callBack);
+            Cleanup.TrackEvent(eventNo, callBack);
             base.AddEventListener(eventNo, callBack);
         }
         #endregion
 
         #region Update
-        private Action _update;
         protected void RegisterUpdate(Action updateCallback)
         {
-            if (_update != null)
-            {
-                GameManager.Instance.Log(E_Log.Error, GetType().Name , "Update重复注册！");
-                return;
-            }
-
-            _update = updateCallback;
-            GameManager.Instance.UpdateCallback += _update;
+            Cleanup.RegisterUpdate(GetType().Name, updateCallback);
         }
         #endregion
 
@@ -71,23 +64,8 @@ namespace Framework
             //注销前执行
             OnBeforeDispose();
 
-            //关闭前移除全部Update回调
-            if (_update != null)
-            {
-                GameManager.Instance.UpdateCallback -= _update;
-                _update = null;
-            }
-
-            //关闭前移除全部注册事件
-            if (_eventList != null)
-            {
-                foreach (var item in _eventList)
-                {
-                    RemoveEventListener(item.Key, item.Value);
-                }
-                _eventList.Clear();
-                _eventList = null;
-            }
+            //统一清理事件、Update回调
+            Cleanup.Dispose();
 
             Log(E_Log.Framework, "注销Module", this.GetType().Name);
         }

@@ -39,6 +39,11 @@ namespace Framework
         protected Coroutine Coroutine;
 
         /// <summary>
+        /// 自动清理器
+        /// </summary>
+        protected readonly AutoCleanup Cleanup = new();
+
+        /// <summary>
         /// 获取UI节点
         /// </summary>
         protected RectTransform GetUILevelTrans(E_UILevel uiLevel)
@@ -46,7 +51,6 @@ namespace Framework
             return GameManager.Instance.GetUILevelTrans(uiLevel);
         }
 
-        #region UI操作
         /// <summary>
         /// 关闭自己
         /// </summary>
@@ -62,52 +66,35 @@ namespace Framework
         {
             HideUI(UIName);
         }
-        #endregion
 
         #region Update
-        private Action _update;
         protected void RegisterUpdate(Action updateCallback)
         {
-            if (_update != null)
-            {
-                GameManager.Instance.Log(E_Log.Error, gameObject.name,"Update重复注册！");
-                return;
-            }
-
-            _update = updateCallback;
-            GameManager.Instance.UpdateCallback += _update;
+            Cleanup.RegisterUpdate(gameObject.name, updateCallback);
         }
         #endregion
 
         #region Event
-        //记录注册的事件，关闭时自动移除
-        private Dictionary<uint, Action<object[]>> _eventList;
-
         protected override void AddEventListener(uint eventNo, Action<object[]> callBack)
         {
-            _eventList ??= new();
-            _eventList.Add(eventNo, callBack);
+            Cleanup.TrackEvent(eventNo, callBack);
             base.AddEventListener(eventNo, callBack);
         }
         #endregion
 
         #region Timer
-        private List<string> _timerList;
-
         /// <summary>
         /// 添加定时器监听
         /// </summary>
         protected override void AddTimer(string timeName, TimerInfo timerInfo)
         {
-            _timerList ??= new List<string>();
-            _timerList.Add(timeName);
+            Cleanup.TrackTimer(timeName);
             base.AddTimer(timeName, timerInfo);
         }
 
         protected override void AddTempTimer(TimerInfo timerInfo)
         {
-            _timerList ??= new List<string>();
-            _timerList.Add(timerInfo.TimerName);
+            Cleanup.TrackTimer(timerInfo.TimerName);
             base.AddTempTimer(timerInfo);
         }
         #endregion
@@ -138,34 +125,8 @@ namespace Framework
             //回收加载器
             LoadHelper.Recycle(LoadHelper);
 
-            //关闭前移除全部Update回调
-            if (_update != null)
-            {
-                GameManager.Instance.UpdateCallback -= _update;
-                _update = null;
-            }
-
-            //关闭前移除全部注册事件
-            if (_eventList != null)
-            {
-                foreach (var item in _eventList)
-                {
-                    RemoveEventListener(item.Key, item.Value);
-                }
-                _eventList.Clear();
-                _eventList = null;
-            }
-
-            //关闭前移除全部定时器
-            if (_timerList != null)
-            {
-                for (int i = 0, count = _timerList.Count; i < count; i++)
-                {
-                    RemoveTimer(_timerList[i]);
-                }
-                _timerList.Clear();
-                _timerList = null;
-            }
+            //统一清理事件、Update、定时器
+            Cleanup.Dispose();
 
             //移除协程
             if (Coroutine != null)

@@ -114,8 +114,8 @@ namespace Framework
             //已打开 直接关闭
             if (_uiBaseDic.TryGetValue(uiName, out var uiBase))
             {
-                Object.Destroy(uiBase.gameObject);
                 uiBase.OnDispose();
+                Object.Destroy(uiBase.gameObject);
                 uiBase = null;
                 _uiBaseDic.Remove(uiName);
             }

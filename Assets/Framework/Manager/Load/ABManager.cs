@@ -5,6 +5,7 @@
  *********************************************/
 using MainPackage;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Framework
@@ -15,6 +16,11 @@ namespace Framework
         /// AB包信息
         /// </summary>
         public ABInfo ABInfo { private set; get; }
+
+        /// <summary>
+        /// 缓存，避免线性查找依赖
+        /// </summary>
+        public Dictionary<string, ABInfo.ABRelyInfo> ABRelyInfoDic { private set; get; }
 
         public override void OnAwake()
         {
@@ -31,6 +37,12 @@ namespace Framework
                 //转化为ABInfo（AB包的索引
                 ABInfo = JsonConvert.DeserializeObject<ABInfo>(textAsset.text);
                 abPackage.Unload(true);
+
+                ABRelyInfoDic = new Dictionary<string, ABInfo.ABRelyInfo>();
+                foreach (var info in ABInfo.ABRelyInfoList)
+                {
+                    ABRelyInfoDic[info.ABName] = info;
+                }
             }
         }
 

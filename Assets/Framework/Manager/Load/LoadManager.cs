@@ -113,7 +113,7 @@ namespace Framework
                      * 问题：写起来麻烦
                      */
                     //寻找到AB包的依赖信息
-                    var abRelyOnInfo = GameManager.Instance.ABManager.ABInfo.ABRelyInfoList.Find(x => x.ABName == abName);
+                    var abRelyOnInfo = GameManager.Instance.ABManager.ABRelyInfoDic[abName];
                     for (int i = 0, count = abRelyOnInfo.ABRelyOnNameList.Count; i < count; i++)
                     {
                         var relyName = abRelyOnInfo.ABRelyOnNameList[i];

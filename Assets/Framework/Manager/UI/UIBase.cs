@@ -91,7 +91,7 @@ namespace Framework
         }
         #endregion
 
-        #region Countdown
+        #region Timer
         private List<string> _timerList;
 
         /// <summary>
@@ -99,13 +99,16 @@ namespace Framework
         /// </summary>
         protected override void AddTimer(string timeName, TimerInfo timerInfo)
         {
-            if (_timerList == null)
-            {
-                _timerList = new List<string>();
-            }
-
+            _timerList ??= new List<string>();
             _timerList.Add(timeName);
             base.AddTimer(timeName, timerInfo);
+        }
+
+        protected override void AddTempTimer(TimerInfo timerInfo)
+        {
+            _timerList ??= new List<string>();
+            _timerList.Add(timerInfo.TimerName);
+            base.AddTempTimer(timerInfo);
         }
         #endregion
 

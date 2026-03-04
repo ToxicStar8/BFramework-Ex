@@ -58,7 +58,7 @@ namespace Framework
         /// <summary>
         /// 发送事件
         /// </summary>
-        public void SendEvent(uint eventNo,params object[] args)
+        public void SendEvent(uint eventNo, params object[] args)
         {
             if (!_eventDic.TryGetValue(eventNo, out var list))
             {
@@ -66,9 +66,9 @@ namespace Framework
                 return;
             }
 
-            foreach (var callBack in list)
+            for (int i = list.Count - 1; i >= 0; i--)
             {
-                callBack.Invoke(args);
+                list[i]?.Invoke(args);
             }
         }
 

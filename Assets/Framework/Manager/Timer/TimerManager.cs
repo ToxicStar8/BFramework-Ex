@@ -56,15 +56,7 @@ namespace Framework
         /// <summary>
         /// 定时器字典
         /// </summary>
-        private Dictionary<string, TimerInfo> _timerInfoDic;
-
-#if UNITY_EDITOR
-        public Dictionary<string, TimerInfo> TimerInfoDic
-        {
-            get { return _timerInfoDic; }
-        }
-#endif
-
+        public Dictionary<string, TimerInfo> TimerInfoDic { get; private set; }
 
         /// <summary>
         /// 临时Key
@@ -73,7 +65,7 @@ namespace Framework
 
         public override void OnAwake()
         {
-            _timerInfoDic = new Dictionary<string, TimerInfo>();
+            TimerInfoDic = new Dictionary<string, TimerInfo>();
         }
 
         /// <summary>
@@ -100,7 +92,7 @@ namespace Framework
             //记录名字
             timerInfo.TimerName = timerName;
             //添加到计时器的字典里
-            _timerInfoDic.Add(timerName, timerInfo);
+            TimerInfoDic.Add(timerName, timerInfo);
             ExecTimer(timerInfo).Forget();
         }
 
@@ -151,10 +143,10 @@ namespace Framework
             finally
             {
                 //不管是时间到了还是主动取消，都会在这里进行回收处理
-                if (_timerInfoDic is not null)
+                if (TimerInfoDic is not null)
                 {
                     timerInfo.EndCallback?.Invoke(timerInfo.Cts.IsCancellationRequested);
-                    _timerInfoDic.Remove(timerInfo.TimerName);
+                    TimerInfoDic.Remove(timerInfo.TimerName);
                     TimerInfo.Recycle(timerInfo);
                 }
                 GameManager.Instance.Log(E_Log.Framework, "定时器回收", timerInfo.TimerName);
@@ -166,7 +158,7 @@ namespace Framework
         /// </summary>
         public TimerInfo GetTimerInfo(string timerName)
         {
-            if (!_timerInfoDic.TryGetValue(timerName, out var timerInfo))
+            if (!TimerInfoDic.TryGetValue(timerName, out var timerInfo))
             {
                 GameManager.Instance.Log(E_Log.Warning, "定时器不存在", timerName);
                 return null;
@@ -179,17 +171,17 @@ namespace Framework
         /// </summary>
         public void RemoveTimer(string timerName)
         {
-            if (_timerInfoDic.ContainsKey(timerName))
+            if (TimerInfoDic.ContainsKey(timerName))
             {
-                _timerInfoDic[timerName].Cts.Cancel();
+                TimerInfoDic[timerName].Cts.Cancel();
             }
         }
         
         public void RemoveTimer(TimerInfo timerInfo)
         {
-            if (_timerInfoDic.ContainsKey(timerInfo.TimerName))
+            if (TimerInfoDic.ContainsKey(timerInfo.TimerName))
             {
-                _timerInfoDic[timerInfo.TimerName].Cts.Cancel();
+                TimerInfoDic[timerInfo.TimerName].Cts.Cancel();
             }
         }
 
@@ -197,15 +189,15 @@ namespace Framework
 
         public override void OnDispose()
         {
-            if (_timerInfoDic is not null)
+            if (TimerInfoDic is not null)
             {
-                var list = _timerInfoDic.Keys.ToList();
+                var list = TimerInfoDic.Keys.ToList();
                 for (int i = 0; i < list.Count; i++)
                 {
                     RemoveTimer(list[i]);
                 }
-                _timerInfoDic.Clear();
-                _timerInfoDic = null;
+                TimerInfoDic.Clear();
+                TimerInfoDic = null;
             }
         }
     }

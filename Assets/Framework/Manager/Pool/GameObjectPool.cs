@@ -42,6 +42,7 @@ namespace Framework
                 //GameEntry.Instance.Log(E_Log.Framework, "不存在" + ObjName + "对象","创建");
                 var obj = GameManager.Instance.LoadManager.LoadSync<GameObject>(ObjName);
                 go = Object.Instantiate(obj, trans);
+                go.name = go.name.Replace("(Clone)", "");
             }
             else
             {

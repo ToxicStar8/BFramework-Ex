@@ -71,8 +71,7 @@ namespace Framework
         /// </summary>
         public void RecycleGameObject(GameObject go)
         {
-            var name = go.name.Replace("(Clone)", "");
-            var pool = CreateGameObjectPool(name);
+            var pool = CreateGameObjectPool(go.name);
             pool.Recycle(go);
         }
         /// <summary>

@@ -58,10 +58,10 @@ namespace Framework
         /// <summary>
         /// 获取UI
         /// </summary>
-        public UIBase GetUI<T>() where T : UIBase
+        public T GetUI<T>() where T : UIBase
         {
             var uiName = typeof(T).Name;
-            return GetUI(uiName);
+            return GetUI(uiName) as T;
         }
 
         /// <summary>

@@ -21,12 +21,12 @@ namespace Framework
         /// <summary>
         /// 红点类型的数量 key为红点类型 value为红点数量 0=没有 n=表示几个
         /// </summary>
-        private Dictionary<int, int> _redPointDic { set; get; }
+        private Dictionary<int, int> _redPointDic;
 
         /// <summary>
         /// 回调的第一个值是Id 第二个值是Key 第三个值是红点的个数 0=不需要显示 1=数量为1 n=数量为n
         /// </summary>
-        private Dictionary<int, Action<int, string, int>> _redActions { set; get; }
+        private Dictionary<int, Action<int, string, int>> _redActions;
 
         public override void OnAwake()
         {

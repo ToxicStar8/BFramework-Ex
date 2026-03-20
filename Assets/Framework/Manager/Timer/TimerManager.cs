@@ -61,7 +61,7 @@ namespace Framework
         /// <summary>
         /// 临时Key
         /// </summary>
-        private int _tempIndex;
+        private uint _tempIndex;
 
         public override void OnAwake()
         {
@@ -73,6 +73,8 @@ namespace Framework
         /// </summary>
         public void AddTempTimer(TimerInfo timerInfo)
         {
+            if (_tempIndex == uint.MaxValue)
+                _tempIndex = 0;
             AddTimer(_tempIndex.ToString(), timerInfo);
             _tempIndex++;
         }
@@ -142,14 +144,15 @@ namespace Framework
             }
             finally
             {
+                var timerName = timerInfo.TimerName;
                 //不管是时间到了还是主动取消，都会在这里进行回收处理
                 if (TimerInfoDic is not null)
                 {
                     timerInfo.EndCallback?.Invoke(timerInfo.Cts.IsCancellationRequested);
-                    TimerInfoDic.Remove(timerInfo.TimerName);
+                    TimerInfoDic.Remove(timerName);
                     TimerInfo.Recycle(timerInfo);
                 }
-                GameManager.Instance.Log(E_Log.Framework, "定时器回收", timerInfo.TimerName);
+                GameManager.Instance.Log(E_Log.Framework, "定时器回收", timerName);
             }
         }
 
@@ -171,17 +174,15 @@ namespace Framework
         /// </summary>
         public void RemoveTimer(string timerName)
         {
-            if (TimerInfoDic.ContainsKey(timerName))
-            {
-                TimerInfoDic[timerName].Cts.Cancel();
-            }
+            if (TimerInfoDic.TryGetValue(timerName, out var timerInfo))
+                timerInfo.Cts.Cancel();
         }
         
         public void RemoveTimer(TimerInfo timerInfo)
         {
             if (TimerInfoDic.ContainsKey(timerInfo.TimerName))
             {
-                TimerInfoDic[timerInfo.TimerName].Cts.Cancel();
+                timerInfo.Cts.Cancel();
             }
         }
 

@@ -57,20 +57,15 @@ namespace Framework
 
         public async UniTask TryDequeue()
         {
-            if (!_isRunning)
+            if (_isRunning) return;
+            _isRunning = true;
+            while (TaskQueue.TryDequeue(out var taskInfo))
             {
-                if (TaskQueue.TryDequeue(out var taskInfo))
-                {
-                    _isRunning = true;
-
-                    taskInfo.Task(taskInfo);
-                    await taskInfo.WaitComplete();
-                    TaskInfo.Recycle(taskInfo);
-
-                    _isRunning = false;
-                    await TryDequeue();
-                }
+                taskInfo.Task(taskInfo);
+                await taskInfo.WaitComplete();
+                TaskInfo.Recycle(taskInfo);
             }
+            _isRunning = false;
         }
 
         public void ClearAllTask()

@@ -855,9 +855,9 @@ namespace GameData
                 case "Pcl":
                     return "PointerClickListener";
                 case "Img":
-                    return "ImageEx";
+                    return "Image";
                 case "Imgs":
-                    return "ImageEx[]";
+                    return "Image[]";
                 case "Raw":
                     return "RawImage";
                 case "Raws":

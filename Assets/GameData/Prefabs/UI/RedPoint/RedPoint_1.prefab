@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 544044817235609683}
   - component: {fileID: 6812875110734776499}
   - component: {fileID: 7460025615461930615}
-  - component: {fileID: 9197343574977260806}
+  - component: {fileID: 9029389858627313292}
   m_Layer: 15
   m_Name: RedPoint_1
   m_TagString: Untagged
@@ -76,7 +76,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &9197343574977260806
+--- !u!114 &9029389858627313292
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -85,9 +85,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 564417938718256341}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19f8d8894e5462648b163d3eba78906b, type: 3}
+  m_Script: {fileID: 11500000, guid: 393b4feff8f10874e994b24ac4e16f2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Key: 
   RedPointIds: 
-  Go_RedPoint: {fileID: 0}

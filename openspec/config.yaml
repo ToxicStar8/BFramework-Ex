@@ -1,20 +1,41 @@
 schema: spec-driven
 
-# Project context (optional)
-# This is shown to AI when creating artifacts.
-# Add your tech stack, conventions, style guides, domain knowledge, etc.
-# Example:
-#   context: |
-#     Tech stack: TypeScript, React, Node.js
-#     We use conventional commits
-#     Domain: e-commerce platform
+context: |
+  项目：BFramework-Ex — 基于 Unity 的轻量级游戏框架
+  技术栈：Unity / C# 9.0 / .NET Framework 4.7.1 / HybridCLR 热更新
+  异步：UniTask (Cysharp.Threading.Tasks)
+  序列化：Newtonsoft.Json
+  网络：UnityWebRequest (HTTP) + System.Net.WebSockets
+  资源管理：AssetBundle 自建管理
 
-# Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
-# Example:
-#   rules:
-#     proposal:
-#       - Keep proposals under 500 words
-#       - Always include a "Non-goals" section
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
+  架构：GameGod 单例总控制器 + 14 个 ManagerBase 子管理器
+  双基类体系：GameBase（非Mono）/ GameBaseMono（Mono）提供统一快捷方法
+  UI 体系：UIManager + UIBase/UnitBase + partial class 代码生成
+  数据体系：ModuleManager + ModuleBase（数据/存档层）
+  配表体系：TableManager + TableCtrlBase<T> + TableBase（懒加载 + 热重载）
+
+  命名空间：Framework（框架核心）、GameData（游戏业务）、MainPackage（启动包）
+  私有字段：_camelCase，公开属性：PascalCase，枚举：E_ 前缀
+  UI 文件：UIXxx.cs（逻辑）+ UIXxx.Design.cs（自动生成绑定）
+
+  主规范路径：openspec/specs/SPEC.md
+  创建变更前请先阅读主规范以了解框架全貌。
+
+rules:
+  proposal:
+    - 用中文撰写
+    - 明确说明涉及的管理器和基类
+    - 列出需要新增或修改的文件路径
+  specs:
+    - 用中文撰写
+    - 参照 SPEC.md 中的架构约定
+    - 说明与现有 Manager/Base 的交互方式
+  design:
+    - 用中文撰写
+    - 说明类结构、接口定义及关键方法签名
+    - 描述数据流与各管理器之间的调用关系
+    - 标注需要代码生成（partial class）或编辑器扩展的部分
+  tasks:
+    - 用中文撰写
+    - 每个任务不超过 2 小时工作量
+    - 按文件路径分组任务

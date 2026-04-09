@@ -62,7 +62,7 @@ namespace Framework
         public void ClearHeader()
         {
             HttpHeaderDic.Clear();
-            GameManager.Instance.Log(E_Log.Framework, "清空浏览器标头");
+            GameGod.Instance.Log(E_Log.Framework, "清空浏览器标头");
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace Framework
         public void AddHeader(string key, string value)
         {
             HttpHeaderDic.Add(key, value);
-            GameManager.Instance.Log(E_Log.Framework, "添加浏览器标头" + key, value);
+            GameGod.Instance.Log(E_Log.Framework, "添加浏览器标头" + key, value);
         }
 
         /// <summary>
@@ -84,11 +84,11 @@ namespace Framework
         {
             if (string.IsNullOrWhiteSpace(url))
             {
-                GameManager.Instance.Log(E_Log.Error, "请求的url为空，url" + url);
+                GameGod.Instance.Log(E_Log.Error, "请求的url为空，url" + url);
                 return null;
             }
 
-            var pool = GameManager.Instance.PoolManager.CreateClassObjectPool<HttpRoutine>();
+            var pool = GameGod.Instance.PoolManager.CreateClassObjectPool<HttpRoutine>();
             var routine = pool.CreateClassObj();
             routine.ThisPool = pool;
             routine.Get(url, jsonDataCallBack, errorCallBack);
@@ -105,25 +105,25 @@ namespace Framework
         {
             if (string.IsNullOrWhiteSpace(url))
             {
-                GameManager.Instance.Log(E_Log.Error, "请求的url为空，url" + url);
+                GameGod.Instance.Log(E_Log.Error, "请求的url为空，url" + url);
                 return null;
             }
 
             if (HttpTextureDic.TryGetValue(url, out var texture2D))
             {
-                GameManager.Instance.Log(E_Log.Framework, "请求的url图片已存在，直接返回图片");
+                GameGod.Instance.Log(E_Log.Framework, "请求的url图片已存在，直接返回图片");
                 texture2DCallBack?.Invoke(texture2D);
                 return null;
             }
 
-            var pool = GameManager.Instance.PoolManager.CreateClassObjectPool<HttpRoutine>();
+            var pool = GameGod.Instance.PoolManager.CreateClassObjectPool<HttpRoutine>();
             var routine = pool.CreateClassObj();
             routine.ThisPool = pool;
             routine.Get(url, (texture2D) =>
             {
                 if (texture2D == null)
                 {
-                    GameManager.Instance.Log(E_Log.Error, "请求的url返回图片为空，url" + url);
+                    GameGod.Instance.Log(E_Log.Error, "请求的url返回图片为空，url" + url);
                     return;
                 }
                 HttpTextureDic[url] = texture2D;
@@ -143,25 +143,25 @@ namespace Framework
         {
             if (string.IsNullOrWhiteSpace(url))
             {
-                GameManager.Instance.Log(E_Log.Error, "请求的url为空，url" + url);
+                GameGod.Instance.Log(E_Log.Error, "请求的url为空，url" + url);
                 return null;
             }
 
             if (HttpAudioClipDic.TryGetValue(url, out var audioClip))
             {
-                GameManager.Instance.Log(E_Log.Framework, "请求的url音频已存在，直接返回音频");
+                GameGod.Instance.Log(E_Log.Framework, "请求的url音频已存在，直接返回音频");
                 audioClipCallBack?.Invoke(audioClip);
                 return null;
             }
 
-            var pool = GameManager.Instance.PoolManager.CreateClassObjectPool<HttpRoutine>();
+            var pool = GameGod.Instance.PoolManager.CreateClassObjectPool<HttpRoutine>();
             var routine = pool.CreateClassObj();
             routine.ThisPool = pool;
             routine.Get(url, audioType, (audioClip) =>
             {
                 if (audioClip == null)
                 {
-                    GameManager.Instance.Log(E_Log.Error, "请求的url返回音频为空，url" + url);
+                    GameGod.Instance.Log(E_Log.Error, "请求的url返回音频为空，url" + url);
                     return;
                 }
                 HttpAudioClipDic[url] = audioClip;
@@ -172,7 +172,7 @@ namespace Framework
 
         public HttpRoutine Post(string url, string json = null, Action<string> jsonDataCallBack = null, Action<string> errorCallBack = null)
         {
-            var pool = GameManager.Instance.PoolManager.CreateClassObjectPool<HttpRoutine>();
+            var pool = GameGod.Instance.PoolManager.CreateClassObjectPool<HttpRoutine>();
             var routine = pool.CreateClassObj();
             routine.ThisPool = pool;
             routine.Post(url, json, jsonDataCallBack,errorCallBack);

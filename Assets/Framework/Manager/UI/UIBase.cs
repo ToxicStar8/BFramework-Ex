@@ -48,7 +48,7 @@ namespace Framework
         /// </summary>
         protected RectTransform GetUILevelTrans(E_UILevel uiLevel)
         {
-            return GameManager.Instance.GetUILevelTrans(uiLevel);
+            return GameGod.Instance.GetUILevelTrans(uiLevel);
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace Framework
             //移除协程
             if (Coroutine != null)
             {
-                GameManager.Instance.StopCoroutine(Coroutine);
+                GameGod.Instance.StopCoroutine(Coroutine);
             }
         }
     }

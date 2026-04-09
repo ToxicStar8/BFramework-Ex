@@ -34,7 +34,7 @@ namespace GameData
         /// </summary>
         public void RegisterUpdateCallback()
         {
-            GameManager.Instance.EventManager.AddEventListener((ushort)RedPointEvent.RedPointTest, Update_001);
+            GameGod.Instance.EventManager.AddEventListener((ushort)RedPointEvent.RedPointTest, Update_001);
         }
 
 
@@ -70,8 +70,8 @@ namespace GameData
         /// </summary>
         private void CommoneSetNumAndInvoke(int id, string key, int num)
         {
-            GameManager.Instance.RedPointManager.SetRedNumById(id, num);
-            var callBack = GameManager.Instance.RedPointManager.GetCallBack(id);
+            GameGod.Instance.RedPointManager.SetRedNumById(id, num);
+            var callBack = GameGod.Instance.RedPointManager.GetCallBack(id);
             callBack?.Invoke(id, key, num);
         }
 
@@ -91,7 +91,7 @@ namespace GameData
         /// </summary>
         public int GetNumById(int id, string key)
         {
-            var num = GameManager.Instance.RedPointManager.GetRedNumById(id);
+            var num = GameGod.Instance.RedPointManager.GetRedNumById(id);
             if (num == -1)
             {
                 num = InitRedPoint(id, key);
@@ -114,11 +114,11 @@ namespace GameData
                     break;
 
                 default:
-                    GameManager.Instance.Log(E_Log.Error, "未知红点类型，Id=" + id.ToString());
+                    GameGod.Instance.Log(E_Log.Error, "未知红点类型，Id=" + id.ToString());
                     return -1;
             }
 
-            GameManager.Instance.RedPointManager.SetRedNumById(id, num);
+            GameGod.Instance.RedPointManager.SetRedNumById(id, num);
             return num;
         }
     }

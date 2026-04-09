@@ -25,7 +25,7 @@ namespace Framework
 
         private void OnGUI()
         {
-            if (!Application.isPlaying || GameManager.Instance == null)
+            if (!Application.isPlaying || GameGod.Instance == null)
             {
                 GUI.contentColor = Color.red;
                 GUILayout.Label("仅在运行下显示Manager数据概况");
@@ -35,7 +35,7 @@ namespace Framework
             _scrollPos = GUILayout.BeginScrollView(_scrollPos);
 
             //========== 类对象池 ==========
-            if (GameManager.Instance.PoolManager != null)
+            if (GameGod.Instance.PoolManager != null)
             {
                 GUI.contentColor = Color.cyan;
                 GUILayout.BeginHorizontal("box", GUILayout.Width(400));
@@ -45,7 +45,7 @@ namespace Framework
                 GUILayout.EndHorizontal();
 
                 GUI.contentColor = Color.white;
-                foreach (var item in GameManager.Instance.PoolManager.InspectorDic)
+                foreach (var item in GameGod.Instance.PoolManager.InspectorDic)
                 {
                     GUILayout.BeginHorizontal("box", GUILayout.Width(400));
                     GUILayout.Label(item.Key, GUILayout.Width(200));
@@ -64,7 +64,7 @@ namespace Framework
                 GUILayout.EndHorizontal();
 
                 GUI.contentColor = Color.white;
-                foreach (var item in GameManager.Instance.PoolManager.GameObjectPoolDic)
+                foreach (var item in GameGod.Instance.PoolManager.GameObjectPoolDic)
                 {
                     GUILayout.BeginHorizontal("box", GUILayout.Width(400));
                     GUILayout.Label(item.Key, GUILayout.Width(200));
@@ -75,7 +75,7 @@ namespace Framework
             }
 
             //========== 计时器 ==========
-            if (GameManager.Instance.TimerManager != null)
+            if (GameGod.Instance.TimerManager != null)
             {
                 GUILayout.Space(10);
                 GUI.contentColor = Color.cyan;
@@ -84,7 +84,7 @@ namespace Framework
                 GUILayout.EndHorizontal();
 
                 GUI.contentColor = Color.white;
-                foreach (var item in GameManager.Instance.TimerManager.TimerInfoDic)
+                foreach (var item in GameGod.Instance.TimerManager.TimerInfoDic)
                 {
                     GUILayout.BeginHorizontal("box", GUILayout.Width(400));
                     GUILayout.Label(item.Key, GUILayout.Width(400));
@@ -93,7 +93,7 @@ namespace Framework
             }
 
             //========== 音频 ==========
-            if (GameManager.Instance.AudioManager != null)
+            if (GameGod.Instance.AudioManager != null)
             {
                 GUILayout.Space(10);
                 GUI.contentColor = Color.cyan;
@@ -105,12 +105,12 @@ namespace Framework
                 GUI.contentColor = Color.white;
                 GUILayout.BeginHorizontal("box", GUILayout.Width(400));
                 GUILayout.Label("背景音乐音量", GUILayout.Width(200));
-                GUILayout.Label(GameManager.Instance.AudioManager.GetVolumeBackground().ToString("F2"), GUILayout.Width(100));
+                GUILayout.Label(GameGod.Instance.AudioManager.GetVolumeBackground().ToString("F2"), GUILayout.Width(100));
                 GUILayout.EndHorizontal();
 
                 GUILayout.BeginHorizontal("box", GUILayout.Width(400));
                 GUILayout.Label("音效音量", GUILayout.Width(200));
-                GUILayout.Label(GameManager.Instance.AudioManager.GetVolumeSound().ToString("F2"), GUILayout.Width(100));
+                GUILayout.Label(GameGod.Instance.AudioManager.GetVolumeSound().ToString("F2"), GUILayout.Width(100));
                 GUILayout.EndHorizontal();
             }
 

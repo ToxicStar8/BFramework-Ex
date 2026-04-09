@@ -79,7 +79,7 @@ namespace Framework
         {
             if (!_allModuleDic.ContainsKey(type.Name))
             {
-                GameManager.Instance.Log(E_Log.Error, "未初始化Module", type.Name);
+                GameGod.Instance.Log(E_Log.Error, "未初始化Module", type.Name);
                 return null;
             }
             return _allModuleDic[type.Name];
@@ -151,7 +151,7 @@ namespace Framework
             if (module != null)
             {
                 File.WriteAllText(_savePath + type.Name, JsonConvert.SerializeObject(module));
-                GameManager.Instance.Log(E_Log.Framework, "保存Module", type.Name);
+                GameGod.Instance.Log(E_Log.Framework, "保存Module", type.Name);
             }
         }
 
@@ -184,7 +184,7 @@ namespace Framework
             var filePath = _savePath + type.Name;
             if (!File.Exists(filePath))
             {
-                GameManager.Instance.Log(E_Log.Error, type.Name, "存档不存在");
+                GameGod.Instance.Log(E_Log.Error, type.Name, "存档不存在");
                 return;
             }
 
@@ -193,7 +193,7 @@ namespace Framework
             var moduleBase = obj as ModuleBase;
             moduleBase.OnLoad();
             _allModuleDic[type.Name] = moduleBase;
-            GameManager.Instance.Log(E_Log.Framework, "加载Module", type.Name);
+            GameGod.Instance.Log(E_Log.Framework, "加载Module", type.Name);
         }
 
         /// <summary>

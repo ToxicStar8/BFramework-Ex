@@ -20,7 +20,7 @@ namespace Framework
         /// <summary>
         /// Socket管理器
         /// </summary>
-        public SocketManager SocketMgr => GameManager.Instance.SocketManager;
+        public SocketManager SocketMgr => GameGod.Instance.SocketManager;
 
         /// <summary>
         /// 客户端Socket
@@ -98,7 +98,7 @@ namespace Framework
         public void Connect(string url, Action openCallback = null, Action closeCallback = null, Dictionary<string, string> headerDic = null)
         {
             Init(url);
-            GameManager.Instance.Log(E_Log.Proto, "WebSocket 尝试连接", _url);
+            GameGod.Instance.Log(E_Log.Proto, "WebSocket 尝试连接", _url);
             OpenCallback = openCallback;
             CloseCallback = closeCallback;
             Socket.ConnectAsync(headerDic);
@@ -113,7 +113,7 @@ namespace Framework
             var proto = jsonData.proto;
             _callbackDic[proto] = callback;
 
-            GameManager.Instance.Log(E_Log.Proto, "WebSocket 发送消息", msg);
+            GameGod.Instance.Log(E_Log.Proto, "WebSocket 发送消息", msg);
             Socket.SendAsync(msg);
         }
 
@@ -127,7 +127,7 @@ namespace Framework
             var proto = jsonData.proto;
             _callbackDic[proto] = callback;
 
-            GameManager.Instance.Log(E_Log.Proto, "WebSocket 发送消息", msg.ToString());
+            GameGod.Instance.Log(E_Log.Proto, "WebSocket 发送消息", msg.ToString());
             Socket.SendAsync(msg);
         }
 
@@ -168,23 +168,23 @@ namespace Framework
             switch (evt.type)
             {
                 case 1:         // 错误
-                    GameManager.Instance.Log(E_Log.Error, "WebSocket 错误", evt.msg);
+                    GameGod.Instance.Log(E_Log.Error, "WebSocket 错误", evt.msg);
                     break;
 
                 case 2:         // 消息
-                    GameManager.Instance.Log(E_Log.Proto, "WebSocket 接收消息", evt.msg);
+                    GameGod.Instance.Log(E_Log.Proto, "WebSocket 接收消息", evt.msg);
                     //分发消息
                     DispatchMsg(evt);
                     break;
 
                 case 3:         // WS 关闭
-                    GameManager.Instance.Log(E_Log.Proto, "WebSocket 主动关闭");
+                    GameGod.Instance.Log(E_Log.Proto, "WebSocket 主动关闭");
                     _callbackDic.Clear();
                     CloseCallback?.Invoke();
                     break;
 
                 case 4:         // WS 打开
-                    GameManager.Instance.Log(E_Log.Proto, "WebSocket 已连接");
+                    GameGod.Instance.Log(E_Log.Proto, "WebSocket 已连接");
                     OpenCallback?.Invoke();
                     break;
 
@@ -211,7 +211,7 @@ namespace Framework
                 return;
             }
             //分发消息
-            GameManager.Instance.EventManager.SendEvent(proto, jsonData);
+            GameGod.Instance.EventManager.SendEvent(proto, jsonData);
         }
     }
 

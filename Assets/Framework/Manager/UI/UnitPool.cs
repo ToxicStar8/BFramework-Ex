@@ -56,7 +56,7 @@ namespace Framework
             _rootRect = rootRect;
             _unitBase = go;
             _unitBase.SetActive(isShowGo);
-            GameManager.Instance.Log(E_Log.Log, "创建对象池", UnitName);
+            GameGod.Instance.Log(E_Log.Log, "创建对象池", UnitName);
         }
 
         /// <summary>
@@ -176,7 +176,7 @@ namespace Framework
         {
             if (_unitBase == null)
             {
-                GameManager.Instance.Log(E_Log.Framework, "Panel" + UnitName, "创建");
+                GameGod.Instance.Log(E_Log.Framework, "Panel" + UnitName, "创建");
                 _unitBase.LoadHelper = LoadHelper;
                 _unitBase.OnAwake();
             }

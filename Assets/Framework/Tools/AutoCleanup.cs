@@ -40,12 +40,12 @@ namespace Framework
         {
             if (_update != null)
             {
-                GameManager.Instance.Log(E_Log.Error, ownerName, "Update重复注册！");
+                GameGod.Instance.Log(E_Log.Error, ownerName, "Update重复注册！");
                 return false;
             }
 
             _update = updateCallback;
-            GameManager.Instance.UpdateCallback += _update;
+            GameGod.Instance.UpdateCallback += _update;
             return true;
         }
         #endregion
@@ -69,7 +69,7 @@ namespace Framework
             //关闭前移除全部Update回调
             if (_update != null)
             {
-                GameManager.Instance.UpdateCallback -= _update;
+                GameGod.Instance.UpdateCallback -= _update;
                 _update = null;
             }
 
@@ -78,7 +78,7 @@ namespace Framework
             {
                 foreach (var item in _eventList)
                 {
-                    GameManager.Instance.EventManager.RemoveEventListener(item.Key, item.Value);
+                    GameGod.Instance.EventManager.RemoveEventListener(item.Key, item.Value);
                 }
                 _eventList.Clear();
                 _eventList = null;
@@ -89,7 +89,7 @@ namespace Framework
             {
                 for (int i = 0, count = _timerList.Count; i < count; i++)
                 {
-                    GameManager.Instance.TimerManager.RemoveTimer(_timerList[i]);
+                    GameGod.Instance.TimerManager.RemoveTimer(_timerList[i]);
                 }
                 _timerList.Clear();
                 _timerList = null;

@@ -28,7 +28,7 @@ namespace Framework
 
         public static TimerInfo Create(int allCount, int intervalTime, bool isExecImmed, Action execCallback = null, Action<bool> endCallback = null)
         {
-            var timerInfo = GameManager.Instance.PoolManager.CreateClassObj<TimerInfo>();
+            var timerInfo = GameGod.Instance.PoolManager.CreateClassObj<TimerInfo>();
             timerInfo.AllCount = allCount;
             timerInfo.IntervalTime = intervalTime;
             timerInfo.IsExecImmed = isExecImmed;
@@ -44,7 +44,7 @@ namespace Framework
             timerInfo.Cts = null;
             timerInfo.ExecCallback = null;
             timerInfo.EndCallback = null;
-            GameManager.Instance.PoolManager.RecycleClassObj(timerInfo);
+            GameGod.Instance.PoolManager.RecycleClassObj(timerInfo);
         }
     }
 
@@ -86,11 +86,11 @@ namespace Framework
         {
             if (timerInfo.AllCount <= 0)
             {
-                GameManager.Instance.Log(E_Log.Error, "计时器的执行次数永远不能小于等于0！");
+                GameGod.Instance.Log(E_Log.Error, "计时器的执行次数永远不能小于等于0！");
                 return;
             }
 
-            GameManager.Instance.Log(E_Log.Framework, "定时器添加", timerName);
+            GameGod.Instance.Log(E_Log.Framework, "定时器添加", timerName);
             //记录名字
             timerInfo.TimerName = timerName;
             //添加到计时器的字典里
@@ -136,11 +136,11 @@ namespace Framework
             }
             catch (OperationCanceledException)
             {
-                GameManager.Instance.Log(E_Log.Warning, "定时器主动取消", timerInfo.TimerName);
+                GameGod.Instance.Log(E_Log.Warning, "定时器主动取消", timerInfo.TimerName);
             }
             catch (Exception ex)
             {
-                GameManager.Instance.Log(E_Log.Error, "定时器遇到意料之外的错误", ex.ToString());
+                GameGod.Instance.Log(E_Log.Error, "定时器遇到意料之外的错误", ex.ToString());
             }
             finally
             {
@@ -152,7 +152,7 @@ namespace Framework
                     TimerInfoDic.Remove(timerName);
                     TimerInfo.Recycle(timerInfo);
                 }
-                GameManager.Instance.Log(E_Log.Framework, "定时器回收", timerName);
+                GameGod.Instance.Log(E_Log.Framework, "定时器回收", timerName);
             }
         }
 
@@ -163,7 +163,7 @@ namespace Framework
         {
             if (!TimerInfoDic.TryGetValue(timerName, out var timerInfo))
             {
-                GameManager.Instance.Log(E_Log.Warning, "定时器不存在", timerName);
+                GameGod.Instance.Log(E_Log.Warning, "定时器不存在", timerName);
                 return null;
             }
             return timerInfo;

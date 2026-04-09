@@ -40,7 +40,7 @@ namespace Framework
         {
             if (index > DataList.Count - 1)
             {
-                GameManager.Instance.Log(E_Log.Error, "超出数据上限 索引", index.ToString());
+                GameGod.Instance.Log(E_Log.Error, "超出数据上限 索引", index.ToString());
                 return null;
             }
             return DataList[index];
@@ -53,7 +53,7 @@ namespace Framework
         {
             if (!DataDic.TryGetValue(id, out var table))
             {
-                GameManager.Instance.Log(E_Log.Error, "没有找到表数据 id", id.ToString());
+                GameGod.Instance.Log(E_Log.Error, "没有找到表数据 id", id.ToString());
             }
             return table;
         }
@@ -65,8 +65,8 @@ namespace Framework
             _initDataStatus = 1;
 
             //表格先卸载后加载，便于热更新
-            GameManager.Instance.LoadManager.UnloadAsset(TableName);
-            var textAsset = GameManager.Instance.LoadManager.LoadSync<TextAsset>(TableName);
+            GameGod.Instance.LoadManager.UnloadAsset(TableName);
+            var textAsset = GameGod.Instance.LoadManager.LoadSync<TextAsset>(TableName);
             var allArr = textAsset.text.Split("`", System.StringSplitOptions.RemoveEmptyEntries);  //全部的文本
             var nameGroupArr = allArr[0].Split('^');   //变量名的行
                                                        //从第二行开始出数据

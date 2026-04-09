@@ -109,14 +109,14 @@ namespace GameData
         private void OnClick_Btn_Start()
         {
             Log(E_Log.Log, "开始游戏");
-            GameManager.Instance.ModuleManager.NewAllModule();
-            GameManager.Instance.ModuleManager.SaveAllModule();
+            GameGod.Instance.ModuleManager.NewAllModule();
+            GameGod.Instance.ModuleManager.SaveAllModule();
         }
 
         private void OnClick_Btn_Continue()
         {
             Log(E_Log.Log, "继续游戏");
-            GameManager.Instance.ModuleManager.LoadAllModule();
+            GameGod.Instance.ModuleManager.LoadAllModule();
         }
 
         private void OnClick_Btn_Exit()

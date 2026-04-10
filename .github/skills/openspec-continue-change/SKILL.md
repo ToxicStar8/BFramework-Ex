@@ -6,113 +6,113 @@ compatibility: Requires openspec CLI.
 metadata:
   author: openspec
   version: "1.0"
-  generatedBy: "1.2.0"
+  generatedBy: "1.1.1"
 ---
 
-Continue working on a change by creating the next artifact.
+通过创建下一个工件继续推进变更。
 
-**Input**: Optionally specify a change name. If omitted, check if it can be inferred from conversation context. If vague or ambiguous you MUST prompt for available changes.
+**输入**：可选指定变更名称。如果省略，先从对话上下文判断能否推断；若模糊或有歧义，必须提示用户选择可用变更。
 
-**Steps**
+**步骤**
 
-1. **If no change name provided, prompt for selection**
+1. **未提供变更名称时，提示选择**
 
-   Run `openspec list --json` to get available changes sorted by most recently modified. Then use the **AskUserQuestion tool** to let the user select which change to work on.
+   运行 `openspec list --json` 获取按最近修改排序的变更列表。然后使用 **AskUserQuestion 工具**让用户选择要继续的变更。
 
-   Present the top 3-4 most recently modified changes as options, showing:
-   - Change name
-   - Schema (from `schema` field if present, otherwise "spec-driven")
-   - Status (e.g., "0/5 tasks", "complete", "no tasks")
-   - How recently it was modified (from `lastModified` field)
+   提供最近 3-4 个变更作为选项，展示：
+   - 变更名称
+   - Schema（若有 `schema` 字段则用其值，否则为 “spec-driven”）
+   - 状态（例如 “0/5 tasks”、“complete”、“no tasks”）
+   - 最近修改时间（来自 `lastModified` 字段）
 
-   Mark the most recently modified change as "(Recommended)" since it's likely what the user wants to continue.
+   将最近修改的变更标记为 “(Recommended)”，这通常是用户要继续的内容。
 
-   **IMPORTANT**: Do NOT guess or auto-select a change. Always let the user choose.
+   **重要**：不要猜测或自动选择，必须让用户做选择。
 
-2. **Check current status**
+2. **检查当前状态**
    ```bash
    openspec status --change "<name>" --json
    ```
-   Parse the JSON to understand current state. The response includes:
-   - `schemaName`: The workflow schema being used (e.g., "spec-driven")
-   - `artifacts`: Array of artifacts with their status ("done", "ready", "blocked")
-   - `isComplete`: Boolean indicating if all artifacts are complete
+   解析 JSON，了解当前状态。响应包含：
+   - `schemaName`：当前使用的工作流 schema（例如 “spec-driven”）
+   - `artifacts`：工件数组及其状态（“done”、“ready”、“blocked”）
+   - `isComplete`：是否全部完成
 
-3. **Act based on status**:
-
-   ---
-
-   **If all artifacts are complete (`isComplete: true`)**:
-   - Congratulate the user
-   - Show final status including the schema used
-   - Suggest: "All artifacts created! You can now implement this change or archive it."
-   - STOP
+3. **根据状态执行**：
 
    ---
 
-   **If artifacts are ready to create** (status shows artifacts with `status: "ready"`):
-   - Pick the FIRST artifact with `status: "ready"` from the status output
-   - Get its instructions:
+   **若全部工件完成（`isComplete: true`）**：
+   - 祝贺用户
+   - 展示最终状态及使用的 schema
+   - 建议：“所有工件都已创建！你可以开始实现该变更，或将其归档。”
+   - 停止
+
+   ---
+
+   **若有就绪工件**（状态中存在 `status: "ready"`）：
+   - 从状态输出中选择第一个 `status: "ready"` 的工件
+   - 获取其指令：
      ```bash
      openspec instructions <artifact-id> --change "<name>" --json
      ```
-   - Parse the JSON. The key fields are:
-     - `context`: Project background (constraints for you - do NOT include in output)
-     - `rules`: Artifact-specific rules (constraints for you - do NOT include in output)
-     - `template`: The structure to use for your output file
-     - `instruction`: Schema-specific guidance
-     - `outputPath`: Where to write the artifact
-     - `dependencies`: Completed artifacts to read for context
-   - **Create the artifact file**:
-     - Read any completed dependency files for context
-     - Use `template` as the structure - fill in its sections
-     - Apply `context` and `rules` as constraints when writing - but do NOT copy them into the file
-     - Write to the output path specified in instructions
-   - Show what was created and what's now unlocked
-   - STOP after creating ONE artifact
+   - 解析 JSON，关键字段：
+     - `context`：项目背景（约束条件，不要写入输出）
+     - `rules`：工件规则（约束条件，不要写入输出）
+     - `template`：输出文件的结构
+     - `instruction`：schema 特定的指导
+     - `outputPath`：写入路径
+     - `dependencies`：已完成的依赖工件，用于上下文
+   - **创建工件文件**：
+     - 阅读已完成的依赖工件获取上下文
+     - 使用 `template` 作为结构，填写各节内容
+     - 将 `context` 与 `rules` 作为约束，但不要复制进文件
+     - 写入指令指定的输出路径
+   - 展示已创建内容及解锁的新工件
+   - 创建一个工件后停止
 
    ---
 
-   **If no artifacts are ready (all blocked)**:
-   - This shouldn't happen with a valid schema
-   - Show status and suggest checking for issues
+   **若没有就绪工件（全部阻塞）**：
+   - 正常 schema 不应出现这种情况
+   - 展示状态并建议检查问题
 
-4. **After creating an artifact, show progress**
+4. **创建工件后显示进度**
    ```bash
    openspec status --change "<name>"
    ```
 
-**Output**
+**输出**
 
-After each invocation, show:
-- Which artifact was created
-- Schema workflow being used
-- Current progress (N/M complete)
-- What artifacts are now unlocked
-- Prompt: "Want to continue? Just ask me to continue or tell me what to do next."
+每次执行后输出：
+- 创建了哪个工件
+- 正在使用的 schema 工作流
+- 当前进度（N/M 完成）
+- 解锁了哪些工件
+- 提示语：“想继续吗？告诉我继续或下一步要做什么。”
 
-**Artifact Creation Guidelines**
+**工件创建指南**
 
-The artifact types and their purpose depend on the schema. Use the `instruction` field from the instructions output to understand what to create.
+工件类型与用途取决于 schema。使用指令输出中的 `instruction` 字段了解应创建的内容。
 
-Common artifact patterns:
+常见模式：
 
-**spec-driven schema** (proposal → specs → design → tasks):
-- **proposal.md**: Ask user about the change if not clear. Fill in Why, What Changes, Capabilities, Impact.
-  - The Capabilities section is critical - each capability listed will need a spec file.
-- **specs/<capability>/spec.md**: Create one spec per capability listed in the proposal's Capabilities section (use the capability name, not the change name).
-- **design.md**: Document technical decisions, architecture, and implementation approach.
-- **tasks.md**: Break down implementation into checkboxed tasks.
+**spec-driven schema**（proposal → specs → design → tasks）：
+- **proposal.md**：若不清晰，向用户询问。填写 Why、What Changes、Capabilities、Impact。
+  - Capabilities 关键：列出的每项能力都需要对应的 spec 文件。
+- **specs/<capability>/spec.md**：为 proposal 的 Capabilities 列表中的每个能力创建一个 spec（使用能力名称，而不是变更名）。
+- **design.md**：记录技术决策、架构、实现方案。
+- **tasks.md**：将实现拆分为带复选框的任务。
 
-For other schemas, follow the `instruction` field from the CLI output.
+其他 schema 按 CLI 输出的 `instruction` 来。
 
-**Guardrails**
-- Create ONE artifact per invocation
-- Always read dependency artifacts before creating a new one
-- Never skip artifacts or create out of order
-- If context is unclear, ask the user before creating
-- Verify the artifact file exists after writing before marking progress
-- Use the schema's artifact sequence, don't assume specific artifact names
-- **IMPORTANT**: `context` and `rules` are constraints for YOU, not content for the file
-  - Do NOT copy `<context>`, `<rules>`, `<project_context>` blocks into the artifact
-  - These guide what you write, but should never appear in the output
+**护栏**
+- 每次只创建一个工件
+- 创建前总是读取依赖工件
+- 不要跳过工件或乱序创建
+- 若上下文不清晰，先询问用户
+- 写入后确认工件文件存在，再更新进度
+- 使用 schema 的工件序列，不要假设具体名称
+- **重要**：`context` 和 `rules` 是给你的约束，不是文件内容
+  - 不要把 `<context>`、`<rules>`、`<project_context>` 块复制进工件
+  - 它们用于指导写作，但不应出现在输出里

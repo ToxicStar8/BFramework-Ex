@@ -6,69 +6,69 @@ compatibility: Requires openspec CLI.
 metadata:
   author: openspec
   version: "1.0"
-  generatedBy: "1.2.0"
+  generatedBy: "1.1.1"
 ---
 
-Start a new change using the experimental artifact-driven approach.
+使用实验性的工件驱动方式创建新变更。
 
-**Input**: The user's request should include a change name (kebab-case) OR a description of what they want to build.
+**输入**：用户请求应包含一个变更名称（kebab-case），或描述他们想要构建的内容。
 
-**Steps**
+**步骤**
 
-1. **If no clear input provided, ask what they want to build**
+1. **如果输入不清晰，先问他们要做什么**
 
-   Use the **AskUserQuestion tool** (open-ended, no preset options) to ask:
-   > "What change do you want to work on? Describe what you want to build or fix."
+   使用 **AskUserQuestion 工具**（开放式，不设选项）询问：
+   > “你想做哪个变更？请描述你要构建或修复的内容。”
 
-   From their description, derive a kebab-case name (e.g., "add user authentication" → `add-user-auth`).
+   从描述中生成 kebab-case 名称（例如：“add user authentication” → `add-user-auth`）。
 
-   **IMPORTANT**: Do NOT proceed without understanding what the user wants to build.
+   **重要**：在理解用户要做什么之前不要继续。
 
-2. **Determine the workflow schema**
+2. **确定工作流 schema**
 
-   Use the default schema (omit `--schema`) unless the user explicitly requests a different workflow.
+   默认使用系统默认 schema（不传 `--schema`），除非用户明确要求其他工作流。
 
-   **Use a different schema only if the user mentions:**
-   - A specific schema name → use `--schema <name>`
-   - "show workflows" or "what workflows" → run `openspec schemas --json` and let them choose
+   **只有在以下情况才使用不同 schema：**
+   - 用户提到具体 schema 名 → 使用 `--schema <name>`
+   - 用户问“有哪些 workflow”/“有哪些工作流” → 运行 `openspec schemas --json` 并让他们选择
 
-   **Otherwise**: Omit `--schema` to use the default.
+   **否则**：省略 `--schema` 使用默认。
 
-3. **Create the change directory**
+3. **创建变更目录**
    ```bash
    openspec new change "<name>"
    ```
-   Add `--schema <name>` only if the user requested a specific workflow.
-   This creates a scaffolded change at `openspec/changes/<name>/` with the selected schema.
+   仅当用户指定其他工作流时才加 `--schema <name>`。
+   这会在 `openspec/changes/<name>/` 下创建所选 schema 的脚手架。
 
-4. **Show the artifact status**
+4. **查看工件状态**
    ```bash
    openspec status --change "<name>"
    ```
-   This shows which artifacts need to be created and which are ready (dependencies satisfied).
+   这会显示哪些工件需要创建、哪些已就绪（依赖满足）。
 
-5. **Get instructions for the first artifact**
-   The first artifact depends on the schema (e.g., `proposal` for spec-driven).
-   Check the status output to find the first artifact with status "ready".
+5. **获取第一个工件的创建指令**
+   第一个工件取决于 schema（例如 spec-driven 中是 `proposal`）。
+   查看状态输出，找到状态为 “ready” 的第一个工件。
    ```bash
    openspec instructions <first-artifact-id> --change "<name>"
    ```
-   This outputs the template and context for creating the first artifact.
+   这会输出创建第一个工件所需的模板与上下文。
 
-6. **STOP and wait for user direction**
+6. **停止并等待用户指示**
 
-**Output**
+**输出**
 
-After completing the steps, summarize:
-- Change name and location
-- Schema/workflow being used and its artifact sequence
-- Current status (0/N artifacts complete)
-- The template for the first artifact
-- Prompt: "Ready to create the first artifact? Just describe what this change is about and I'll draft it, or ask me to continue."
+完成上述步骤后，总结：
+- 变更名称与路径
+- 使用的 schema/工作流及其工件序列
+- 当前状态（已完成 0/N 个工件）
+- 第一个工件的模板
+- 提示语：“准备好创建第一个工件了吗？描述这个变更的背景，我来帮你起草，或让我继续。”
 
-**Guardrails**
-- Do NOT create any artifacts yet - just show the instructions
-- Do NOT advance beyond showing the first artifact template
-- If the name is invalid (not kebab-case), ask for a valid name
-- If a change with that name already exists, suggest continuing that change instead
-- Pass --schema if using a non-default workflow
+**护栏**
+- 还不要创建任何工件 - 只展示指令
+- 不要超出展示第一个工件模板
+- 如果名称无效（不是 kebab-case），要求有效名称
+- 如果同名变更已存在，建议继续该变更
+- 使用非默认工作流时才传 `--schema`

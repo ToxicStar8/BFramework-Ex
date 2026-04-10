@@ -2,13 +2,13 @@
 description: 引导式上手——带讲解走完一次完整 OpenSpec 工作流循环
 ---
 
-带用户走完首次完整 OpenSpec 工作流循环。这是一次教学体验——你会在他们的代码库中做真实工作，同时解释每一步。
+Guide the user through their first complete OpenSpec workflow cycle. This is a teaching experience—you'll do real work in their codebase while explaining each step.
 
 ---
 
-## 预检查
+## Preflight
 
-开始前检查 OpenSpec CLI 是否安装：
+Before starting, check if the OpenSpec CLI is installed:
 
 ```bash
 # Unix/macOS
@@ -17,16 +17,16 @@ openspec --version 2>&1 || echo "CLI_NOT_INSTALLED"
 # if (Get-Command openspec -ErrorAction SilentlyContinue) { openspec --version } else { echo "CLI_NOT_INSTALLED" }
 ```
 
-**若未安装 CLI：**
-> OpenSpec CLI 未安装。请先安装，再回来使用 `/opsx:onboard`。
+**If CLI not installed:**
+> OpenSpec CLI is not installed. Install it first, then come back to `/opsx:onboard`.
 
-若未安装，停止。
+Stop here if not installed.
 
 ---
 
-## 阶段 1：欢迎
+## Phase 1: Welcome
 
-展示：
+Display:
 
 ```
 ## Welcome to OpenSpec!
@@ -48,20 +48,20 @@ Let's start by finding something to work on.
 
 ---
 
-## 阶段 2：任务选择
+## Phase 2: Task Selection
 
-### 代码库分析
+### Codebase Analysis
 
-扫描代码库中的小型改进机会，重点关注：
+Scan the codebase for small improvement opportunities. Look for:
 
-1. **TODO/FIXME 注释** - 在代码中搜索 `TODO`、`FIXME`、`HACK`、`XXX`
-2. **缺失异常处理** - 吞掉错误的 `catch`、高风险操作无 try-catch
-3. **无测试的函数** - 对照 `src/` 与测试目录
-4. **类型问题** - TypeScript 中的 `any`（`: any`、`as any`）
-5. **调试残留** - 非调试代码中的 `console.log`、`console.debug`、`debugger`
-6. **缺少校验** - 处理用户输入但无验证
+1. **TODO/FIXME comments** - Search for `TODO`, `FIXME`, `HACK`, `XXX` in code files
+2. **Missing error handling** - `catch` blocks that swallow errors, risky operations without try-catch
+3. **Functions without tests** - Cross-reference `src/` with test directories
+4. **Type issues** - `any` types in TypeScript files (`: any`, `as any`)
+5. **Debug artifacts** - `console.log`, `console.debug`, `debugger` statements in non-debug code
+6. **Missing validation** - User input handlers without validation
 
-同时检查最近 git 活动：
+Also check recent git activity:
 ```bash
 # Unix/macOS
 git log --oneline -10 2>/dev/null || echo "No git history"
@@ -69,9 +69,9 @@ git log --oneline -10 2>/dev/null || echo "No git history"
 # git log --oneline -10 2>$null; if ($LASTEXITCODE -ne 0) { echo "No git history" }
 ```
 
-### 提出建议
+### Present Suggestions
 
-基于分析提出 3-4 个具体建议：
+From your analysis, present 3-4 specific suggestions:
 
 ```
 ## Task Suggestions
@@ -99,12 +99,12 @@ Based on scanning your codebase, here are some good starter tasks:
 Which task interests you? (Pick a number or describe your own)
 ```
 
-**若未发现明显任务：**
-> 我没有在代码库里发现明显的 quick wins。你有什么一直想加或修的小东西吗？
+**If nothing found:** Fall back to asking what the user wants to build:
+> I didn't find obvious quick wins in your codebase. What's something small you've been meaning to add or fix?
 
-### 范围护栏
+### Scope Guardrail
 
-若用户选择的任务过大（大型功能/多日工作）：
+If the user picks or describes something too large (major feature, multi-day work):
 
 ```
 That's a valuable task, but it's probably larger than ideal for your first OpenSpec run-through.
@@ -119,22 +119,22 @@ For learning the workflow, smaller is better—it lets you see the full cycle wi
 What would you prefer?
 ```
 
-若用户坚持，允许继续——这是软护栏。
+Let the user override if they insist—this is a soft guardrail.
 
 ---
 
-## 阶段 3：探索演示
+## Phase 3: Explore Demo
 
-任务选定后，简要演示探索模式：
+Once a task is selected, briefly demonstrate explore mode:
 
 ```
 Before we create a change, let me quickly show you **explore mode**—it's how you think through problems before committing to a direction.
 ```
 
-花 1-2 分钟调查相关代码：
-- 阅读相关文件
-- 若有帮助，画 ASCII 图
-- 记录关键考虑点
+Spend 1-2 minutes investigating the relevant code:
+- Read the file(s) involved
+- Draw a quick ASCII diagram if it helps
+- Note any considerations
 
 ```
 ## Quick Exploration
@@ -150,13 +150,13 @@ Explore mode (`/opsx:explore`) is for this kind of thinking—investigating befo
 Now let's create a change to hold our work.
 ```
 
-**暂停** - 等用户确认后继续。
+**PAUSE** - Wait for user acknowledgment before proceeding.
 
 ---
 
-## 阶段 4：创建变更
+## Phase 4: Create the Change
 
-**说明：**
+**EXPLAIN:**
 ```
 ## Creating a Change
 
@@ -165,12 +165,12 @@ A "change" in OpenSpec is a container for all the thinking and planning around a
 Let me create one for our task.
 ```
 
-**执行：**用 kebab-case 名称创建变更：
+**DO:** Create the change with a derived kebab-case name:
 ```bash
 openspec new change "<derived-name>"
 ```
 
-**展示：**
+**SHOW:**
 ```
 Created: `openspec/changes/<name>/`
 
@@ -182,18 +182,15 @@ openspec/changes/<name>/
 ├── specs/         ← Detailed requirements (empty)
 └── tasks.md       ← Implementation checklist (empty)
 ```
-```
-
-```
 
 Now let's fill in the first artifact—the proposal.
 ```
 
 ---
 
-## 阶段 5：Proposal
+## Phase 5: Proposal
 
-**说明：**
+**EXPLAIN:**
 ```
 ## The Proposal
 
@@ -202,7 +199,7 @@ The proposal captures **why** we're making this change and **what** it involves 
 I'll draft one based on our task.
 ```
 
-**执行：**起草 proposal 内容（先不保存）：
+**DO:** Draft the proposal content (don't save yet):
 
 ```
 Here's a draft proposal:
@@ -235,13 +232,13 @@ Here's a draft proposal:
 Does this capture the intent? I can adjust before we save it.
 ```
 
-**暂停** - 等用户确认/反馈。
+**PAUSE** - Wait for user approval/feedback.
 
-确认后保存 proposal：
+After approval, save the proposal:
 ```bash
 openspec instructions proposal --change "<name>" --json
 ```
-然后将内容写入 `openspec/changes/<name>/proposal.md`。
+Then write the content to `openspec/changes/<name>/proposal.md`.
 
 ```
 Proposal saved. This is your "why" document—you can always come back and refine it as understanding evolves.
@@ -251,9 +248,9 @@ Next up: specs.
 
 ---
 
-## 阶段 6：Specs
+## Phase 6: Specs
 
-**说明：**
+**EXPLAIN:**
 ```
 ## Specs
 
@@ -262,7 +259,7 @@ Specs define **what** we're building in precise, testable terms. They use a requ
 For a small task like this, we might only need one spec file.
 ```
 
-**执行：**创建 spec 文件：
+**DO:** Create the spec file:
 ```bash
 # Unix/macOS
 mkdir -p openspec/changes/<name>/specs/<capability-name>
@@ -270,7 +267,7 @@ mkdir -p openspec/changes/<name>/specs/<capability-name>
 # New-Item -ItemType Directory -Force -Path "openspec/changes/<name>/specs/<capability-name>"
 ```
 
-起草 spec 内容：
+Draft the spec content:
 
 ```
 Here's the spec:
@@ -294,13 +291,13 @@ Here's the spec:
 This format—WHEN/THEN/AND—makes requirements testable. You can literally read them as test cases.
 ```
 
-保存到 `openspec/changes/<name>/specs/<capability>/spec.md`。
+Save to `openspec/changes/<name>/specs/<capability>/spec.md`.
 
 ---
 
-## 阶段 7：Design
+## Phase 7: Design
 
-**说明：**
+**EXPLAIN:**
 ```
 ## Design
 
@@ -309,7 +306,7 @@ The design captures **how** we'll build it—technical decisions, tradeoffs, app
 For small changes, this might be brief. That's fine—not every change needs deep design discussion.
 ```
 
-**执行：**起草 design.md：
+**DO:** Draft design.md:
 
 ```
 Here's the design:
@@ -339,13 +336,13 @@ Here's the design:
 For a small task, this captures the key decisions without over-engineering.
 ```
 
-保存到 `openspec/changes/<name>/design.md`。
+Save to `openspec/changes/<name>/design.md`.
 
 ---
 
-## 阶段 8：Tasks
+## Phase 8: Tasks
 
-**说明：**
+**EXPLAIN:**
 ```
 ## Tasks
 
@@ -354,7 +351,7 @@ Finally, we break the work into implementation tasks—checkboxes that drive the
 These should be small, clear, and in logical order.
 ```
 
-**执行：**根据 specs 与 design 生成任务：
+**DO:** Generate tasks based on specs and design:
 
 ```
 Here are the implementation tasks:
@@ -375,32 +372,32 @@ Here are the implementation tasks:
 Each checkbox becomes a unit of work in the apply phase. Ready to implement?
 ```
 
-**暂停** - 等用户确认准备实现。
+**PAUSE** - Wait for user to confirm they're ready to implement.
 
-保存到 `openspec/changes/<name>/tasks.md`。
+Save to `openspec/changes/<name>/tasks.md`.
 
 ---
 
-## 阶段 9：Apply（实现）
+## Phase 9: Apply (Implementation)
 
-**说明：**
+**EXPLAIN:**
 ```
 ## Implementation
 
 Now we implement each task, checking them off as we go. I'll announce each one and occasionally note how the specs/design informed the approach.
 ```
 
-**执行：**对每个任务：
+**DO:** For each task:
 
-1. 宣布：“Working on task N: [description]”
-2. 在代码库中实现变更
-3. 自然引用 specs/design：“The spec says X, so I'm doing Y”
-4. 在 tasks.md 中勾选完成：`- [ ]` → `- [x]`
-5. 简短状态：“✓ Task N complete”
+1. Announce: "Working on task N: [description]"
+2. Implement the change in the codebase
+3. Reference specs/design naturally: "The spec says X, so I'm doing Y"
+4. Mark complete in tasks.md: `- [ ]` → `- [x]`
+5. Brief status: "✓ Task N complete"
 
-保持讲解简洁，不要逐行解释。
+Keep narration light—don't over-explain every line of code.
 
-全部完成后：
+After all tasks:
 
 ```
 ## Implementation Complete
@@ -415,9 +412,9 @@ The change is implemented! One more step—let's archive it.
 
 ---
 
-## 阶段 10：Archive
+## Phase 10: Archive
 
-**说明：**
+**EXPLAIN:**
 ```
 ## Archiving
 
@@ -426,12 +423,12 @@ When a change is complete, we archive it. This moves it from `openspec/changes/`
 Archived changes become your project's decision history—you can always find them later to understand why something was built a certain way.
 ```
 
-**执行：**
+**DO:**
 ```bash
 openspec archive "<name>"
 ```
 
-**展示：**
+**SHOW:**
 ```
 Archived to: `openspec/changes/archive/YYYY-MM-DD-<name>/`
 
@@ -440,7 +437,7 @@ The change is now part of your project's history. The code is in your codebase, 
 
 ---
 
-## 阶段 11：回顾与下一步
+## Phase 11: Recap & Next Steps
 
 ```
 ## Congratulations!
@@ -462,30 +459,38 @@ This same rhythm works for any size change—a small fix or a major feature.
 
 ## Command Reference
 
+**Core workflow:**
+
 | Command | What it does |
 |---------|--------------|
+| `/opsx:propose` | Create a change and generate all artifacts |
 | `/opsx:explore` | Think through problems before/during work |
-| `/opsx:new` | Start a new change, step through artifacts |
-| `/opsx:ff` | Fast-forward: create all artifacts at once |
-| `/opsx:continue` | Continue working on an existing change |
 | `/opsx:apply` | Implement tasks from a change |
-| `/opsx:verify` | Verify implementation matches artifacts |
 | `/opsx:archive` | Archive a completed change |
+
+**Additional commands:**
+
+| Command | What it does |
+|---------|--------------|
+| `/opsx:new` | Start a new change, step through artifacts one at a time |
+| `/opsx:continue` | Continue working on an existing change |
+| `/opsx:ff` | Fast-forward: create all artifacts at once |
+| `/opsx:verify` | Verify implementation matches artifacts |
 
 ---
 
 ## What's Next?
 
-Try `/opsx:new` or `/opsx:ff` on something you actually want to build. You've got the rhythm now!
+Try `/opsx:propose` on something you actually want to build. You've got the rhythm now!
 ```
 
 ---
 
-## 优雅退出处理
+## Graceful Exit Handling
 
-### 用户中途想停止
+### User wants to stop mid-way
 
-若用户表示要停、要暂停或明显失去兴趣：
+If the user says they need to stop, want to pause, or seem disengaged:
 
 ```
 No problem! Your change is saved at `openspec/changes/<name>/`.
@@ -497,38 +502,46 @@ To pick up where we left off later:
 The work won't be lost. Come back whenever you're ready.
 ```
 
-优雅退出，不要施压。
+Exit gracefully without pressure.
 
-### 用户只想要命令参考
+### User just wants command reference
 
-若用户表示只想看命令或跳过教程：
+If the user says they just want to see the commands or skip the tutorial:
 
 ```
 ## OpenSpec Quick Reference
 
+**Core workflow:**
+
 | Command | What it does |
 |---------|--------------|
+| `/opsx:propose <name>` | Create a change and generate all artifacts |
 | `/opsx:explore` | Think through problems (no code changes) |
-| `/opsx:new <name>` | Start a new change, step by step |
-| `/opsx:ff <name>` | Fast-forward: all artifacts at once |
-| `/opsx:continue <name>` | Continue an existing change |
 | `/opsx:apply <name>` | Implement tasks |
-| `/opsx:verify <name>` | Verify implementation |
 | `/opsx:archive <name>` | Archive when done |
 
-Try `/opsx:new` to start your first change, or `/opsx:ff` if you want to move fast.
+**Additional commands:**
+
+| Command | What it does |
+|---------|--------------|
+| `/opsx:new <name>` | Start a new change, step by step |
+| `/opsx:continue <name>` | Continue an existing change |
+| `/opsx:ff <name>` | Fast-forward: all artifacts at once |
+| `/opsx:verify <name>` | Verify implementation |
+
+Try `/opsx:propose` to start your first change.
 ```
 
-优雅结束。
+Exit gracefully.
 
 ---
 
-## 护栏
+## Guardrails
 
-- **在关键节点遵循 EXPLAIN → DO → SHOW → PAUSE 模式**（探索后、proposal 起草后、tasks 后、归档后）
-- **实现阶段保持轻讲解**——教学但不过度讲课
-- **不要跳过阶段**，即便是小变更——目标是教学流程
-- **在标记点暂停确认**，但不要过度暂停
-- **优雅处理退出**——不要强迫用户继续
-- **使用真实代码库任务**——不要模拟或虚构示例
-- **温和调整范围**——引导更小任务，但尊重用户选择
+- **Follow the EXPLAIN → DO → SHOW → PAUSE pattern** at key transitions (after explore, after proposal draft, after tasks, after archive)
+- **Keep narration light** during implementation—teach without lecturing
+- **Don't skip phases** even if the change is small—the goal is teaching the workflow
+- **Pause for acknowledgment** at marked points, but don't over-pause
+- **Handle exits gracefully**—never pressure the user to continue
+- **Use real codebase tasks**—don't simulate or use fake examples
+- **Adjust scope gently**—guide toward smaller tasks but respect user choice

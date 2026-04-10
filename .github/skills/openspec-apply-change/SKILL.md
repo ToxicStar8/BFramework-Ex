@@ -6,88 +6,88 @@ compatibility: Requires openspec CLI.
 metadata:
   author: openspec
   version: "1.0"
-  generatedBy: "1.1.1"
+  generatedBy: "1.2.0"
 ---
 
-实现 OpenSpec 变更中的任务。
+Implement tasks from an OpenSpec change.
 
-**输入**：可选指定变更名称。如果省略，先从对话上下文判断能否推断；若模糊或有歧义，必须提示用户选择可用变更。
+**Input**: Optionally specify a change name. If omitted, check if it can be inferred from conversation context. If vague or ambiguous you MUST prompt for available changes.
 
-**步骤**
+**Steps**
 
-1. **选择变更**
+1. **Select the change**
 
-   若提供名称，直接使用。否则：
-   - 若对话中提到变更，则从上下文推断
-   - 若仅有一个活跃变更，可自动选择
-   - 若存在歧义，运行 `openspec list --json` 获取可用变更，并使用 **AskUserQuestion 工具**让用户选择
+   If a name is provided, use it. Otherwise:
+   - Infer from conversation context if the user mentioned a change
+   - Auto-select if only one active change exists
+   - If ambiguous, run `openspec list --json` to get available changes and use the **AskUserQuestion tool** to let the user select
 
-   始终声明：“使用变更：<name>”，并说明如何切换（例如 `/opsx:apply <other>`）。
+   Always announce: "Using change: <name>" and how to override (e.g., `/opsx:apply <other>`).
 
-2. **检查状态以了解 schema**
+2. **Check status to understand the schema**
    ```bash
    openspec status --change "<name>" --json
    ```
-   解析 JSON，了解：
-   - `schemaName`：正在使用的工作流（例如 “spec-driven”）
-   - 哪个工件包含任务（spec-driven 通常为 “tasks”，其他需查看状态）
+   Parse the JSON to understand:
+   - `schemaName`: The workflow being used (e.g., "spec-driven")
+   - Which artifact contains the tasks (typically "tasks" for spec-driven, check status for others)
 
-3. **获取 apply 指令**
+3. **Get apply instructions**
 
    ```bash
    openspec instructions apply --change "<name>" --json
    ```
 
-   返回内容包括：
-   - 上下文文件路径（取决于 schema，可为 proposal/specs/design/tasks 或 spec/tests/implementation/docs）
-   - 进度（总数/已完成/剩余）
-   - 任务列表及状态
-   - 基于当前状态的动态指令
+   This returns:
+   - Context file paths (varies by schema - could be proposal/specs/design/tasks or spec/tests/implementation/docs)
+   - Progress (total, complete, remaining)
+   - Task list with status
+   - Dynamic instruction based on current state
 
-   **处理不同状态：**
-   - 若 `state: "blocked"`（缺少工件）：提示并建议使用 openspec-continue-change
-   - 若 `state: "all_done"`：祝贺并建议归档
-   - 否则：进入实现流程
+   **Handle states:**
+   - If `state: "blocked"` (missing artifacts): show message, suggest using openspec-continue-change
+   - If `state: "all_done"`: congratulate, suggest archive
+   - Otherwise: proceed to implementation
 
-4. **读取上下文文件**
+4. **Read context files**
 
-   读取 apply 指令输出中的 `contextFiles`。
-   文件依赖 schema：
-   - **spec-driven**：proposal、specs、design、tasks
-   - 其他 schema：以 CLI 输出的 contextFiles 为准
+   Read the files listed in `contextFiles` from the apply instructions output.
+   The files depend on the schema being used:
+   - **spec-driven**: proposal, specs, design, tasks
+   - Other schemas: follow the contextFiles from CLI output
 
-5. **展示当前进度**
+5. **Show current progress**
 
-   展示：
-   - 正在使用的 schema
-   - 进度：“N/M tasks complete”
-   - 剩余任务概览
-   - CLI 返回的动态指令
+   Display:
+   - Schema being used
+   - Progress: "N/M tasks complete"
+   - Remaining tasks overview
+   - Dynamic instruction from CLI
 
-6. **实现任务（循环直到完成或阻塞）**
+6. **Implement tasks (loop until done or blocked)**
 
-   对每个未完成任务：
-   - 显示正在处理的任务
-   - 完成所需代码变更
-   - 变更保持最小且聚焦
-   - 在 tasks 文件中标记完成：`- [ ]` → `- [x]`
-   - 继续下一个任务
+   For each pending task:
+   - Show which task is being worked on
+   - Make the code changes required
+   - Keep changes minimal and focused
+   - Mark task complete in the tasks file: `- [ ]` → `- [x]`
+   - Continue to next task
 
-   **暂停条件：**
-   - 任务不清晰 → 先询问
-   - 实现暴露设计问题 → 建议更新工件
-   - 遇到错误或阻塞 → 报告并等待指示
-   - 用户中断
+   **Pause if:**
+   - Task is unclear → ask for clarification
+   - Implementation reveals a design issue → suggest updating artifacts
+   - Error or blocker encountered → report and wait for guidance
+   - User interrupts
 
-7. **完成或暂停时展示状态**
+7. **On completion or pause, show status**
 
-   展示：
-   - 本次会话完成的任务
-   - 总体进度：“N/M tasks complete”
-   - 若全部完成：建议归档
-   - 若暂停：说明原因并等待指示
+   Display:
+   - Tasks completed this session
+   - Overall progress: "N/M tasks complete"
+   - If all done: suggest archive
+   - If paused: explain why and wait for guidance
 
-**实现过程输出**
+**Output During Implementation**
 
 ```
 ## Implementing: <change-name> (schema: <schema-name>)
@@ -101,7 +101,7 @@ Working on task 4/7: <task description>
 ✓ Task complete
 ```
 
-**完成输出**
+**Output On Completion**
 
 ```
 ## Implementation Complete
@@ -118,7 +118,7 @@ Working on task 4/7: <task description>
 All tasks complete! Ready to archive this change.
 ```
 
-**暂停输出（遇到问题）**
+**Output On Pause (Issue Encountered)**
 
 ```
 ## Implementation Paused
@@ -138,19 +138,19 @@ All tasks complete! Ready to archive this change.
 What would you like to do?
 ```
 
-**护栏**
-- 按任务推进，直到完成或阻塞
-- 开始前务必读取上下文文件（来自 apply 指令输出）
-- 任务不明确时暂停并询问
-- 实现暴露问题时暂停并建议更新工件
-- 每个任务的代码变更要最小且聚焦
-- 完成任务后立即勾选
-- 遇到错误/阻塞/不清晰需求时暂停，不要猜
-- 以 CLI 输出的 contextFiles 为准，不要假设文件名
+**Guardrails**
+- Keep going through tasks until done or blocked
+- Always read context files before starting (from the apply instructions output)
+- If task is ambiguous, pause and ask before implementing
+- If implementation reveals issues, pause and suggest artifact updates
+- Keep code changes minimal and scoped to each task
+- Update task checkbox immediately after completing each task
+- Pause on errors, blockers, or unclear requirements - don't guess
+- Use contextFiles from CLI output, don't assume specific file names
 
-**流式工作流整合**
+**Fluid Workflow Integration**
 
-此技能支持“对变更的行动”模型：
+This skill supports the "actions on a change" model:
 
-- **随时可调用**：工件未齐全但已有任务时、部分实现后、或与其他操作交替
-- **允许更新工件**：实现暴露设计问题时，建议更新工件，不受阶段锁定
+- **Can be invoked anytime**: Before all artifacts are done (if tasks exist), after partial implementation, interleaved with other actions
+- **Allows artifact updates**: If implementation reveals design issues, suggest updating artifacts - not phase-locked, work fluidly

@@ -21,8 +21,6 @@ context: |
   私有字段：_camelCase，公开属性：PascalCase，枚举：E_ 前缀
   UI 文件：UIXxx.cs（逻辑）+ UIXxx.Design.cs（自动生成绑定）
 
-  项目代码架构:openspec/specs/SPEC.md
-
 rules:
   proposal:
     - 明确说明涉及的管理器和基类

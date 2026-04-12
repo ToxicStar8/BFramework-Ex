@@ -67,6 +67,7 @@ Assets/
 |---|---|
 | `GameEntry` | 游戏总入口，负责启动流程控制 |
 | `DowloadManager` | 原生实现 AB 包增量下载，支持 MD5 比对、断点重试（最多3次）、进度回调 |
+| `InputFieldMobileSupport` | 移动端输入框适配支持组件 |
 
 **下载状态机：**
 - `0` 未开始 → `1` 检查更新 → `2` 下载中 → `3` 下载完毕
@@ -96,7 +97,7 @@ Assets/
 | **HttpManager** | 原生实现可自定义 Header 的 HTTP GET/POST 请求 |
 | **SocketManager** | 基于 [UnityWebSocket](https://github.com/psygames/UnityWebSocket) 实现可自定义 Header 的 WebSocket 通信 |
 | **PoolManager** | 提供`游戏对象池`和`类对象池`两种池化方案，降低 GC 压力 |
-| **RedPointManager** | 使用前缀树（Trie）实现红点树系统，支持自动计算父节点红点状态 |
+| **RedPointManager** | 使用 Dictionary 实现红点系统，支持按 Id 注册/移除回调、设置/获取红点数量 |
 | **TableManager** | 基于 EPPlus 将 Excel 表格数据转换为运行时可用的配置表 |
 | **TimerManager** | 基于 UniTask 的定时器，支持命名定时器（防重复注册）和一次性匿名定时器 |
 | **UIManager** | 基于 UGUI 的 UI 框架，支持多层级管理、打开/隐藏/关闭 UI，内置 `UnitPool` 管理 UI 内部列表元素 |
@@ -150,9 +151,10 @@ Assets/
 | **Build AssetName** | 一键生成所有资源的名称索引 |
 | **Build SpriteAtlas** | 一键打包图集 |
 | **Build AssetBundles** | 一键打包 AB 包（支持自定义 `ABConfig` 配置） |
+| **ExcelTools** | Excel 策划表可视化编辑与导出工具窗口 |
 | **可视化红点树** | 在 Inspector 面板实时查看红点树结构 |
 | **UI 代码生成** | 一键生成 UI 绑定代码，减少手动查找节点 |
-| **GameGod 面板扩展** | 在 `GameGod` Inspector 面板显示对象池和计时器运行状态 |
+| **GameManager 监视窗口** | 独立 EditorWindow，运行时实时查看对象池、计时器等管理器状态 |
 
 ---
 
@@ -185,7 +187,7 @@ Assets/
 
 1. **克隆仓库**并在 Unity 2021.3 LTS（或更高版本）中打开项目
 2. 安装 HybridCLR：执行 `HybridCLR / Installer`
-3. 在 `GameEntry` 挂载的 GameObject 上配置 `IsEditorMode = true` 以跳过热更下载，直接进行本地开发
+3. 在 `GameEntry` 挂载的 GameObject 上配置 `IsEditorMode = true` 以跳过热更下载，直接进行本地开发；若需在编辑器内使用 AB 包运行，额外勾选 `IsRunABPackage = true`
 4. 继承 `GameBase` 或 `GameBaseMono` 编写业务逻辑，通过内置方法调用各 Manager
 5. 参考 `Editor/热更说明.txt` 完成完整的热更打包流程
 

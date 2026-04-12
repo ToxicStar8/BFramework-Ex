@@ -68,7 +68,14 @@ namespace Framework
 
             for (int i = list.Count - 1; i >= 0; i--)
             {
-                list[i]?.Invoke(args);
+                try
+                {
+                    list[i]?.Invoke(args);
+                }
+                catch (Exception e)
+                {
+                    GameGod.Instance.Log(E_Log.Error, "事件回调异常 eventNo=" + eventNo, e.ToString());
+                }
             }
         }
 

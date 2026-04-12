@@ -116,6 +116,7 @@ namespace Framework
             {
                 uiBase.OnDispose();
                 Object.Destroy(uiBase.gameObject);
+                GameGod.Instance.LoadManager.UnloadAsset(uiName + ".prefab");
                 uiBase = null;
                 _uiBaseDic.Remove(uiName);
             }

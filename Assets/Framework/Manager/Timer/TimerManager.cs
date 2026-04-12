@@ -90,6 +90,12 @@ namespace Framework
                 return;
             }
 
+            if (TimerInfoDic.ContainsKey(timerName))
+            {
+                GameGod.Instance.Log(E_Log.Error, "定时器名称重复", timerName);
+                return;
+            }
+
             GameGod.Instance.Log(E_Log.Framework, "定时器添加", timerName);
             //记录名字
             timerInfo.TimerName = timerName;

@@ -223,11 +223,6 @@ namespace Framework
         {
             GameGod.Instance.FsmManager.ReleaseFsm(fsmId);
         }
-        [System.Obsolete("请使用 ReleaseFsm，此方法名拼写有误，将在后续版本移除")]
-        protected void RelaseFsm(int fsmId)
-        {
-            ReleaseFsm(fsmId);
-        }
         #endregion
 
         #region Net

@@ -94,8 +94,8 @@ namespace Framework
 
         protected override void AddTempTimer(TimerInfo timerInfo)
         {
-            base.AddTempTimer(timerInfo);
             Cleanup.TrackTimer(timerInfo.TimerName);
+            base.AddTempTimer(timerInfo);
         }
         #endregion
 

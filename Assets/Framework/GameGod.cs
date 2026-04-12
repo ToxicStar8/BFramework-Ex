@@ -108,9 +108,6 @@ namespace Framework
 
         private void OnDestroy()
         {
-            //回收全局加载器
-            LoadHelper.Recycle(LoadHelper);
-
             //再执行
             ModuleManager.OnDispose();
             ABManager.OnDispose();

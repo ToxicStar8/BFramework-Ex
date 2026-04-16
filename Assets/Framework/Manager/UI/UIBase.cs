@@ -88,14 +88,14 @@ namespace Framework
         /// </summary>
         protected override void AddTimer(string timeName, TimerInfo timerInfo)
         {
-            Cleanup.TrackTimer(timeName);
             base.AddTimer(timeName, timerInfo);
+            Cleanup.TrackTimer(timeName);
         }
 
         protected override void AddTempTimer(TimerInfo timerInfo)
         {
-            Cleanup.TrackTimer(timerInfo.TimerName);
             base.AddTempTimer(timerInfo);
+            Cleanup.TrackTimer(timerInfo.TimerName);
         }
         #endregion
 

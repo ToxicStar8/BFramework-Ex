@@ -38,7 +38,7 @@ namespace Framework
         /// </summary>
         public T GetDataByIndex(int index)
         {
-            if (index > DataList.Count - 1)
+            if (index < 0 || index > DataList.Count - 1)
             {
                 GameGod.Instance.Log(E_Log.Error, "超出数据上限 索引", index.ToString());
                 return null;
@@ -63,17 +63,48 @@ namespace Framework
         public void OnAwake()
         {
             _initDataStatus = 1;
+            DataList.Clear();
+            DataDic.Clear();
 
             //表格先卸载后加载，便于热更新
             GameGod.Instance.LoadManager.UnloadAsset(TableName);
             var textAsset = GameGod.Instance.LoadManager.LoadSync<TextAsset>(TableName);
+            if (textAsset == null)
+            {
+                GameGod.Instance.Log(E_Log.Error, "表格资源为空", TableName);
+                _initDataStatus = 0;
+                return;
+            }
+
             var allArr = textAsset.text.Split("`", System.StringSplitOptions.RemoveEmptyEntries);  //全部的文本
+            if (allArr.Length == 0)
+            {
+                GameGod.Instance.Log(E_Log.Warning, "表格内容为空", TableName);
+                _initDataStatus = 2;
+                return;
+            }
+
             var nameGroupArr = allArr[0].Split('^');   //变量名的行
                                                        //从第二行开始出数据
             for (int i = 1, length = allArr.Length; i < length; i++)
             {
                 T table = new T();
-                table.OnAwake(nameGroupArr, allArr[i]);
+                try
+                {
+                    table.OnAwake(nameGroupArr, allArr[i]);
+                }
+                catch (System.Exception ex)
+                {
+                    GameGod.Instance.Log(E_Log.Error, TableName + "解析失败", ex.Message);
+                    continue;
+                }
+
+                if (DataDic.ContainsKey(table.Id))
+                {
+                    GameGod.Instance.Log(E_Log.Error, TableName + "重复Id", table.Id.ToString());
+                    continue;
+                }
+
                 DataList.Add(table);
                 DataDic.Add(table.Id, table);
             }

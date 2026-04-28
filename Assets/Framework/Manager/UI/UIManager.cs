@@ -47,9 +47,25 @@ namespace Framework
             }
 
             var uiTrans = GameGod.Instance.GetUILevelTrans(uiLevel);
-            uiBase = GameGod.Instance.LoadHelper.CreateGameObjectSync(uiName + ".prefab", uiTrans).GetComponent<T>();
+            var loadHelper = LoadHelper.Create();
+            var uiObj = loadHelper.CreateGameObjectSync(uiName + ".prefab", uiTrans);
+            if (uiObj == null)
+            {
+                LoadHelper.Recycle(loadHelper);
+                return;
+            }
+
+            uiBase = uiObj.GetComponent<T>();
+            if (uiBase == null)
+            {
+                GameGod.Instance.Log(E_Log.Error, uiName, "未找到UI组件");
+                Object.Destroy(uiObj);
+                LoadHelper.Recycle(loadHelper);
+                return;
+            }
+
             uiBase.UIName = uiName;
-            uiBase.LoadHelper = LoadHelper.Create();
+            uiBase.LoadHelper = loadHelper;
             uiBase.OnAwake();
             uiBase.OnShow(args);
             _uiBaseDic[uiName] = uiBase;
@@ -130,13 +146,12 @@ namespace Framework
             {
                 item.Value.OnDispose();
                 Object.Destroy(item.Value.gameObject);
-                GameGod.Instance.LoadManager.UnloadAsset(item.Key + ".prefab");
             }
             _uiBaseDic.Clear();
         }
 
         public override void OnUpdate() { }
-        public override void OnDispose() 
+        public override void OnDispose()
         {
             CloseAll();
             _uiBaseDic = null;

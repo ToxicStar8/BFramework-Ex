@@ -123,7 +123,11 @@ namespace Framework
             OnBeforeDestroy();
 
             //回收加载器
-            LoadHelper.Recycle(LoadHelper);
+            if (LoadHelper != null)
+            {
+                LoadHelper.Recycle(LoadHelper);
+                LoadHelper = null;
+            }
 
             //统一清理事件、Update、定时器
             Cleanup.Dispose();

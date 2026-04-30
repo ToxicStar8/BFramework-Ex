@@ -87,5 +87,5 @@ MonoBehaviour:
     signatureLength: 256
   polymorphicDllSettings:
     enable: 1
-    codeGenerationSecretKey: obfuz-polymorphic-key
-    disableLoadStandardDll: 0
+    codeGenerationSecretKey: BFEX-HAHA-FEICHANGHAO
+    disableLoadStandardDll: 1

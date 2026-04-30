@@ -7,7 +7,7 @@ using UnityEditor;
 using UnityEditor.UI;
 #endif
 
-namespace ET.Client
+namespace Framework
 {
     [AddComponentMenu("Layout/Content Size Fitter Ex", 141)]
     [ExecuteAlways]

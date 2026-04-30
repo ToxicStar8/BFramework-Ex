@@ -146,15 +146,12 @@ namespace Framework
 
             Directory.CreateDirectory(Application.streamingAssetsPath);
 
-            string hotUpdateDllPath = $"{SettingsUtil.GetHotUpdateDllsOutputDirByTarget(target)}";
-            List<string> obfuscationRelativeAssemblyNames = ObfuzSettings.Instance.assemblySettings.GetObfuscationRelativeAssemblyNames();
-
             string srcDir = string.Empty;
             string srcFile = string.Empty;
             string dstFile = string.Empty;
             foreach (string assName in SettingsUtil.HotUpdateAssemblyNamesIncludePreserved)
             {
-                srcDir = obfuscationRelativeAssemblyNames.Contains(assName) ? obfuscatedHotUpdateDllPath : hotUpdateDllPath;
+                srcDir = obfuscatedHotUpdateDllPath;
                 srcFile = $"{srcDir}/{assName}.dll";
                 dstFile = $"{Application.dataPath}/Hotfix/{assName}.dll.bytes";
                 if (File.Exists(srcFile))

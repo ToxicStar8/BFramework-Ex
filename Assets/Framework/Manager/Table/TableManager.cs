@@ -27,15 +27,6 @@ namespace Framework
             LoadHelper = LoadHelper.Create();
         }
 
-        /// <summary>
-        /// 重新创建表格加载器
-        /// </summary>
-        public void ReloadLoadHelper()
-        {
-            LoadHelper.Recycle(LoadHelper);
-            LoadHelper = LoadHelper.Create();
-        }
-
         public void Init(Type[] typeArr)
         {
             //初始化表格
@@ -73,7 +64,9 @@ namespace Framework
         /// </summary>
         public void HotReload()
         {
-            ReloadLoadHelper();
+            LoadHelper.Recycle(LoadHelper);
+            LoadHelper = LoadHelper.Create();
+
             foreach (var item in _allTableDic)
             {
                 var tableCtrl = item.Value;

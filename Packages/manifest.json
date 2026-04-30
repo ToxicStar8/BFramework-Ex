@@ -5,6 +5,7 @@
     "com.code-philosophy.obfuz4hybridclr": "https://github.com/focus-creative-games/obfuz4hybridclr.git",
     "com.coffee.ui-effect": "https://github.com/mob-sakai/UIEffect.git",
     "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+    "com.tuyoogame.yooasset": "2.3.18",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.ai.navigation": "1.1.6",
     "com.unity.cinemachine": "2.10.3",
@@ -48,10 +49,10 @@
   },
   "scopedRegistries": [
     {
-      "name": "hybridclr_unity",
-      "url": "https://package.openupm.cn",
+      "name": "package.openupm.com",
+      "url": "https://package.openupm.com",
       "scopes": [
-        "com.focus-creative-games.hybridclr_unity"
+        "com.tuyoogame.yooasset"
       ]
     }
   ]

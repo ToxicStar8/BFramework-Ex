@@ -1,24 +1,25 @@
 {
   "dependencies": {
     "com.code-philosophy.hybridclr": {
-      "version": "file:com.code-philosophy.hybridclr@01754c8fb4",
+      "version": "https://gitee.com/focus-creative-games/hybridclr_unity.git",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "4feac30cb2e105992986c737f7f54992b8300e1a"
     },
     "com.code-philosophy.obfuz": {
       "version": "https://github.com/focus-creative-games/obfuz.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "4bdf21349c80e693f5c7e818b2c32f34660f28f2"
+      "hash": "7b06f0fed8675c31cbae9760a93e7deec0c0a05c"
     },
     "com.code-philosophy.obfuz4hybridclr": {
       "version": "https://github.com/focus-creative-games/obfuz4hybridclr.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "59804e17a0d1562ca0f847db986ed93b25825b6d"
+      "hash": "6277e75ce11de86b765d4bd75d4968d1bcaa2eaa"
     },
     "com.coffee.ui-effect": {
       "version": "https://github.com/mob-sakai/UIEffect.git",

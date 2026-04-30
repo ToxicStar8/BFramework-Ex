@@ -29,20 +29,20 @@ namespace MainPackage
             _fallbackHostServer = fallbackHostServer;
 
 #if UNITY_STANDALONE_WIN
-            _targetCDNUrl = $"/Windows/{Application.version}";
+            _targetCDNUrl = $"/Windows/{Application.version}/";
 #elif UNITY_STANDALONE_OSX
-        _targetCDNUrl = $"/Mac/{Application.version}";
+            _targetCDNUrl = $"/Mac/{Application.version}/";
 #elif UNITY_ANDROID
-        _targetCDNUrl = $"/Android/{Application.version}";
+            _targetCDNUrl = $"/Android/{Application.version}/";
 #elif UNITY_IOS
-        _targetCDNUrl = $"/IOS/{Application.version}";
+            _targetCDNUrl = $"/IOS/{Application.version}/";
 #endif
 
         }
 
         string IRemoteServices.GetRemoteMainURL(string fileName)
         {
-            var url = $"{_defaultHostServer}/{_targetCDNUrl}/{fileName}";
+            var url = $"{_defaultHostServer}{_targetCDNUrl}{fileName}";
             GameEntry.Instance.Log(E_Log.Framework, $"使用主地址:{url}");
             return url;
         }

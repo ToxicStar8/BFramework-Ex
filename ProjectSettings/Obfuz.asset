@@ -80,7 +80,7 @@ MonoBehaviour:
       methodCountPerClass: 10
       fieldCountPerClass: 50
       garbageCodeType: 1
-      outputPath: Assets/Obfuz/GarbageCode
+      outputPath: Assets/MainPackage/Obfuz/GarbageCode
     additionalTasks: []
   watermarkSettings:
     text: Obfuscated by Obfuz

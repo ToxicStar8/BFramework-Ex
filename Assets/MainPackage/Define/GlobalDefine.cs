@@ -34,10 +34,10 @@ namespace MainPackage
         /// <summary>
         /// 资源下载地址
         /// </summary>
-        public static readonly string DebugServerCDNUrl1 = "www.baidu1.com";
-        public static readonly string DebugServerCDNUrl2 = "www.baidu2.com";
-        public static readonly string ReleaseServerCDNUrl1 = "www.baidu1.com";
-        public static readonly string ReleaseServerCDNUrl2 = "www.baidu2.com";
+        public static readonly string DebugServerCDNUrl1 = "https://toxicstar.top/CDN";
+        public static readonly string DebugServerCDNUrl2 = "https://toxicstar.top/CDN";
+        public static readonly string ReleaseServerCDNUrl1 = "https://toxicstar.top/CDN";
+        public static readonly string ReleaseServerCDNUrl2 = "https://toxicstar.top/CDN";
 
     }
 }

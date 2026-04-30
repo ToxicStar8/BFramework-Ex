@@ -24,11 +24,13 @@ namespace Framework
 
         public string ObjName { private set; get; }
         public int Count => ObjLinkedList.Count;
+        private LoadHelper _loadHelper;
         //public GameObject this[int index] => ObjList[index];
 
         public GameObjectPool(string objName)
         {
             ObjName = objName;
+            _loadHelper = LoadHelper.Create();
         }
 
         /// <summary>
@@ -40,7 +42,7 @@ namespace Framework
             if (ObjQueue.Count == 0)
             {
                 //GameEntry.Instance.Log(E_Log.Framework, "不存在" + ObjName + "对象","创建");
-                var obj = GameGod.Instance.LoadManager.LoadSync<GameObject>(ObjName);
+                var obj = _loadHelper.LoadSync<GameObject>(ObjName);
                 go = Object.Instantiate(obj, trans);
                 go.name = go.name.Replace("(Clone)", "");
             }
@@ -116,8 +118,8 @@ namespace Framework
             ObjQueue.Clear();
             ObjQueue = null;
 
-            //只在关闭池的时候卸载一次
-            GameGod.Instance.LoadManager.UnloadAsset(ObjName);
+            LoadHelper.Recycle(_loadHelper);
+            _loadHelper = null;
         }
     }
 }

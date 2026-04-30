@@ -24,7 +24,7 @@ namespace GameData
             //初始化Module
             GameGod.Instance.ModuleManager.InitModuleType(ModuleTypes.ModuleTypeArr);
             //背景音乐
-            GameGod.Instance.AudioManager.PlayBackground("RetroComedy.ogg");
+            GameGod.Instance.AudioManager.PlayBackground("RetroComedy");
             //红点树启动
             //var rootKey = GameGod.Instance.RedPointManager.RootNode.Key;
             //GameGod.Instance.RedPointManager.AddOrGetNodeByParentKey<UIMainMenu>(rootKey);

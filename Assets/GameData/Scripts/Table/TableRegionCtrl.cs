@@ -10,6 +10,6 @@ namespace GameData
 {
     public partial class TableRegionCtrl : TableCtrlBase<TableRegion>
     {
-        public override string TableName => "tb_region.bytes";
+        public override string TableName => "tb_region";
     }
 }

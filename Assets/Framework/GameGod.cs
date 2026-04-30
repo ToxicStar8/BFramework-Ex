@@ -28,18 +28,11 @@ namespace Framework
         /// </summary>
         public event Action DisposeCallback;
 
-        /// <summary>
-        /// 全局用的加载器，基本不释放
-        /// </summary>
-        public LoadHelper LoadHelper { private set; get; }
-
         public static GameGod Instance { private set; get; }
         public PoolManager PoolManager { private set; get; }
         public HttpManager HttpManager { private set; get; }
         public SocketManager SocketManager { private set; get; }
-        public ABManager ABManager { private set; get; }
         public UIManager UIManager { private set; get; }
-        public LoadManager LoadManager { private set; get; }
         public EventManager EventManager { private set; get; }
         public TableManager TableManager { private set; get; }
         public AudioManager AudioManager { private set; get; }
@@ -58,8 +51,6 @@ namespace Framework
             Instance = this;
             DontDestroyOnLoad(Instance);
 
-            ABManager = new ABManager();
-            LoadManager = new LoadManager();
             PoolManager = new PoolManager();
             HttpManager = new HttpManager();
             SocketManager = new SocketManager();
@@ -72,8 +63,6 @@ namespace Framework
             FsmManager = new FsmManager();
             RedPointManager = new RedPointManager();
             TaskManager = new TaskManager();
-
-            LoadHelper = LoadHelper.Create();
         }
 
         private void Start()
@@ -86,9 +75,7 @@ namespace Framework
             PoolManager.OnUpdate();
             HttpManager.OnUpdate();
             SocketManager.OnUpdate();
-            ABManager.OnUpdate();
             UIManager.OnUpdate();
-            LoadManager.OnUpdate();
             ModuleManager.OnUpdate();
             EventManager.OnUpdate();
             TableManager.OnUpdate();
@@ -110,12 +97,10 @@ namespace Framework
         {
             //再执行
             ModuleManager.OnDispose();
-            ABManager.OnDispose();
             FsmManager.OnDispose();
             TimerManager.OnDispose();
             UIManager.OnDispose();
             PoolManager.OnDispose();
-            LoadManager.OnDispose();
             EventManager.OnDispose();
             TableManager.OnDispose();
             HttpManager.OnDispose();

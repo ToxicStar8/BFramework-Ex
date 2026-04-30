@@ -48,7 +48,7 @@ namespace Framework
 
             var uiTrans = GameGod.Instance.GetUILevelTrans(uiLevel);
             var loadHelper = LoadHelper.Create();
-            var uiObj = loadHelper.CreateGameObjectSync(uiName + ".prefab", uiTrans);
+            var uiObj = loadHelper.CreateGameObjectSync(uiName, uiTrans);
             if (uiObj == null)
             {
                 LoadHelper.Recycle(loadHelper);
@@ -59,7 +59,7 @@ namespace Framework
             if (uiBase == null)
             {
                 GameGod.Instance.Log(E_Log.Error, uiName, "未找到UI组件");
-                Object.Destroy(uiObj);
+                //loadHelper创建的ui对象，这里回收加载器即销毁ui实例化对象
                 LoadHelper.Recycle(loadHelper);
                 return;
             }
@@ -130,8 +130,8 @@ namespace Framework
             //已打开 直接关闭
             if (_uiBaseDic.TryGetValue(uiName, out var uiBase))
             {
+                //loadHelper创建的ui对象，这里回收加载器即销毁ui实例化对象
                 uiBase.OnDispose();
-                Object.Destroy(uiBase.gameObject);
                 uiBase = null;
                 _uiBaseDic.Remove(uiName);
             }

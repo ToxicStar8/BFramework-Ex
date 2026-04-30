@@ -19,10 +19,21 @@ namespace Framework
     public class TableManager : ManagerBase
     {
         private Dictionary<Type, ITableCtrlBase> _allTableDic;
+        public LoadHelper LoadHelper { private set; get; }
 
         public override void OnAwake()
         {
             _allTableDic = new Dictionary<Type, ITableCtrlBase>();
+            LoadHelper = LoadHelper.Create();
+        }
+
+        /// <summary>
+        /// 重新创建表格加载器
+        /// </summary>
+        public void ReloadLoadHelper()
+        {
+            LoadHelper.Recycle(LoadHelper);
+            LoadHelper = LoadHelper.Create();
         }
 
         public void Init(Type[] typeArr)
@@ -62,6 +73,7 @@ namespace Framework
         /// </summary>
         public void HotReload()
         {
+            ReloadLoadHelper();
             foreach (var item in _allTableDic)
             {
                 var tableCtrl = item.Value;
@@ -76,6 +88,8 @@ namespace Framework
         public override void OnUpdate() { }
         public override void OnDispose()
         {
+            LoadHelper.Recycle(LoadHelper);
+            LoadHelper = null;
             _allTableDic.Clear();
             _allTableDic = null;
         }

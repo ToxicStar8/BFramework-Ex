@@ -405,7 +405,7 @@ namespace GameData
             tableCtrlName += "Ctrl";
             outAllStr = outAllStr.Replace("#TableCtrlName", tableCtrlName);
             outAllStr = outAllStr.Replace("#Time", DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss"));
-            outAllStr = outAllStr.Replace("#TextName", "\"" + table.Name + ".bytes\"");
+            outAllStr = outAllStr.Replace("#TextName", "\"" + table.Name + "\"");
             outAllStr = outAllStr.Replace("#ExcelName", excelName);
 
             var file = File.CreateText(_outScriptPath + "/" + tableCtrlName + ".cs");

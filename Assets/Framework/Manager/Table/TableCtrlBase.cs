@@ -66,9 +66,7 @@ namespace Framework
             DataList.Clear();
             DataDic.Clear();
 
-            //表格先卸载后加载，便于热更新
-            GameGod.Instance.LoadManager.UnloadAsset(TableName);
-            var textAsset = GameGod.Instance.LoadManager.LoadSync<TextAsset>(TableName);
+            var textAsset = GameGod.Instance.TableManager.LoadHelper.LoadSync<TextAsset>(TableName);
             if (textAsset == null)
             {
                 GameGod.Instance.Log(E_Log.Error, "表格资源为空", TableName);

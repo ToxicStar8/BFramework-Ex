@@ -21,12 +21,17 @@ namespace MainPackage
         /// 检查更新中
         /// </summary>
         [SerializeField]
-        private Text Txt_VersionCheck;
+        private Text Txt_Version;
         /// <summary>
-        /// 加载资源中
+        /// 一级提示
         /// </summary>
         [SerializeField]
-        private Text Txt_LoadingAsset;
+        private Text Txt_OneTips;
+        /// <summary>
+        /// 二级提示
+        /// </summary>
+        [SerializeField]
+        private Text Txt_TwoTips;
         /// <summary>
         /// 退出按钮
         /// </summary>
@@ -38,36 +43,46 @@ namespace MainPackage
         [SerializeField]
         private RectTransform Rt_Error;
 
-        /// <summary>
-        /// 是否加载中
-        /// </summary>
-        private bool _isLoading = false;
-
         private void Awake()
         {
             Btn_Quit.onClick.AddListener(Application.Quit);
-            gameObject.SetActive(true);
+            SetIsComplete(false);
+            SetProgress(0);
+            SetVersion("");
+            SetOneTips("");
+            SetTwoTips("");
         }
 
         /// <summary>
-        /// 初始化
+        /// 设置版本号
         /// </summary>
-        public void CheckUpdate()
+        public void SetVersion(string versionCheck)
         {
-            Txt_VersionCheck.gameObject.SetActive(true);
-            Txt_LoadingAsset.gameObject.SetActive(false);
-            Img_Progress.fillAmount = 0;
+            Txt_Version.text = versionCheck;
         }
 
         /// <summary>
-        /// 开始下载
+        /// 设置一级提示
         /// </summary>
-        public void StartDowload()
+        public void SetProgress(float progress)
         {
-            Txt_VersionCheck.gameObject.SetActive(false);
-            Txt_LoadingAsset.gameObject.SetActive(true);
-            Img_Progress.fillAmount = 0;
-            _isLoading = true;
+            Img_Progress.fillAmount = progress;
+        }
+
+        /// <summary>
+        /// 设置一级提示
+        /// </summary>
+        public void SetOneTips(string oneTips)
+        {
+            Txt_OneTips.text = oneTips;
+        }
+
+        /// <summary>
+        /// 设置二级提示
+        /// </summary>
+        public void SetTwoTips(string twoTips)
+        {
+            Txt_TwoTips.text = twoTips;
         }
 
         /// <summary>
@@ -78,46 +93,12 @@ namespace MainPackage
             Rt_Error.gameObject.SetActive(true);
         }
 
-        private void Update()
+        /// <summary>
+        /// 设置下载完毕
+        /// </summary>
+        public void SetIsComplete(bool isComplete)
         {
-            //加载完毕就关闭界面
-            if (GameEntry.Instance.DowloadManager.IsDowloadEnd)
-            {
-                if (gameObject.activeSelf)
-                {
-                    gameObject.SetActive(false);
-                }
-                return;
-            }
-
-            //下载异常
-            if (GameEntry.Instance.DowloadManager.IsDowloadError)
-            {
-                if (gameObject.activeSelf)
-                {
-                    ShowError();
-                }
-                return;
-            }
-
-            if (_isLoading)
-            {
-                Txt_LoadingAsset.text = GameEntry.Instance.DowloadManager.LoadedABTimes.ToString() + "/" + GameEntry.Instance.DowloadManager.ABMd5InfoList.Count.ToString();
-                Img_Progress.fillAmount = (float)GameEntry.Instance.DowloadManager.LoadedABTimes / GameEntry.Instance.DowloadManager.ABMd5InfoList.Count;
-            }
-            else
-            {
-                //检查更新
-                if (GameEntry.Instance.DowloadManager.DowloadStatus == 1)
-                {
-                    CheckUpdate();
-                }
-                //开始下载
-                if (GameEntry.Instance.DowloadManager.DowloadStatus == 2)
-                {
-                    StartDowload();
-                }
-            }
+            gameObject.SetActive(!isComplete);
         }
     }
 }

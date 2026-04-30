@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -900,6 +899,7 @@ MonoBehaviour:
   m_BoundingShape2D: {fileID: 0}
   m_Damping: 0.5
   m_MaxWindowSize: -1
+  m_Padding: 0
 --- !u!1 &1124249893
 GameObject:
   m_ObjectHideFlags: 0
@@ -983,8 +983,7 @@ MonoBehaviour:
   UICamera: {fileID: 644216477}
   ObjPool: {fileID: 1978671858}
   GameStart: {fileID: 1124249894}
-  IsEditorMode: 1
-  IsRunABPackage: 0
+  _playMode: 0
   WinLoading: {fileID: 176193653}
   IsEnableTimeScale: 0
   TimeScale: 1
@@ -1191,10 +1190,6 @@ PrefabInstance:
     - target: {fileID: 4457795698213252719, guid: 451f5739f3e9a574cb5d71fc33bf320d, type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4457795698213252719, guid: 451f5739f3e9a574cb5d71fc33bf320d, type: 3}
-      propertyPath: m_RootOrder
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4457795698213252719, guid: 451f5739f3e9a574cb5d71fc33bf320d, type: 3}
       propertyPath: m_AnchorMax.x

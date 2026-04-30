@@ -1,16 +1,16 @@
 ﻿/*********************************************
  * BFramework
- * 通用加载助手（加载器）
- * 创建时间：2023/01/29 14:36:31
+ * 轻量化加载器
+ * 更新时间：2026/04/30 15:19:41
  *********************************************/
 using MainPackage;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.U2D;
 using Object = UnityEngine.Object;
+using YooAsset;
 
 namespace Framework
 {
@@ -19,7 +19,17 @@ namespace Framework
     /// </summary>
     public class LoadHelper
     {
-        public LoadHelper() { }
+        public LoadHelper()
+        {
+            _assetHandleDic = new();
+            _spriteDic = new();
+            _gameObjectList = new();
+        }
+
+        /// <summary>
+        /// 当前资源包
+        /// </summary>
+        public ResourcePackage Package => YooAssets.GetPackage(GlobalDefine.PackageName);
 
         /// <summary>
         /// 创建加载器
@@ -41,33 +51,50 @@ namespace Framework
         }
 
         /// <summary>
-        /// 资源名列表
+        /// 已加载资源句柄字典
         /// </summary>
-        private HashSet<string> _objNameHashSet;
+        private Dictionary<string, AssetHandle> _assetHandleDic;
 
+        /// <summary>
+        /// 已加载Sprite字典
+        /// </summary>
+        private Dictionary<string, Sprite> _spriteDic;
+
+        /// <summary>
+        /// 实例对象列表
+        /// </summary>
+        private List<GameObject> _gameObjectList;
+
+        #region 加载图片
         /// <summary>
         /// 同步加载Sprite
         /// </summary>
-        public Sprite GetSpriteSync(string atlasName, string spriteName)
+        public Sprite LoadSpriteSync(string atlasName, string spriteName)
         {
-            _objNameHashSet ??= new();
-            //真正加载Sp的地方
-            var sp = GameGod.Instance.LoadManager.GetSprite(atlasName, spriteName);
-            if (sp == null)
+            //因为美术资源太多重复的名字，这里直接使用 [文件夹_文件] 的格式来做可寻址
+            var spaName = $"{atlasName}_{atlasName}";
+            var spName = $"{atlasName}_{spriteName}";
+            if (_spriteDic.TryGetValue(spName, out var cachedSprite))
             {
-                GameGod.Instance.Log(E_Log.Error, "图片资源为空", spriteName);
+                return cachedSprite;
+            }
+
+            var spa = LoadSync<SpriteAtlas>(spaName);
+            if (spa == null)
+            {
+                GameGod.Instance.Log(E_Log.Error, $"SpriteAtlas is Null!{spaName}");
                 return null;
             }
-            //追加到记录列表里
-            if (!_objNameHashSet.Contains(atlasName))
+
+            var sprite = spa.GetSprite(spriteName);
+            if (sprite == null)
             {
-                _objNameHashSet.Add(atlasName);
+                GameGod.Instance.Log(E_Log.Error, $"Sprite is Null!{spName}");
+                return null;
             }
-            if (!_objNameHashSet.Contains(spriteName))
-            {
-                _objNameHashSet.Add(spriteName);
-            }
-            return sp;
+
+            TrackSprite(spName, sprite);
+            return sprite;
         }
 
         /// <summary>
@@ -75,18 +102,45 @@ namespace Framework
         /// </summary>
         public async UniTask<Sprite> GetSpriteAsync(string atlasName, string spriteName)
         {
-            var sp = GetSpriteSync(atlasName, spriteName);
-            await UniTask.CompletedTask;
-            return sp;
-        }
+            //因为美术资源太多重复的名字，这里直接使用 [文件夹_文件] 的格式来做可寻址
+            var spaName = $"{atlasName}_{atlasName}";
+            var spName = $"{atlasName}_{spriteName}";
+            if (_spriteDic.TryGetValue(spName, out var cachedSprite))
+            {
+                return cachedSprite;
+            }
 
+            var spa = await LoadAsync<SpriteAtlas>(spaName);
+            if (spa == null)
+            {
+                GameGod.Instance.Log(E_Log.Error, $"SpriteAtlas is Null!{spaName}");
+                return null;
+            }
+
+            var sprite = spa.GetSprite(spriteName);
+            if (sprite == null)
+            {
+                GameGod.Instance.Log(E_Log.Error, $"Sprite is Null!{spName}");
+                return null;
+            }
+
+            TrackSprite(spName, sprite);
+            return sprite;
+        }
+        #endregion
+
+        #region 加载资源
         /// <summary>
         /// 加载资源 带后缀
         /// </summary>
         public T LoadSync<T>(string objName) where T : Object
         {
-            var obj = LoadSync(objName) as T;
-            return obj;
+            if (!_assetHandleDic.TryGetValue(objName, out var handle))
+            {
+                handle = Package.LoadAssetSync<T>(objName);
+                TrackAssetHandle(objName, handle);
+            }
+            return handle.GetAssetObject<T>();
         }
 
         /// <summary>
@@ -94,19 +148,7 @@ namespace Framework
         /// </summary>
         public Object LoadSync(string objName)
         {
-            _objNameHashSet ??= new();
-            //真正加载资源的地方
-            var obj = GameGod.Instance.LoadManager.LoadSync(objName);
-            if (obj == null)
-            {
-                GameGod.Instance.Log(E_Log.Error, "加载资源为空", objName);
-                return null;
-            }
-            //记录名字即可
-            if (!_objNameHashSet.Contains(objName))
-            {
-                _objNameHashSet.Add(objName);
-            }
+            var obj = LoadSync<Object>(objName);
             return obj;
         }
 
@@ -115,8 +157,13 @@ namespace Framework
         /// </summary>
         public async UniTask<T> LoadAsync<T>(string objName) where T : Object
         {
-            var obj = await LoadAsync(objName) as T;
-            return obj;
+            if (!_assetHandleDic.TryGetValue(objName, out var handle))
+            {
+                handle = Package.LoadAssetAsync<T>(objName);
+                await handle;
+                TrackAssetHandle(objName, handle);
+            }
+            return handle.GetAssetObject<T>();
         }
 
         /// <summary>
@@ -124,9 +171,72 @@ namespace Framework
         /// </summary>
         public async UniTask<Object> LoadAsync(string objName)
         {
-            var obj = LoadSync(objName);
-            await UniTask.CompletedTask;
+            var obj = await LoadAsync<Object>(objName);
             return obj;
+        }
+
+        /// <summary>
+        /// 同步创建实例对象
+        /// </summary>
+        public GameObject CreateGameObjectSync(string objName, Transform trans = null)
+        {
+            var obj = LoadSync<GameObject>(objName);
+            if (obj == null)
+            {
+                GameGod.Instance.Log(E_Log.Error, "创建实例资源为空", objName);
+                return null;
+            }
+
+            var go = Object.Instantiate(obj, trans);
+            TrackGameObject(go);
+            return go;
+        }
+
+        /// <summary>
+        /// 异步创建实例对象
+        /// </summary>
+        public async UniTask<GameObject> CreateGameObjectAsync(string objName, Transform trans = null)
+        {
+            var obj = await LoadAsync<GameObject>(objName);
+            if (obj == null)
+            {
+                GameGod.Instance.Log(E_Log.Error, "创建实例资源为空", objName);
+                return null;
+            }
+
+            var go = Object.Instantiate(obj, trans);
+            TrackGameObject(go);
+            return go;
+        }
+
+        private void TrackAssetHandle(string objName, AssetHandle handle)
+        {
+            if (handle == null)
+            {
+                return;
+            }
+
+            _assetHandleDic[objName] = handle;
+        }
+
+        private void TrackSprite(string spriteName, Sprite sprite)
+        {
+            if (sprite == null)
+            {
+                return;
+            }
+
+            _spriteDic[spriteName] = sprite;
+        }
+
+        private void TrackGameObject(GameObject go)
+        {
+            if (go == null)
+            {
+                return;
+            }
+
+            _gameObjectList.Add(go);
         }
 
         /// <summary>
@@ -135,19 +245,8 @@ namespace Framework
         /// <param name="sceneName">加载场景一定要用全大小写名，全小写的名字只能用于预先放在BuildSetting里使用</param>
         public void LoadSceneSync(string sceneName)
         {
-            if (!GameEntry.Instance.IsEditorMode || GameEntry.Instance.IsRunABPackage)
-            {
-                LoadSync(sceneName + ".unity");
-                SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
-            }
-#if UNITY_EDITOR
-            else
-            {
-                string path = GameGod.Instance.LoadManager.GetObjAssetPath(sceneName + ".unity");
-                var parameters = new LoadSceneParameters(LoadSceneMode.Single);
-                UnityEditor.SceneManagement.EditorSceneManager.LoadSceneInPlayMode(path, parameters);
-            }
-#endif
+            LoadSync(sceneName + ".unity");
+            SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
         }
 
         /// <summary>
@@ -156,64 +255,71 @@ namespace Framework
         /// <param name="sceneName">加载场景一定要用全大小写名，全小写的名字只能用于预先放在BuildSetting里使用</param>
         public async UniTask LoadSceneAsync(string sceneName)
         {
-            if (!GameEntry.Instance.IsEditorMode || GameEntry.Instance.IsRunABPackage)
-            {
-                await LoadAsync(sceneName + ".unity");
-                await SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
-            }
-#if UNITY_EDITOR
-            else
-            {
-                string path = GameGod.Instance.LoadManager.GetObjAssetPath(sceneName + ".unity");
-                var parameters = new LoadSceneParameters(LoadSceneMode.Single);
-                await UnityEditor.SceneManagement.EditorSceneManager.LoadSceneAsyncInPlayMode(path, parameters);
-            }
-#endif
+            await LoadAsync(sceneName + ".unity");
+            await SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
         }
+        #endregion
 
-        /// <summary>
-        /// 直接创建对象
-        /// </summary>
-        public GameObject CreateGameObjectSync(string objName, Transform trans = null)
-        {
-            var obj = LoadSync<GameObject>(objName);
-            return Object.Instantiate(obj, trans);
-        }
-
-        /// <summary>
-        /// 异步直接创建对象
-        /// </summary>
-        public async UniTask<GameObject> CreateGameObjectAsync(string objName, Transform trans = null)
-        {
-            var obj = await LoadAsync<GameObject>(objName);
-            return Object.Instantiate(obj, trans);
-        }
-
+        #region 卸载资源
         /// <summary>
         /// 卸载全部资源
         /// </summary>
         public void UnloadAll()
         {
-            UnloadAllObject();
+            DestroyAllGameObject();
+            ClearSpriteCache();
+            ReleaseAllAssetHandle();
         }
 
         /// <summary>
-        /// 卸载全部Obj
+        /// 销毁全部实例对象
         /// </summary>
-        private void UnloadAllObject()
+        private void DestroyAllGameObject()
         {
-            if (_objNameHashSet == null)
+            if (_gameObjectList == null)
             {
                 return;
             }
 
-            //关闭前移除全部Obj
-            foreach (var objName in _objNameHashSet)
+            foreach (var go in _gameObjectList)
             {
-                GameGod.Instance.LoadManager.UnloadAsset(objName);
-                GameGod.Instance.Log(E_Log.Framework, "Unload Object", objName);
+                if (go != null)
+                {
+                    Object.Destroy(go);
+                }
             }
-            _objNameHashSet.Clear();
+            _gameObjectList.Clear();
         }
+
+        /// <summary>
+        /// 清理Sprite缓存
+        /// </summary>
+        private void ClearSpriteCache()
+        {
+            if (_spriteDic == null)
+            {
+                return;
+            }
+
+            _spriteDic.Clear();
+        }
+
+        /// <summary>
+        /// 释放全部资源句柄
+        /// </summary>
+        private void ReleaseAllAssetHandle()
+        {
+            if (_assetHandleDic == null)
+            {
+                return;
+            }
+
+            foreach (var item in _assetHandleDic)
+            {
+                item.Value?.Release();
+            }
+            _assetHandleDic.Clear();
+        }
+        #endregion
     }
 }

@@ -92,7 +92,7 @@ namespace Framework
         /// </summary>
         protected virtual Sprite GetSpriteSync(LoadHelper loadHelper, string atlasName, string spriteName)
         {
-            var sp = loadHelper.GetSpriteSync(atlasName, spriteName);
+            var sp = loadHelper.LoadSpriteSync(atlasName, spriteName);
             return sp;
         }
         /// <summary>

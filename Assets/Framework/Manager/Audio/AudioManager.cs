@@ -22,6 +22,7 @@ namespace Framework
         private AudioSource _soundAudio;
         //音频挂载的游戏对象
         private GameObject gameObject;
+        private LoadHelper _loadHelper;
 
         //背景音乐音量
         private float _volumeBackground;
@@ -55,6 +56,7 @@ namespace Framework
             _volumeSound = PlayerPrefs.GetFloat(ConstDefine.VolumeSound, 1);
             //挂载在游戏入口下
             gameObject.SetParent(GameEntry.Instance.transform);
+            _loadHelper = LoadHelper.Create();
         }
 
         /// <summary>
@@ -65,7 +67,7 @@ namespace Framework
         {
             GameEntry.Instance.Log(E_Log.Audio, "播放音乐", audioName);
 
-            var audio = GameGod.Instance.LoadManager.LoadSync<AudioClip>(audioName);
+            var audio = _loadHelper.LoadSync<AudioClip>(audioName);
             //声音
             _backgroundAudio.volume = _volumeBackground;
             //如果在播放 先停止
@@ -89,7 +91,7 @@ namespace Framework
         {
             GameEntry.Instance.Log(E_Log.Audio, "播放音效", audioName);
 
-            var audio = GameGod.Instance.LoadManager.LoadSync<AudioClip>(audioName);
+            var audio = _loadHelper.LoadSync<AudioClip>(audioName);
             _soundAudio.PlayOneShot(audio);
         }
 
@@ -98,6 +100,8 @@ namespace Framework
         {
             _soundAudio = null;
             _backgroundAudio = null;
+            LoadHelper.Recycle(_loadHelper);
+            _loadHelper = null;
             UnityEngine.Object.Destroy(gameObject);
         }
     }

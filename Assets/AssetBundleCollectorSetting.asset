@@ -38,7 +38,7 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-      - CollectPath: Assets/GameData/UI/Sprite
+      - CollectPath: Assets/GameData/UI/Sprites
         CollectorGUID: 7fdaaec75d125ac4d9fd4e83869e36ef
         CollectorType: 0
         AddressRuleName: AddressByFolderAndFileName

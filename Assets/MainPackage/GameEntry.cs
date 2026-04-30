@@ -150,21 +150,21 @@ namespace MainPackage
             Log(E_Log.Framework, "热更代码", "启动中");
             //加载热更DLL
             var package = YooAssets.GetPackage(GlobalDefine.PackageName);
-            var assetHandle = package.LoadAssetAsync<TextAsset>(GlobalDefine.HotfixDllName);
-            yield return assetHandle;
-            var assTextAsset = assetHandle.GetAssetObject<TextAsset>();
+            var assHandle = package.LoadAssetAsync<TextAsset>(GlobalDefine.HotfixDllName);
+            yield return assHandle;
+            var assTextAsset = assHandle.GetAssetObject<TextAsset>();
             Assembly ass = Assembly.Load(assTextAsset.bytes);
             Log(E_Log.Framework, "热更代码", "DLL加载完毕");
 
             Log(E_Log.Framework, "补元", "开始");
-            var allAssetHandle = package.LoadAllAssetsAsync<TextAsset>(GlobalDefine.HotfixDllName);
-            yield return allAssetHandle;
-            foreach (var assetObj in allAssetHandle.AllAssetObjects)
+            var allDllHandle = package.LoadAllAssetsAsync<TextAsset>(GlobalDefine.HotfixDllName);
+            yield return allDllHandle;
+            foreach (var dllObj in allDllHandle.AllAssetObjects)
             {
-                Log(E_Log.Framework, "assetObj.name", assetObj.name);
-                if (assetObj.name.EndsWith(".bytes") && assetObj.name != GlobalDefine.HotfixDllName)
+                Log(E_Log.Framework, "dllObj.name", dllObj.name);
+                if (dllObj.name.EndsWith(".bytes") && dllObj.name != GlobalDefine.HotfixDllName)
                 {
-                    var textAsset = assetObj as TextAsset;
+                    var textAsset = dllObj as TextAsset;
                     HybridCLR.RuntimeApi.LoadMetadataForAOTAssembly(textAsset.bytes, HybridCLR.HomologousImageMode.SuperSet);
                 }
             }
@@ -172,7 +172,9 @@ namespace MainPackage
 
             Log(E_Log.Framework, "加载热更", "开始");
             //原生加载热更
-            var hotfixObj = package.LoadAssetSync<GameObject>("HotUpdatePrefab").GetAssetObject<GameObject>();
+            var hotfixHandle = package.LoadAssetAsync<GameObject>("HotUpdatePrefab");
+            yield return hotfixHandle;
+            var hotfixObj = hotfixHandle.GetAssetObject<GameObject>();
             GameObject hotfixPrefab = Instantiate(hotfixObj, transform);
             hotfixPrefab.name = "[Hotfix]";
             //反射加载
@@ -181,6 +183,12 @@ namespace MainPackage
             //hotfixPrefab.AddComponent(entryType);
             //hotfixPrefab.name = "[Hotfix]";
             Log(E_Log.Framework, "加载热更", "完毕");
+
+            yield return new WaitForSeconds(0.2f);
+
+            assHandle.Release();
+            allDllHandle.Release();
+            hotfixHandle.Release();
 
             WinLoading.SetIsComplete(true);
         }

@@ -184,7 +184,7 @@ Assets/
 
 1. **克隆仓库**并在 Unity 2021.3 LTS（或更高版本）中打开项目
 2. 安装 HybridCLR：执行 `HybridCLR / Installer`
-3. 在 `GameEntry` 挂载的 GameObject 上将 `YooAsset运行模式` 设置为 `EditorSimulateMode` 以在编辑器中跳过实际下载、直接模拟资源加载进行本地开发；正式出包时设置为 `HostPlayMode`
+3. 在 `GameEntry` 挂载的 GameObject 的 Inspector 中，将 `YooAsset运行模式`（`Play Mode`）字段设置为 `EditorSimulateMode` 以在编辑器中跳过实际下载、直接模拟资源加载进行本地开发；正式出包时设置为 `HostPlayMode`
 4. 继承 `GameBase` 或 `GameBaseMono` 编写业务逻辑，通过内置方法调用各 Manager
 5. 参考 `Editor/热更说明.txt` 完成完整的热更打包流程
 

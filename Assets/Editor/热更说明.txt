@@ -1,23 +1,20 @@
 //生成主包体依赖文件
-1.HybridCLR/Generate/all
+1.HybridCLR/Generate/All
 
 //打包顺便生成AotDll
-2.File/Build Setting/Build
+2.File/Build Settings/Build
 
 //打图集
 3.BFramework/Build SpriteAtlas
 
-//打资源名称
-4.BFramework/Build AssetName
+//编译热更Dll（含混淆+多态，替代旧的 CompileDll + 手动移动Dll）
+4.HybridCLR/ObfuzExtension/CompileAndObfuscatePolymorphicDll
 
-//打热更Dll
-5.HybridCLR/CompileDll/ActiveBuildTarget
-
-//打AB包
-6.BFramework/Build AssetBundles
+//打AB包（通过YooAsset打包窗口）
+5.YooAsset/AssetBundle Builder
 
 //
-7.把AssetBundle文件夹下的文件上传至服务器
+6.把AssetBundle文件夹下的文件上传至服务器
 
 //
-8.发布包
+7.发布包

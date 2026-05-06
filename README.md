@@ -49,13 +49,12 @@ Assets/
 1. **生成主包体依赖文件**：`HybridCLR/Generate/All`
 2. **打包并生成 AotDll**：`File / Build Settings / Build`
 3. **打图集**：`BFramework / Build SpriteAtlas`
-4. **生成资源名称**：`BFramework / Build AssetName`
-5. **编译热更 DLL**：`HybridCLR / CompileDll / ActiveBuildTarget`
-6. **打 AB 包**：`BFramework / Build AssetBundles`
-7. **上传 AssetBundle 文件夹至 CDN 服务器**
-8. **发布包体**
+4. **编译热更 DLL（含混淆 + 多态）**：`HybridCLR / ObfuzExtension / CompileAndObfuscatePolymorphicDll`
+5. **打 AB 包**：通过 `YooAsset / AssetBundle Builder` 打包窗口构建
+6. **上传 AssetBundle 文件夹至 CDN 服务器**
+7. **发布包体**
 
-> 编辑器模式下跳过下载流程，直接读取本地 `AssetBundle/` 目录。
+> 编辑器模式下将 `YooAsset运行模式` 设置为 `EditorSimulateMode`，跳过实际下载流程，直接模拟资源加载。
 
 ---
 

@@ -65,7 +65,7 @@ Assets/
 
 | 类 | 说明 |
 |---|---|
-| `GameEntry` | 游戏总入口，负责启动流程控制；集成 YooAsset 初始化、资源版本检查、AB 包增量下载（最多重试3次）及热更 DLL 加载 |
+| `GameEntry` | 游戏总入口，负责启动流程控制；集成 YooAsset 初始化、资源版本检查、AB 包下载及热更 DLL 加载 |
 | `WinLoading` | 加载界面组件，提供进度条、提示文本、版本号显示及下载出错提示 |
 | `InputFieldMobileSupport` | 移动端输入框适配支持组件 |
 

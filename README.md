@@ -32,12 +32,12 @@
 Assets/
 ├── Editor/          # 编辑器工具（打包、图集、UI代码生成等）
 ├── Framework/       # 核心框架（Base、Manager、Component、Extensions）
-├── GameData/        # 游戏数据（策划表、美术资源、预制体、脚本）
+├── GameData/        # 游戏数据（策划表、美术资源、UI、脚本）
 ├── Hotfix/          # 热更新代码 DLL
-├── HybridCLRData/   # HybridCLR 生成数据
-├── MainPackage/     # 主包（入口、下载器、启动流程）
-├── Plugin/          # 第三方插件
-└── Scenes/          # 场景文件
+├── MainPackage/     # 主包（入口、加载界面、启动流程）
+│   ├── HybridCLRData/   # HybridCLR 生成数据
+│   └── Scenes/          # 场景文件
+└── Plugin/          # 第三方插件
 ```
 
 ---
@@ -65,12 +65,9 @@ Assets/
 
 | 类 | 说明 |
 |---|---|
-| `GameEntry` | 游戏总入口，负责启动流程控制 |
-| `DowloadManager` | 原生实现 AB 包增量下载，支持 MD5 比对、断点重试（最多3次）、进度回调 |
+| `GameEntry` | 游戏总入口，负责启动流程控制；集成 YooAsset 初始化、资源版本检查、AB 包下载及热更 DLL 加载 |
+| `WinLoading` | 加载界面组件，提供进度条、提示文本、版本号显示及下载出错提示 |
 | `InputFieldMobileSupport` | 移动端输入框适配支持组件 |
-
-**下载状态机：**
-- `0` 未开始 → `1` 检查更新 → `2` 下载中 → `3` 下载完毕
 
 ---
 
@@ -92,17 +89,15 @@ Assets/
 | **AudioManager** | 支持播放`背景音乐`（唯一）和多个`音效` |
 | **EventManager** | 事件中心，支持添加/移除/发送事件监听；`SendEvent` 内置异常隔离，单个回调异常不影响其他监听器 |
 | **FsmManager** | 有限状态机管理器，支持创建多个独立 FSM 实例 |
-| **LoadManager** | 可寻址同步/异步加载资源与精灵，通过 `LoadHelper` 管理对象持有的资源引用，支持资源释放 |
 | **ModuleManager** | 数据层管理器，网络游戏中作为请求器和数据缓存，单机游戏中作为存档管理 |
 | **HttpManager** | 原生实现可自定义 Header 的 HTTP GET/POST 请求 |
 | **SocketManager** | 基于 [UnityWebSocket](https://github.com/psygames/UnityWebSocket) 实现可自定义 Header 的 WebSocket 通信 |
 | **PoolManager** | 提供`游戏对象池`和`类对象池`两种池化方案，降低 GC 压力 |
-| **RedPointManager** | 使用 Dictionary 实现红点系统，支持按 Id 注册/移除回调、设置/获取红点数量 |
+| **RedPointManager** | 红点系统，支持按 Id 注册/移除回调、设置/获取红点数量 |
 | **TableManager** | 基于 EPPlus 将 Excel 表格数据转换为运行时可用的配置表 |
 | **TimerManager** | 基于 UniTask 的定时器，支持命名定时器（防重复注册）和一次性匿名定时器 |
 | **UIManager** | 基于 UGUI 的 UI 框架，支持多层级管理、打开/隐藏/关闭 UI，内置 `UnitPool` 管理 UI 内部列表元素 |
 | **TaskManager** | 基于 UniTask 实现的任务队列，支持异步任务按序逐步执行 |
-| **ABManager** | AB 包管理器，负责加载和管理 AssetBundle 及其依赖 |
 
 #### Component — 通用组件
 
@@ -163,7 +158,7 @@ Assets/
 | 目录 | 说明 |
 |---|---|
 | `Art/` | 美术资源 |
-| `Prefabs/` | 预制体 |
+| `UI/` | UI 相关资源（图集、预制体等） |
 | `Scripts/` | 业务逻辑代码 |
 | `Table/` | Excel 策划表 |
 
@@ -174,11 +169,13 @@ Assets/
 | 依赖 | 用途 |
 |---|---|
 | [HybridCLR](https://github.com/focus-creative-games/hybridclr) | C# 热更新运行时 |
+| [YooAsset](https://github.com/tuyoogame/YooAsset) | 资源管理与 AB 包增量热更新 |
 | [UniTask](https://github.com/Cysharp/UniTask) | 异步任务（定时器、任务队列） |
 | [UnityWebSocket](https://github.com/psygames/UnityWebSocket) | WebSocket 通信 |
 | [DOTween](http://dotween.demigiant.com/) | 动画缓动 |
 | [EPPlus](https://www.epplussoftware.com/) | Excel 表格解析 |
 | [Newtonsoft.Json](https://www.newtonsoft.com/json) | JSON 序列化 |
+| [Obfuz](https://github.com/focus-creative-games/obfuz) | 代码混淆与安全保护 |
 | TextMesh Pro | 高质量文本渲染 |
 
 ---
@@ -187,7 +184,7 @@ Assets/
 
 1. **克隆仓库**并在 Unity 2021.3 LTS（或更高版本）中打开项目
 2. 安装 HybridCLR：执行 `HybridCLR / Installer`
-3. 在 `GameEntry` 挂载的 GameObject 上配置 `IsEditorMode = true` 以跳过热更下载，直接进行本地开发；若需在编辑器内使用 AB 包运行，额外勾选 `IsRunABPackage = true`
+3. 在 `GameEntry` 挂载的 GameObject 的 Inspector 中，将 `YooAsset运行模式`（`Play Mode`）字段设置为 `EditorSimulateMode` 以在编辑器中跳过实际下载、直接模拟资源加载进行本地开发；正式出包时设置为 `HostPlayMode`
 4. 继承 `GameBase` 或 `GameBaseMono` 编写业务逻辑，通过内置方法调用各 Manager
 5. 参考 `Editor/热更说明.txt` 完成完整的热更打包流程
 

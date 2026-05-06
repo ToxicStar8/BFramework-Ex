@@ -49,13 +49,12 @@ Assets/
 1. **生成主包体依赖文件**：`HybridCLR/Generate/All`
 2. **打包并生成 AotDll**：`File / Build Settings / Build`
 3. **打图集**：`BFramework / Build SpriteAtlas`
-4. **生成资源名称**：`BFramework / Build AssetName`
-5. **编译热更 DLL**：`HybridCLR / CompileDll / ActiveBuildTarget`
-6. **打 AB 包**：`BFramework / Build AssetBundles`
-7. **上传 AssetBundle 文件夹至 CDN 服务器**
-8. **发布包体**
+4. **编译热更 DLL（含混淆 + 多态）**：`HybridCLR / ObfuzExtension / CompileAndObfuscatePolymorphicDll`
+5. **打 AB 包**：通过 `YooAsset / AssetBundle Builder` 打包窗口构建
+6. **上传 AssetBundle 文件夹至 CDN 服务器**
+7. **发布包体**
 
-> 编辑器模式下跳过下载流程，直接读取本地 `AssetBundle/` 目录。
+> 编辑器模式下将 `YooAsset运行模式` 设置为 `EditorSimulateMode`，跳过实际下载流程，直接模拟资源加载。
 
 ---
 
@@ -66,7 +65,7 @@ Assets/
 | 类 | 说明 |
 |---|---|
 | `GameEntry` | 游戏总入口，负责启动流程控制；集成 YooAsset 初始化、资源版本检查、AB 包下载及热更 DLL 加载 |
-| `WinLoading` | 加载界面组件，提供进度条、提示文本、版本号显示及下载出错提示 |
+| `WinLoading` | 加载界面组件，提供进度条、提示文本、版本号显示、退出按钮及下载出错提示 |
 | `InputFieldMobileSupport` | 移动端输入框适配支持组件 |
 
 ---
@@ -79,7 +78,7 @@ Assets/
 |---|---|
 | `GameBase` | 所有游戏对象的基类，封装了对所有 Manager 的便捷调用（事件、UI、音频、定时器、网络、状态机等） |
 | `GameBaseMono` | MonoBehaviour 版本的游戏对象基类 |
-| `ManagerBase` | 所有 Manager 的基类，规范 `OnUpdate` / `OnDispose` 生命周期 |
+| `ManagerBase` | 所有 Manager 的基类，规范 `OnAwake` / `OnUpdate` / `OnDispose` 生命周期 |
 | `InstanceBase` | 单例基类 |
 
 #### Manager — 管理器
@@ -94,7 +93,7 @@ Assets/
 | **SocketManager** | 基于 [UnityWebSocket](https://github.com/psygames/UnityWebSocket) 实现可自定义 Header 的 WebSocket 通信 |
 | **PoolManager** | 提供`游戏对象池`和`类对象池`两种池化方案，降低 GC 压力 |
 | **RedPointManager** | 红点系统，支持按 Id 注册/移除回调、设置/获取红点数量 |
-| **TableManager** | 基于 EPPlus 将 Excel 表格数据转换为运行时可用的配置表 |
+| **TableManager** | 配置表管理器，加载由 EPPlus 导出的数据文件，运行时提供类型安全的配置表访问 |
 | **TimerManager** | 基于 UniTask 的定时器，支持命名定时器（防重复注册）和一次性匿名定时器 |
 | **UIManager** | 基于 UGUI 的 UI 框架，支持多层级管理、打开/隐藏/关闭 UI，内置 `UnitPool` 管理 UI 内部列表元素 |
 | **TaskManager** | 基于 UniTask 实现的任务队列，支持异步任务按序逐步执行 |
@@ -139,17 +138,14 @@ Assets/
 
 ### Editor — 编辑器工具
 
-通过菜单栏 `BFramework` 快速执行以下操作：
+通过菜单栏 `BFramework` 或右键菜单快速执行以下操作：
 
 | 功能 | 说明 |
 |---|---|
-| **Build AssetName** | 一键生成所有资源的名称索引 |
-| **Build SpriteAtlas** | 一键打包图集 |
-| **Build AssetBundles** | 一键打包 AB 包（支持自定义 `ABConfig` 配置） |
-| **ExcelTools** | Excel 策划表可视化编辑与导出工具窗口 |
-| **可视化红点树** | 在 Inspector 面板实时查看红点树结构 |
-| **UI 代码生成** | 一键生成 UI 绑定代码，减少手动查找节点 |
-| **GameManager 监视窗口** | 独立 EditorWindow，运行时实时查看对象池、计时器等管理器状态 |
+| **Build SpriteAtlas** | 一键打包图集并生成图集名称常量代码（`BFramework / Build SpriteAtlas`） |
+| **Excel导表工具** | Excel 策划表可视化编辑与导出工具窗口（`BFramework / Excel导表工具`） |
+| **UI 代码生成** | 在 Hierarchy 面板右键 `GameObject / 生成UI代码`，一键生成 UI 绑定代码，减少手动查找节点 |
+| **GameManager 监视窗口** | 独立 EditorWindow，运行时实时查看对象池、计时器等管理器状态（`BFramework / GameManager监视窗口`） |
 
 ---
 

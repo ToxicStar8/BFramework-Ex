@@ -33,6 +33,8 @@ namespace Framework
 		/// </summary>
 		private FsmState<T> _currState;
 
+		private bool _isDisposed;
+
 		/// <summary>
 		/// 构造函数
 		/// </summary>
@@ -60,9 +62,13 @@ namespace Framework
 
         public override void OnUpdate()
 		{
+			if (_isDisposed)
+			{
+				return;
+			}
+
 			_currState?.OnUpdate();
 		}
-
 		/// <summary>
 		/// 获取状态
 		/// </summary>
@@ -81,38 +87,55 @@ namespace Framework
 		/// <param name="newState"></param>
 		public void ChangeState(sbyte newState)
 		{
-			if (CurrStateType == newState) return;
-
-			//设置为默认时就已经离开过了 不离开第二次
-			if (CurrStateType != -1 && _currState != null)
+			if (_isDisposed)
 			{
-				_currState.OnLeave();
+				throw new ObjectDisposedException(nameof(Fsm<T>));
 			}
-			CurrStateType = newState;
-			//-1就是默认状态
-			if(newState != -1)
+
+			if (CurrStateType == newState)
 			{
-				_currState = _stateDic[CurrStateType];
-				//进入新状态
+				return;
+			}
+
+			FsmState<T> nextState = null;
+			if (newState != -1 && !_stateDic.TryGetValue(newState, out nextState))
+			{
+				throw new ArgumentOutOfRangeException(nameof(newState), newState, "状态不存在。");
+			}
+
+			_currState?.OnLeave();
+			_currState = null;
+			CurrStateType = newState;
+
+			if (nextState != null)
+			{
+				_currState = nextState;
 				_currState.OnEnter();
 			}
 		}
-
 		/// <summary>
 		/// 关闭状态机
 		/// </summary>
 		public override void OnDispose()
 		{
-			if (_currState != null)
+			if (_isDisposed)
 			{
-				_currState.OnLeave();
+				return;
 			}
+
+			_isDisposed = true;
+			_currState?.OnLeave();
+			_currState = null;
+			CurrStateType = -1;
 
 			foreach (KeyValuePair<sbyte, FsmState<T>> state in _stateDic)
 			{
 				state.Value.OnDestroy();
+				state.Value.CurrFsm = null;
 			}
+
 			_stateDic.Clear();
+			Owner = null;
 		}
 	}
 }

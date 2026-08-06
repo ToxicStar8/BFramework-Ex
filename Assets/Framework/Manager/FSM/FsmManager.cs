@@ -20,6 +20,8 @@ namespace Framework
 		/// 状态机字典
 		/// </summary>
 		private Dictionary<int, FsmBase> _fsmDic;
+		private List<FsmBase> _updateFsms;
+		private bool _isDisposed;
 
 		/// <summary>
 		/// 状态机的临时编号
@@ -29,8 +31,10 @@ namespace Framework
 		public override void OnAwake()
 		{
 			_fsmDic = new Dictionary<int, FsmBase>();
+			_updateFsms = new List<FsmBase>();
+			_tempFsmIndex = 0;
+			_isDisposed = false;
 		}
-
 		/// <summary>
 		/// 创建状态机
 		/// </summary>
@@ -40,6 +44,11 @@ namespace Framework
 		/// <returns></returns>
 		public Fsm<T> CreateFsm<T>(T owner, FsmState<T>[] states) where T : class
 		{
+			if (_isDisposed)
+			{
+				throw new ObjectDisposedException(nameof(FsmManager));
+			}
+
 			var fsm = new Fsm<T>(_tempFsmIndex, owner, states);
 			_fsmDic[_tempFsmIndex] = fsm;
 			_tempFsmIndex++;
@@ -54,27 +63,46 @@ namespace Framework
 		{
 			if (_fsmDic.TryGetValue(fsmId, out var fsm))
 			{
-				fsm.OnDispose();
 				_fsmDic.Remove(fsmId);
+				fsm.OnDispose();
 			}
 		}
-
-		public override void OnUpdate() 
+		public override void OnUpdate()
 		{
-			foreach (var item in _fsmDic)
+			if (_isDisposed)
 			{
-				item.Value.OnUpdate();
+				return;
+			}
+
+			_updateFsms.Clear();
+			_updateFsms.AddRange(_fsmDic.Values);
+
+			foreach (var fsm in _updateFsms)
+			{
+				if (_fsmDic.ContainsKey(fsm.FsmId))
+				{
+					fsm.OnUpdate();
+				}
 			}
 		}
-
 		public override void OnDispose()
 		{
-            foreach (var item in _fsmDic)
-            {
-				item.Value.OnDispose();
+			if (_isDisposed)
+			{
+				return;
 			}
+
+			_isDisposed = true;
+			_updateFsms.Clear();
+			_updateFsms.AddRange(_fsmDic.Values);
 			_fsmDic.Clear();
-			_fsmDic = null;
+
+			foreach (var fsm in _updateFsms)
+			{
+				fsm.OnDispose();
+			}
+
+			_updateFsms.Clear();
 		}
 	}
 }

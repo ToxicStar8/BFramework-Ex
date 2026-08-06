@@ -96,6 +96,8 @@ namespace Framework
         private void OnDestroy()
         {
             //再执行
+            //先请求任务取消，再释放任务可能依赖的Manager。
+            TaskManager.OnDispose();
             ModuleManager.OnDispose();
             FsmManager.OnDispose();
             TimerManager.OnDispose();
@@ -107,7 +109,6 @@ namespace Framework
             SocketManager.OnDispose();
             AudioManager.OnDispose();
             RedPointManager.OnDispose();
-            TaskManager.OnDispose();
         }
 
         /// <summary>

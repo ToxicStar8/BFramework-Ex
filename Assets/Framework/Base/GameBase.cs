@@ -6,6 +6,7 @@
 using Cysharp.Threading.Tasks;
 using MainPackage;
 using System;
+using System.Threading;
 using UnityEngine;
 
 namespace Framework
@@ -324,9 +325,24 @@ namespace Framework
         #endregion
 
         #region Task
-        protected virtual void AddTask(Action<TaskInfo> task)
+        protected virtual UniTask EnqueueTask(Func<CancellationToken, UniTask> task)
         {
-            GameGod.Instance.TaskManager.AddTask(task);
+            return GameGod.Instance.TaskManager.Enqueue(task);
+        }
+
+        protected virtual UniTask EnqueueNextTask(Func<CancellationToken, UniTask> task)
+        {
+            return GameGod.Instance.TaskManager.EnqueueNext(task);
+        }
+
+        protected virtual bool CancelCurrentTask()
+        {
+            return GameGod.Instance.TaskManager.CancelCurrent();
+        }
+
+        protected virtual int ClearTaskQueue()
+        {
+            return GameGod.Instance.TaskManager.ClearQueue();
         }
         #endregion
     }

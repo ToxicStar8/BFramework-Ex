@@ -87,23 +87,19 @@ namespace GameData
                 Log(sb.ToString());
             }
 
-            AddTask(async (task) =>
+            EnqueueTask(async (cancellationToken) =>
             {
                 Log("哈哈1");
-                await UniTask.Delay(1000);
+                await UniTask.Delay(1000, cancellationToken: cancellationToken);
                 Log("哈哈2");
+            }).Forget();
 
-                task.OnComplete();
-            });
-
-            AddTask(async (task) =>
+            EnqueueTask(async (cancellationToken) =>
             {
                 Log("哈哈3");
 
                 await UniTask.CompletedTask;
-
-                task.OnComplete();
-            });
+            }).Forget();
         }
 
         private void OnClick_Btn_Start()

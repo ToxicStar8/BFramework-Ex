@@ -1,0 +1,4 @@
+interface:
+  display_name: "L1-L4 Task Routing"
+  short_description: "按 L1-L4 分级路由任务上下文、计划与验证强度"
+  default_prompt: "Use $classify-task-level to classify this task and apply the matching context, planning, and verification depth."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Unity 客户端开发"
+  short_description: "按现有实现处理 Module、事件、HTTP、WebSocket、资源与红点"
+  default_prompt: "使用 $develop-unity-client 按项目现有 BFEX API、Module、事件、HTTP、WebSocket、资源加载或红点规范处理这个 Unity 客户端任务。"

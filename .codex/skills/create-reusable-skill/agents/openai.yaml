@@ -1,0 +1,4 @@
+interface:
+  display_name: "创建可复用 Skill"
+  short_description: "创建可跨项目复用且不绑定仓库的 Codex Skill"
+  default_prompt: "使用 $create-reusable-skill 创建或改造一个不绑定具体项目的可复用 Codex skill。"

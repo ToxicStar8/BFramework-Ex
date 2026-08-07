@@ -1,0 +1,4 @@
+interface:
+  display_name: "开发 Unity UI"
+  short_description: "按项目现有 C# 路径开发、修改或扩展 Unity UI"
+  default_prompt: "使用 $develop-unity-ui 按项目现有 UI 路径实现或修改界面。"

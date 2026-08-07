@@ -80,30 +80,30 @@ namespace Framework
 
             //寻找到当前obj的路径
             string prefabName = go.name + ".prefab";
-            var directoryInfo = new DirectoryInfo(Application.dataPath);
+            var prefabRoot = Path.Combine(Application.dataPath, "GameData", "UI", "Prefab");
+            var scriptRoot = Path.Combine(Application.dataPath, "GameData", "Scripts", "UI");
+            var directoryInfo = new DirectoryInfo(prefabRoot);
             string path = string.Empty;
-            foreach (var item in directoryInfo.GetFiles("*.*", SearchOption.AllDirectories))
+            if (!directoryInfo.Exists)
+            {
+                Debug.LogError("UI Prefab目录不存在：" + prefabRoot);
+                return;
+            }
+
+            foreach (var item in directoryInfo.GetFiles(prefabName, SearchOption.AllDirectories))
             {
                 if (item.Name == prefabName)
                 {
-                    //预制体路径
-                    path = item.FullName;
-                    if (go.name.StartsWith("UI"))
-                    {
-                        //替换成脚本路径
-                        path = path.Replace("GameData\\Prefabs", "GameData\\Scripts").Substring(0, path.Length - prefabName.Length);
-                    }
-                    else
-                    {
-                        path = path.Replace("GameData\\Prefabs", "GameData\\Scripts").Substring(0, path.Length - prefabName.Length - 6);
-                    }
+                    var relativeDirectory = item.DirectoryName.Substring(prefabRoot.Length)
+                        .TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+                    path = Path.Combine(scriptRoot, relativeDirectory);
                     break;
                 }
             }
 
             if (string.IsNullOrEmpty(path))
             {
-                Debug.LogError("UI内的Unit请直接使用UI生成代码");
+                Debug.LogError("未找到对应的UI/Unit Prefab：" + prefabName);
                 return;
             }
 
@@ -288,7 +288,8 @@ namespace GameData
     }
 }
 ";
-            if (!File.Exists(path + go.name + ".cs"))
+            var businessScriptPath = Path.Combine(path, go.name + ".cs");
+            if (!File.Exists(businessScriptPath))
             {
                 if (BindDataDic.TryGetValue(go, out var list))
                 {
@@ -330,7 +331,7 @@ namespace GameData
                     temp = temp.Replace("#ButtonBindFunc", btnBindFunc);
                     temp = temp.Replace("#ButtonOnClick", btnOnClickStr);
                     //导出文件
-                    File.WriteAllText(path + "/" + go.name + ".cs", temp, new UTF8Encoding(false));
+                    File.WriteAllText(businessScriptPath, temp, new UTF8Encoding(false));
                 }
             }
         }

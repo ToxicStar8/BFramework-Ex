@@ -1,8 +1,5 @@
 {
   "dependencies": {
-    "com.code-philosophy.hybridclr": "https://github.com/focus-creative-games/hybridclr_unity.git",
-    "com.code-philosophy.obfuz": "https://github.com/focus-creative-games/obfuz.git",
-    "com.code-philosophy.obfuz4hybridclr": "https://github.com/focus-creative-games/obfuz4hybridclr.git",
     "com.coffee.ui-effect": "https://github.com/mob-sakai/UIEffect.git",
     "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
     "com.tuyoogame.yooasset": "3.0.5",

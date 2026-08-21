@@ -3,8 +3,6 @@
  * 游戏入口
  * 创建时间：2023/06/16 16:54:23
  *********************************************/
-using Obfuz;
-using Obfuz.EncryptionVM;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -100,16 +98,6 @@ namespace MainPackage
 
         public static GameEntry Instance { private set; get; }
 
-        /// <summary>
-        /// 加载混淆
-        /// </summary>
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
-        private static void OnAfterAssembliesLoaded()
-        {
-            var textAsset = Resources.Load<TextAsset>("Obfuz/defaultStaticSecretKey");
-            EncryptionService<DefaultStaticEncryptionScope>.Encryptor = new GeneratedEncryptionVirtualMachine(textAsset.bytes);
-        }
-
         private void Awake()
         {
             Instance = this;
@@ -145,27 +133,6 @@ namespace MainPackage
             Log(E_Log.Framework, "热更代码", "启动中");
             //加载热更DLL
             var package = YooAssets.GetPackage(GlobalDefine.PackageName);
-            var assHandle = package.LoadAssetAsync<TextAsset>(GlobalDefine.HotfixDllName);
-            yield return assHandle;
-            var assTextAsset = assHandle.GetAssetObject<TextAsset>();
-            Assembly ass = Assembly.Load(assTextAsset.bytes);
-            Log(E_Log.Framework, "热更代码", "DLL加载完毕");
-
-            Log(E_Log.Framework, "补元", "开始");
-            var allDllHandle = package.LoadAllAssetsAsync<TextAsset>(GlobalDefine.HotfixDllName);
-            yield return allDllHandle;
-            foreach (var dllObj in allDllHandle.AllAssetObjects)
-            {
-                Log(E_Log.Framework, "dllObj.name", dllObj.name);
-                if (dllObj.name.EndsWith(".bytes") && dllObj.name != GlobalDefine.HotfixDllName)
-                {
-                    var textAsset = dllObj as TextAsset;
-                    HybridCLR.RuntimeApi.LoadMetadataForAOTAssembly(textAsset.bytes, HybridCLR.HomologousImageMode.SuperSet);
-                }
-            }
-            Log(E_Log.Framework, "补元", "完毕");
-
-            Log(E_Log.Framework, "加载热更", "开始");
             //原生加载热更
             var hotfixHandle = package.LoadAssetAsync<GameObject>("HotUpdatePrefab");
             yield return hotfixHandle;
@@ -181,8 +148,6 @@ namespace MainPackage
 
             yield return new WaitForSeconds(0.2f);
 
-            assHandle.Release();
-            allDllHandle.Release();
             hotfixHandle.Release();
 
             WinLoading.SetIsComplete(true);

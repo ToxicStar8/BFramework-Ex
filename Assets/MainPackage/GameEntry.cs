@@ -17,7 +17,7 @@ namespace MainPackage
     /// <summary>
     /// 远端资源地址查询服务类
     /// </summary>
-    public class RemoteServices : IRemoteServices
+    public class RemoteServices : IRemoteService
     {
         private readonly string _defaultHostServer;
         private readonly string _fallbackHostServer;
@@ -40,18 +40,13 @@ namespace MainPackage
 
         }
 
-        string IRemoteServices.GetRemoteMainURL(string fileName)
+        public IReadOnlyList<string> GetRemoteUrls(string fileName)
         {
-            var url = $"{_defaultHostServer}{_targetCDNUrl}{fileName}";
-            GameEntry.Instance.Log(E_Log.Framework, $"使用主地址:{url}");
-            return url;
-        }
-
-        string IRemoteServices.GetRemoteFallbackURL(string fileName)
-        {
-            var url = $"{_fallbackHostServer}/{_targetCDNUrl}/{fileName}";
-            GameEntry.Instance.Log(E_Log.Framework, $"使用备用地址:{url}");
-            return url;
+            return new[]
+            {
+                $"{_defaultHostServer}{_targetCDNUrl}{fileName}",
+                $"{_fallbackHostServer}{_targetCDNUrl}{fileName}"
+            };
         }
     }
 
@@ -214,7 +209,6 @@ namespace MainPackage
             YooAssets.Initialize();
 
             var package = YooAssets.CreatePackage(GlobalDefine.PackageName);
-            YooAssets.SetDefaultPackage(package);
 
 #if !UNITY_EDITOR
             playMode = EPlayMode.HostPlayMode;
@@ -225,26 +219,26 @@ namespace MainPackage
             {
                 case EPlayMode.EditorSimulateMode:
                     {
-                        var buildResult = EditorSimulateModeHelper.SimulateBuild(GlobalDefine.PackageName);
+                        var buildResult = EditorSimulateBuildInvoker.Build(GlobalDefine.PackageName, (int)EBundleType.VirtualAssetBundle);
                         var packageRoot = buildResult.PackageRootDirectory;
                         var fileSystemParams = FileSystemParameters.CreateDefaultEditorFileSystemParameters(packageRoot);
 
-                        var createParameters = new EditorSimulateModeParameters();
+                        var createParameters = new EditorSimulateModeOptions();
                         createParameters.EditorFileSystemParameters = fileSystemParams;
 
-                        var initOperation = package.InitializeAsync(createParameters);
+                        var initOperation = package.InitializePackageAsync(createParameters);
                         yield return initOperation;
                         CheckInitOperation(initOperation);
                         break;
                     }
                 case EPlayMode.OfflinePlayMode:
                     {
-                        var fileSystemParams = FileSystemParameters.CreateDefaultBuildinFileSystemParameters();
+                        var fileSystemParams = FileSystemParameters.CreateDefaultBuiltinFileSystemParameters();
 
-                        var createParameters = new OfflinePlayModeParameters();
-                        createParameters.BuildinFileSystemParameters = fileSystemParams;
+                        var createParameters = new OfflinePlayModeOptions();
+                        createParameters.BuiltinFileSystemParameters = fileSystemParams;
 
-                        var initOperation = package.InitializeAsync(createParameters);
+                        var initOperation = package.InitializePackageAsync(createParameters);
                         yield return initOperation;
                         CheckInitOperation(initOperation);
                         break;
@@ -254,12 +248,15 @@ namespace MainPackage
                         string defaultHostServer = GlobalDefine.ReleaseServerCDNUrl1;
                         string fallbackHostServer = GlobalDefine.ReleaseServerCDNUrl2;
 
-                        IRemoteServices remoteServices = new RemoteServices(defaultHostServer, fallbackHostServer);
-                        var cacheFileSystemParams = FileSystemParameters.CreateDefaultCacheFileSystemParameters(remoteServices);
-                        var createParameters = new HostPlayModeParameters();
+                        IRemoteService remoteServices = new RemoteServices(defaultHostServer, fallbackHostServer);
+                        var cacheFileSystemParams = FileSystemParameters.CreateDefaultSandboxFileSystemParameters(remoteServices);
+                        var builtinFileSystemParams = FileSystemParameters.CreateDefaultBuiltinFileSystemParameters();
+
+                        var createParameters = new HostPlayModeOptions();
+                        createParameters.BuiltinFileSystemParameters = builtinFileSystemParams;
                         createParameters.CacheFileSystemParameters = cacheFileSystemParams;
 
-                        var initOperation = package.InitializeAsync(createParameters);
+                        var initOperation = package.InitializePackageAsync(createParameters);
                         yield return initOperation;
                         CheckInitOperation(initOperation);
                         break;
@@ -269,9 +266,9 @@ namespace MainPackage
             }
         }
 
-        private void CheckInitOperation(InitializationOperation initOperation)
+        private void CheckInitOperation(InitializePackageOperation initOperation)
         {
-            if (initOperation.Status == EOperationStatus.Succeed)
+            if (initOperation.Status == EOperationStatus.Succeeded)
             {
                 Log(E_Log.Framework, "资源包初始化成功！");
             }
@@ -288,10 +285,10 @@ namespace MainPackage
         private IEnumerator RequestPackageVersion()
         {
             var package = YooAssets.GetPackage(GlobalDefine.PackageName);
-            var operation = package.RequestPackageVersionAsync(false);
+            var operation = package.RequestPackageVersionAsync();
             yield return operation;
 
-            if (operation.Status == EOperationStatus.Succeed)
+            if (operation.Status == EOperationStatus.Succeeded)
             {
                 _packageVersion = operation.PackageVersion;
                 Log(E_Log.Framework, $"资源版本:{_packageVersion}");
@@ -309,10 +306,10 @@ namespace MainPackage
         private IEnumerator UpdatePackageManifest()
         {
             var package = YooAssets.GetPackage(GlobalDefine.PackageName);
-            var operation = package.UpdatePackageManifestAsync(_packageVersion);
+            var operation = package.LoadPackageManifestAsync(new LoadPackageManifestOptions(_packageVersion, 60));
             yield return operation;
 
-            if (operation.Status == EOperationStatus.Succeed)
+            if (operation.Status == EOperationStatus.Succeeded)
             {
                 Log(E_Log.Framework, $"更新资源清单:{_packageVersion}");
             }
@@ -331,22 +328,23 @@ namespace MainPackage
             int downloadingMaxNum = 10;
             int failedTryAgain = 3;
             var package = YooAssets.GetPackage(GlobalDefine.PackageName);
-            var downloader = package.CreateResourceDownloader(downloadingMaxNum, failedTryAgain);
+            var downloader = package.CreateResourceDownloader(new ResourceDownloaderOptions(downloadingMaxNum, failedTryAgain));
 
             if (downloader.TotalDownloadCount == 0)
             {
                 yield break;
             }
 
-            downloader.DownloadFinishCallback = OnDownloadFinishFunction;
-            downloader.DownloadErrorCallback = OnDownloadErrorFunction;
-            downloader.DownloadUpdateCallback = OnDownloadUpdateFunction;
-            downloader.DownloadFileBeginCallback = OnDownloadFileBeginFunction;
+            //注册回调方法
+            downloader.DownloadCompleted += OnDownloadCompletedFunction;                //当下载器结束（无论成功或失败）
+            downloader.DownloadError += OnDownloadErrorFunction;                        //当下载器发生错误
+            downloader.DownloadProgressChanged += OnDownloadProgressChangedFunction;    //当下载进度发生变化
+            downloader.DownloadFileStarted += OnDownloadFileStartedFunction;            //当开始下载某个文件
 
-            downloader.BeginDownload();
+            downloader.StartDownload();
             yield return downloader;
 
-            if (downloader.Status == EOperationStatus.Succeed)
+            if (downloader.Status == EOperationStatus.Succeeded)
             {
                 Log(E_Log.Framework, "资源包下载成功！");
             }
@@ -357,27 +355,28 @@ namespace MainPackage
             }
         }
 
-        private void OnDownloadFinishFunction(DownloaderFinishData data)
+        private void OnDownloadCompletedFunction(DownloadCompletedEventArgs args)
         {
             Log(E_Log.Framework, "资源包下载成功回调");
         }
 
-        private void OnDownloadErrorFunction(DownloadErrorData data)
+        private void OnDownloadErrorFunction(DownloadErrorEventArgs args)
         {
             WinLoading.ShowError();
         }
 
-        private void OnDownloadUpdateFunction(DownloadUpdateData data)
+        private void OnDownloadProgressChangedFunction(DownloadProgressChangedEventArgs args)
         {
-            long curDownloadBytes = data.CurrentDownloadBytes;
-            long totalDownloadBytes = data.TotalDownloadBytes;
+            long curDownloadBytes = args.CurrentDownloadBytes;
+            long totalDownloadBytes = args.TotalDownloadBytes;
             WinLoading.SetOneTips("正在为您下载游戏必要的资源包...");
             WinLoading.SetTwoTips($"{((float)curDownloadBytes / 1024 / 1024).ToString("F2")}MB/{((float)totalDownloadBytes / 1024 / 1024).ToString("F2")}MB");
             WinLoading.SetProgress(curDownloadBytes / totalDownloadBytes);
         }
 
-        private static void OnDownloadFileBeginFunction(DownloadFileData data)
+        private void OnDownloadFileStartedFunction(DownloadFileStartedEventArgs args)
         {
+
         }
         #endregion
 

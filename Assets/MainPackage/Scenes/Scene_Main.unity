@@ -983,7 +983,7 @@ MonoBehaviour:
   UICamera: {fileID: 644216477}
   ObjPool: {fileID: 1978671858}
   GameStart: {fileID: 1124249894}
-  _playMode: 0
+  _playMode: 1
   WinLoading: {fileID: 176193653}
   IsEnableTimeScale: 0
   TimeScale: 1

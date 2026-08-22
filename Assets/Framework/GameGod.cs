@@ -102,13 +102,15 @@ namespace Framework
             FsmManager.OnDispose();
             TimerManager.OnDispose();
             UIManager.OnDispose();
-            PoolManager.OnDispose();
             EventManager.OnDispose();
             TableManager.OnDispose();
             HttpManager.OnDispose();
             SocketManager.OnDispose();
             AudioManager.OnDispose();
             RedPointManager.OnDispose();
+            // UI、表格、音频和部分 Manager 的释放过程仍会回收 LoadHelper/池对象，
+            // 因此 PoolManager 必须最后释放。
+            PoolManager.OnDispose();
         }
 
         /// <summary>
@@ -126,6 +128,6 @@ namespace Framework
         /// <summary>
         /// Log
         /// </summary>
-        public void Log(E_Log logType, string title = null, string content = null,string color = null) => GameEntry.Instance.Log(logType, title, content,color);
+        public void Log(E_Log logType, string title = null, string content = null, string color = null) => GameEntry.Instance.Log(logType, title, content, color);
     }
 }

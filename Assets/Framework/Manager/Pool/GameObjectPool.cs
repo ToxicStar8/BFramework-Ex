@@ -98,9 +98,12 @@ namespace Framework
         /// </summary>
         public void ReleaseAll()
         {
-            for (var curNode = ObjLinkedList.First; curNode != null; curNode = curNode.Next)
+            for (var curNode = ObjLinkedList.First; curNode != null;)
             {
+                // Release 会移除当前节点，必须提前保存下一个节点。
+                var nextNode = curNode.Next;
                 Release(curNode.Value);
+                curNode = nextNode;
             }
             ObjLinkedList.Clear();
         }

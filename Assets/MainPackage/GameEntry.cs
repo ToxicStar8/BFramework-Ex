@@ -146,7 +146,8 @@ namespace MainPackage
             //hotfixPrefab.name = "[Hotfix]";
             Log(E_Log.Framework, "加载热更", "完毕");
 
-            yield return new WaitForSeconds(0.2f);
+            // HotUpdateMain.Start 初始化完成后会自毁，等实例销毁再释放启动资源。
+            yield return new WaitUntil(() => hotfixPrefab == null);
 
             hotfixHandle.Release();
 
@@ -189,6 +190,7 @@ namespace MainPackage
                         var fileSystemParams = FileSystemParameters.CreateDefaultEditorFileSystemParameters(packageRoot);
 
                         var createParameters = new EditorSimulateModeOptions();
+                        createParameters.AutoUnloadBundleWhenUnused = true;
                         createParameters.EditorFileSystemParameters = fileSystemParams;
 
                         var initOperation = package.InitializePackageAsync(createParameters);
@@ -201,6 +203,7 @@ namespace MainPackage
                         var fileSystemParams = FileSystemParameters.CreateDefaultBuiltinFileSystemParameters();
 
                         var createParameters = new OfflinePlayModeOptions();
+                        createParameters.AutoUnloadBundleWhenUnused = true;
                         createParameters.BuiltinFileSystemParameters = fileSystemParams;
 
                         var initOperation = package.InitializePackageAsync(createParameters);
@@ -218,6 +221,7 @@ namespace MainPackage
                         var builtinFileSystemParams = FileSystemParameters.CreateDefaultBuiltinFileSystemParameters();
 
                         var createParameters = new HostPlayModeOptions();
+                        createParameters.AutoUnloadBundleWhenUnused = true;
                         createParameters.BuiltinFileSystemParameters = builtinFileSystemParams;
                         createParameters.CacheFileSystemParameters = cacheFileSystemParams;
 

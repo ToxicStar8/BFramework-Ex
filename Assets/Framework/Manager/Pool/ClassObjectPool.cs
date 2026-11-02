@@ -3,6 +3,7 @@
  * 类对象池
  * 创建时间：2023/01/08 20:40:23
  *********************************************/
+using MainPackage;
 using System.Collections.Generic;
 
 namespace Framework
@@ -56,7 +57,12 @@ namespace Framework
         public void Recycle(T obj)
         {
             //GameEntry.Instance.Log(E_Log.Framework, ClassName, "回池");
-            ClassLinkedList.Remove(obj);
+            if (!ClassLinkedList.Remove(obj))
+            {
+                GameGod.Instance.Log(E_Log.Error, $"{ClassName} 回收失败",
+                    "对象未被此池取出，不能重复回收或回收其他池的对象。");
+                return;
+            }
             ClassQueue.Enqueue(obj);
 #if UNITY_EDITOR
             //更新类数量

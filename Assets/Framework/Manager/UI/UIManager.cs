@@ -5,7 +5,6 @@
  *********************************************/
 using MainPackage;
 using System.Collections.Generic;
-using Object = UnityEngine.Object;
 
 namespace Framework
 {
@@ -19,9 +18,15 @@ namespace Framework
         /// </summary>
         private Dictionary<string, UIBase> _uiBaseDic;
 
+        /// <summary>
+        /// UI Prefab 加载器
+        /// </summary>
+        private LoadHelper _loadHelper;
+
         public override void OnAwake()
         {
             _uiBaseDic = new Dictionary<string, UIBase>();
+            _loadHelper = LoadHelper.Create();
         }
 
         /// <summary>
@@ -47,11 +52,10 @@ namespace Framework
             }
 
             var uiTrans = GameGod.Instance.GetUILevelTrans(uiLevel);
-            var loadHelper = LoadHelper.Create();
-            var uiObj = loadHelper.CreateGameObjectSync(uiName, uiTrans);
+            var uiObj = _loadHelper.CreateGameObjectSync(uiName, uiTrans);
             if (uiObj == null)
             {
-                LoadHelper.Recycle(loadHelper);
+                _loadHelper.Unload(uiName, destroyInstances: true);
                 return;
             }
 
@@ -59,13 +63,12 @@ namespace Framework
             if (uiBase == null)
             {
                 GameGod.Instance.Log(E_Log.Error, uiName, "未找到UI组件");
-                //loadHelper创建的ui对象，这里回收加载器即销毁ui实例化对象
-                LoadHelper.Recycle(loadHelper);
+                _loadHelper.Unload(uiName, destroyInstances: true);
                 return;
             }
 
             uiBase.UIName = uiName;
-            uiBase.LoadHelper = loadHelper;
+            uiBase.LoadHelper = LoadHelper.Create();
             uiBase.OnAwake();
             uiBase.OnShow(args);
             _uiBaseDic[uiName] = uiBase;
@@ -130,10 +133,10 @@ namespace Framework
             //已打开 直接关闭
             if (_uiBaseDic.TryGetValue(uiName, out var uiBase))
             {
-                //loadHelper创建的ui对象，这里回收加载器即销毁ui实例化对象
                 uiBase.OnDispose();
                 uiBase = null;
                 _uiBaseDic.Remove(uiName);
+                _loadHelper.Unload(uiName, destroyInstances: true);
             }
         }
 
@@ -145,7 +148,7 @@ namespace Framework
             foreach (var item in _uiBaseDic)
             {
                 item.Value.OnDispose();
-                Object.Destroy(item.Value.gameObject);
+                _loadHelper.Unload(item.Key, destroyInstances: true);
             }
             _uiBaseDic.Clear();
         }
@@ -155,6 +158,8 @@ namespace Framework
         {
             CloseAll();
             _uiBaseDic = null;
+            LoadHelper.Recycle(_loadHelper);
+            _loadHelper = null;
         }
     }
 }
